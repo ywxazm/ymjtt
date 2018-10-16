@@ -9,10 +9,11 @@
         </encoder>
     </appender>
 
+    <!-- RollingFileAppender: 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其它文件 -->
     <appender name="DebugMsg" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
-            <fileNamePattern>${catalina.base}/logs/logback-debug.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${catalina.home}/logs/logback-debug.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
@@ -29,14 +30,14 @@
     <appender name="InfoMsg" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
-            <fileNamePattern>${catalina.base}/logs/logback-info.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${catalina.home}/logs/logback-info.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}: %msg%n</pattern>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -48,14 +49,14 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
             <!-- log.dir 在maven profile里配置 -->
-            <fileNamePattern>${catalina.base}/logs/logback-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${catalina.home}/logs/logback-error.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}: %msg%n</pattern>
         </encoder>
-        <filter class="ch.qos.logback.classic.filter.LevelFilter"><!-- 只打印错误日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
@@ -63,11 +64,15 @@
     </appender>
 
     <!-- 相当于logger元素，只是name值已经确定为root了 -->
-    <!--确定输出级别为info以上-->
-    <root level="DEBUG">
+    <!-- 确定输出级别为info以上 -->
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="DebugMsg"/>
         <appender-ref ref="InfoMsg"/>
         <appender-ref ref="ErrorMsg"/>
     </root>
+
+    <!-- 控制框架日志输出级别 -->
+    <logger name="org.springframework" level="DEBUG"/>
+
 </configuration>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ywx.ymjtt.dao.test.StudentDoMapper">
+
+    <!-- sql片段 -->
+    <sql id="studentCloum">stu.id, stu.name, stu.age</sql>
+    <sql id="studentWhere">
+        WHERE 1 = 1
+        <if test="studentDo != null">
+            <if test="studentDo.id != null">
+                AND stu.id = #{id}
+            </if>
+            <if test="studentDo.name != null">
+                AND stu.name = #{name}
+            </if>
+        </if>
+    </sql>
+
+    <!-- 查询 -->
+    <select id="query" parameterType="StudentDo" resultType="StudentDo">
+        SELECT
+        <include refid="studentCloum"/>
+        FROM student stu
+        <include refid="studentWhere"/>
+    </select>
+
+</mapper>
