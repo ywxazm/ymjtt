@@ -12,6 +12,8 @@
     <modules>
         <module>ymjtt_manager_pojo</module>
         <module>ymjtt_manager_dao</module>
+        <module>ymjtt_manager_interface</module>
+        <module>ymjtt_manager_service</module>
     </modules>
     <artifactId>ymjtt_manager</artifactId>
 

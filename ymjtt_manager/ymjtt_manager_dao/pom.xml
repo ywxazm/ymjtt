@@ -46,8 +46,34 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
         </dependency>
-
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- TODO: 待处理 -->
+            <!-- 资源文件管理 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <resources>
+                        <resource>
+                            <directory>src/main/java</directory>                   <!-- 处理哪个目录下的资源文件 -->
+                            <targetPath>${project.build.directory}/classes</targetPath> <!-- 打包后放在什么位置 -->
+                            <excludes>                                                  <!-- 不包含directory指定目录下的以下文件 -->
+                                <exclude>pro/*</exclude>
+                                <exclude>dev/*</exclude>
+                            </excludes>
+                            <includes>                                                  <!-- 包含directory指定目录下的以下文件 -->
+                                <include>com.ywx.ymjtt.dao.test.*.xml</include>                                     <!-- 如果冲突，以<include>为准 -->
+                            </includes>
+                            <filtering>false</filtering>                                <!-- true,<excludes>放到classpath -->
+                        </resource>                                                     <!-- false,<includes>放到classpath -->
+                    </resources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>
