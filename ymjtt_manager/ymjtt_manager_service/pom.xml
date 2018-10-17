@@ -7,16 +7,16 @@
         <groupId>com.ywx.ymjtt</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>                                  <!-- 只有打包成war，才会添加第三方的jar到打包文件中-->
-    <artifactId>ymjtt_manager_service</artifactId>
+    <modelVersion>4.0.0</modelVersion>                          <!-- 此工程中，生成的jar并不是可执行jar -->
+    <packaging>war</packaging>                                  <!-- 此工程中，只有打包成war，才会添加第三方的jar到打包文件中-->
+    <artifactId>ymjtt_manager_service</artifactId>              <!-- 此工程中，如果jar也需要添加第三方的jar，需要添加maven-shade-plugin -->
 
     <dependencies>
         <!-- 内部依赖 -->
-        <dependency>
-            <groupId>com.ywx.ymjtt</groupId>
-            <artifactId>ymjtt_manager_dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+        <dependency>                                            <!-- package, install, deploy的区别 -->
+            <groupId>com.ywx.ymjtt</groupId>                    <!-- package: 编译、测试、打包 -->
+            <artifactId>ymjtt_manager_dao</artifactId>          <!-- install: 编译、测试、打包、安装-->
+            <version>1.0-SNAPSHOT</version>                     <!-- deploy : 编译、测试、打包、安装、部署-->
         </dependency>
         <dependency>
             <groupId>com.ywx.ymjtt</groupId>
@@ -37,13 +37,13 @@
 
         <!-- aspectj -->
         <dependency>
-            <groupId>org.aspectj</groupId>
+            <groupId>org.aspectj</groupId>          <!-- spring aop要用到的包, 不用事务可以不加此包 -->
             <artifactId>aspectjweaver</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-        <plugins>                                                           <!-- 插件不会打包至war中-->
+        <plugins>                                                           <!-- 插件不会打包至war/jar中-->
             <!-- tomcat -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

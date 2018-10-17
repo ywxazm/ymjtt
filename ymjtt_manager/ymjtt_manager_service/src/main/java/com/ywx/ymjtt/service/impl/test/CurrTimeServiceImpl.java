@@ -11,7 +11,7 @@ public class CurrTimeServiceImpl implements CurrTimeService {
     @Autowired
     private CurrTimeMapper currTimeMapper;
 
-    @Override
+//    @Override
     public String queryCurrTime() {
         return currTimeMapper.queryCurrTime();
     }

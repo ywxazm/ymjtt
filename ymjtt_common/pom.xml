@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>jar</packaging>                          <!-- 在这种多模块的工程开发中，打包的jar包可能并不包含第三方依赖jar -->
     <artifactId>ymjtt_common</artifactId>
 
     <!-- 依赖管理 -->
@@ -22,18 +22,22 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
         </dependency>
-        <!-- logback -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
-        </dependency>
+        <!-- logback -->                                <!-- <scope>的分类 -->
+        <dependency>                                    <!-- compile: 默认值，依赖参与 编译、测试、运行，打包，强依赖 -->
+            <groupId>ch.qos.logback</groupId>           <!-- test:    依赖参与编译、测试，不打包，如junit -->
+            <artifactId>logback-classic</artifactId>    <!-- runtime: 依赖参与测试、运行，不参与编译，如jdbc -->
+            <scope>test</scope>                         <!-- provided:依赖参与编译、测试、运行，不打包，如servlet -->
+        </dependency>                                   <!-- system:  与provided类似，但依赖不从Maven仓库中拿，而是取本地的，需要配置systemPath指定依赖位置-->
         <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- plexus-utils -->
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+        </dependency>
     </dependencies>
-
 </project>
