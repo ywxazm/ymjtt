@@ -18,4 +18,24 @@ public class StudentDoServiceImpl implements StudentDoService {
     public List<StudentDo> queryAll() {
         return studentDoMapper.query(null);
     }
+
+    @Override
+    public List<StudentDo> query(StudentDo studentDo) {
+        return studentDoMapper.query(studentDo);
+    }
+
+    @Override
+    public void add(StudentDo studentDo) {
+        studentDoMapper.add(studentDo);
+    }
+
+    @Override
+    public void delete(StudentDo studentDo) {
+        studentDoMapper.delete(studentDo);
+    }
+
+    @Override
+    public void update(StudentDo studentDo) {
+        studentDoMapper.update(studentDo);
+    }
 }

@@ -25,4 +25,27 @@
         <include refid="studentWhere"/>
     </select>
 
+    <!-- 增加 -->
+    <insert id="add" parameterType="StudentDo">
+        INSERT INTO student VALUES (null, #{name}, #{age})
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="StudentDo">
+        DELETE FROM student
+        <if test="id != null">
+            WHERE id = #{id}
+        </if>
+    </delete>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="StudentDo">
+        UPDATE student stu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">stu.name = #{name},</if>
+            <if test="age != null">stu.age = #{age}</if>
+        </trim>
+        WHERE stu.id = #{id}
+    </update>
+
 </mapper>
