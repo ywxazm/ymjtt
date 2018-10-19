@@ -9,4 +9,9 @@
         </plugin>
     </plugins>-->
 
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="SLF4J" />        <!-- STDOUT_LOGGING由mybatis定义    支持日志类型：SLF4J/LOG4J/LOG4J2/STDOUT_LOGGING/NO_LOGGING-->
+    </settings>
+
 </configuration>

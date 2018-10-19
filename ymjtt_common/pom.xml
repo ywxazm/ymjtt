@@ -40,4 +40,28 @@
             <artifactId>plexus-utils</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 在此项目中，打成可执行包，即包含第三方jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>         <!-- 将不使用的jar，不打入jar包-->
+                    <createDependencyReducedPom>false</createDependencyReducedPom>      <!-- 避免在打包时生成 dependency-reduced-pom.xml 文件 -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

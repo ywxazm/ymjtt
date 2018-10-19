@@ -34,7 +34,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
         </dependency>
-
         <!-- aspectj -->
         <dependency>
             <groupId>org.aspectj</groupId>          <!-- spring aop要用到的包, 不用事务可以不加此包 -->
@@ -51,6 +50,7 @@
                 <configuration>
                     <path>/manager</path>
                     <port>8081</port>
+                    <uriEncoding>utf-8</uriEncoding>
                 </configuration>
             </plugin>
         </plugins>

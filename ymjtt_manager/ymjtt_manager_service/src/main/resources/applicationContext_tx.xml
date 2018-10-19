@@ -13,8 +13,34 @@
     <!-- 通知 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
+            <!-- for test -->
+            <!-- read-only -->
+            <tx:method name="onlyRead01" propagation="REQUIRED" read-only="true" />
+            <!-- timeout -->
+            <tx:method name="timeOut01" propagation="REQUIRED" timeout="1"  />        <!-- timeout单位： 秒 -->
+            <!-- isolation-->
+            <!--读未提交  对事务 update 的行加“共享锁”，事务结束释放锁，其它事务不可修改此行 -->
+            <tx:method name="gengXinDate02" propagation="REQUIRED" isolation="READ_UNCOMMITTED"/>
+            <tx:method name="gengXinDate0201" propagation="REQUIRED" isolation="READ_UNCOMMITTED"/>
+            <tx:method name="chaXunDate02" propagation="REQUIRED" isolation="READ_UNCOMMITTED"/>
+            <!-- 读已提交  对事务 update 的行加“排它锁”，
+                           对事务 read   的行加“共享锁”，-->
+            <tx:method name="gengXinDate03" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+            <tx:method name="gengXinDate0301" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+            <tx:method name="chaXunDate03" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+            <!-- 可重复读  对事务 update 的行加“排它锁”，
+                           对事务 read   的行加“共享锁”，-->
+            <tx:method name="gengXinDate04" propagation="REQUIRED" isolation="REPEATABLE_READ"/>
+            <tx:method name="gengXinDate0401" propagation="REQUIRED" isolation="REPEATABLE_READ"/>
+            <tx:method name="chaXunDate04" propagation="REQUIRED" isolation="REPEATABLE_READ"/>
+             <!--串行化    对事务 read, update 的表加锁，其它事务不可读写任何数据 -->
+            <tx:method name="gengXinDate05" propagation="REQUIRED" isolation="SERIALIZABLE"/>
+            <tx:method name="gengXinDate0501" propagation="REQUIRED" isolation="SERIALIZABLE"/>
+            <tx:method name="chaXunDate05" propagation="REQUIRED" isolation="SERIALIZABLE"/>
+
+
             <!-- 传播行为 -->
-            <tx:method name="quer*" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="quer*" propagation="REQUIRED" read-only="true" />
             <tx:method name="add*" propagation="REQUIRED"/>
             <tx:method name="update*" propagation="REQUIRED"/>
             <tx:method name="delete*" propagation="REQUIRED"/>
@@ -23,7 +49,7 @@
 
     <!-- 切面 -->
     <aop:config>
-        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.ywx.ymjtt.service.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.ywx.ymjtt.service.impl.test.*.*(..))"/>
     </aop:config>
 
 </beans>
