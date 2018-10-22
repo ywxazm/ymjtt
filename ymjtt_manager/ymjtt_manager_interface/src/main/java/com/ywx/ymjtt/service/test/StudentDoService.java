@@ -2,6 +2,7 @@ package com.ywx.ymjtt.service.test;
 
 import com.ywx.ymjtt.pojo.test.StudentDo;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface StudentDoService {
@@ -27,18 +28,19 @@ public interface StudentDoService {
     void tianJiaDate02();
     void shanChuDate02();
 
-        //读已提交
-    void gengXinDate03();
-    void gengXinDate0301();
-    List<StudentDo> chaXunDate03();
-
-        //可重复读
-    void gengXinDate04();
-    void gengXinDate0401();
-    List<StudentDo> chaXunDate04();
-
         //串行化
     void gengXinDate05();
     void gengXinDate0501();
     List<StudentDo> chaXunDate05();
+
+        //传播行为
+    void method01();
+    void method02();
+
+        //回滚问题
+    void method03() throws Exception;
+    void method04();
+    void method05();
+    void method06() throws Exception;
+
 }

@@ -8,7 +8,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,56 +46,31 @@ public class TxTest {
     }
 
     /**
-     * 隔离级别
+     * 锁与锁之间的相互作用
      * 1. 一个资源上可以同时存在多个共享锁，共享锁存在的时候不能加排他锁，可以加更新锁
      * 2. 一个资源只能有一个排他锁，存在排他锁的情况下，不能再加其他类型的锁
      * 3. 一个资源只能有一个更新锁，存在更新锁的情况下，只能加共享锁
+     *
+     * 隔离级别的理解
+     *      每一个事务,即每一亲连接,或者说每一条线程,都有自己的高速缓存(mysql缓存)
+     *  1.  读未提交: 从所有线程的高速缓存中取数据
+     *  2.  读已提交: 从磁盘中取数据
+     *  3.  可重复读: 第一次取数据从磁盘,后面的取数据从自己的高速缓存
+     *  4.  串行化:   磁盘只允许一条线程操作
      */
     //读未提交  对事务 update 的行加“共享锁”，事务结束释放锁，其它事务不可修改此行
-        //对于更新的数据加“共享锁”，其它事务可查询此事务
+        //对于更新的数据加“共享锁”，其它事务可查询此事务,但不可修改此数据
     @Test
     public void test03001() {
         studentDoService.gengXinDate02();   //加“共享锁”
     }
     @Test
     public void test03002() {
-        studentDoService.gengXinDate0201();
+        studentDoService.gengXinDate0201();     //加"共享锁"后,其它事务不可再加"共享锁"
     }
     @Test
     public void test03003() {
-        List<StudentDo> list = studentDoService.chaXunDate02();
-        list.stream().forEach(System.out::println);
-    }
-    //读已提交  对事务 update 的行加“更新锁”，
-    //          对事务 read   的行加“共享锁”，
-        //一个事务加“更新锁”后，其它事务不可再添加“更新锁”
-    @Test
-    public void test03010() {
-        studentDoService.gengXinDate03();   //加“更新锁”
-    }
-    @Test
-    public void test03011() {
-        studentDoService.gengXinDate0301();   //加“更新锁”
-    }
-    @Test
-    public void test03012() {
-        List<StudentDo> list = studentDoService.chaXunDate03();
-        list.stream().forEach(System.out::println);
-    }
-    //可重复读  对事务 update 的行加“更新锁”，其它事务不可再持有“更新锁”，只能够等待此更新锁的释放，可能存在等待超时
-    //          对事务 read   的行加“共享锁”，
-        //一个事务加“更新锁”后，其它事务不可再添加“更新锁”
-    @Test
-    public void test03020() {
-        studentDoService.gengXinDate04();   //加“更新锁”
-    }
-    @Test
-    public void test03021() {
-        studentDoService.gengXinDate0401();   //加“更新锁”，此更新锁处于等待状态，会有等待超时
-    }
-    @Test
-    public void test03022() {
-        List<StudentDo> list = studentDoService.chaXunDate04();
+        List<StudentDo> list = studentDoService.chaXunDate02();          //加"共享锁"后,其它事务可加"共享锁"
         list.stream().forEach(System.out::println);
     }
     //串行化    对事务 read, update 的表加锁，其它事务不可读写任何数据 其它事务不可读写任何数据
@@ -114,17 +92,39 @@ public class TxTest {
 
     /**
      * 回滚问题
+     * 对于检查型异常(继承RunTimeException, Eroor及其子类),默认不回滚
+     * 对于检查型异常(继承Exception),默认回滚
      */
+    //Exception及其子类是不会回滚的(RunException除外)
     @Test
-    public void test040() {
-
+    public void test040() throws Exception {
+        studentDoService.method03();
+    }
+    //RunException回滚
+    @Test
+    public void test041() {
+        studentDoService.method04();
+    }
+    //RunException通过配置,实现不回滚
+    @Test
+    public void test042() {
+        studentDoService.method05();
+    }
+    //Exception通过配置,实现回滚
+    @Test
+    public void test043() throws Exception {
+        studentDoService.method06();
     }
 
     /**
      * 传播行为问题
      */
+    //REQUIRED, 支持当前事务,如果没有事务,则新建事务
     @Test
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void test050() {
-
+        studentDoService.method01();
+        studentDoService.method02();
+        int i = 10 / 0;
     }
 }

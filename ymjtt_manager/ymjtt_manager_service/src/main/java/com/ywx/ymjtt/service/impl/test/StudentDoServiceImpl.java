@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -107,70 +108,6 @@ public class StudentDoServiceImpl implements StudentDoService {
 
     }
 
-    //读已提交
-    @Override
-    public void gengXinDate03() {
-        List<StudentDo> list = studentDoMapper.query(null);
-        StudentDo stu = list.get(list.size() - 1);
-        stu.setAge(new Random().nextInt(100));
-        studentDoMapper.update(stu);
-
-        try {
-            Thread.sleep(600000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void gengXinDate0301() {
-        List<StudentDo> list = studentDoMapper.query(null);
-        StudentDo stu = list.get(list.size() - 1);
-        stu.setAge(new Random().nextInt(100));
-        studentDoMapper.update(stu);
-
-        try {
-            Thread.sleep(600000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public List<StudentDo> chaXunDate03() {
-        return studentDoMapper.query(null);
-    }
-
-    //可重复读
-    @Override
-    public void gengXinDate04() {
-        List<StudentDo> list = studentDoMapper.query(null);
-        StudentDo stu = list.get(list.size() - 1);
-        stu.setAge(new Random().nextInt(100));
-        studentDoMapper.update(stu);
-
-        try {
-            Thread.sleep(600000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void gengXinDate0401() {
-        List<StudentDo> list = studentDoMapper.query(null);
-        StudentDo stu = list.get(list.size() - 1);
-        stu.setAge(new Random().nextInt(100));
-        studentDoMapper.update(stu);
-
-        try {
-            Thread.sleep(600000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public List<StudentDo> chaXunDate04() {
-        return studentDoMapper.query(null);
-    }
-
     //串行化
     @Override
     public void gengXinDate05() {
@@ -201,6 +138,68 @@ public class StudentDoServiceImpl implements StudentDoService {
     @Override
     public List<StudentDo> chaXunDate05() {
         return studentDoMapper.query(null);
+    }
+
+    //传播行为
+    @Override
+    public void method01() {
+        System.out.println("-------------method01.start--------------");
+        StudentDo stu = new StudentDo();
+        stu.setName("method01");
+        stu.setAge(10);
+        studentDoMapper.add(stu);
+        System.out.println("-------------method01.end--------------");
+    }
+
+    @Override
+    public void method02() {
+        System.out.println("-------------method02.start--------------");
+        StudentDo stu = new StudentDo();
+        stu.setName("method02");
+        stu.setAge(11);
+        studentDoMapper.add(stu);
+//        int i = 10 / 0;
+        System.out.println("-------------method02.end--------------");
+    }
+
+    @Override
+    public void method03() throws Exception {
+        StudentDo stu = new StudentDo();
+        stu.setName("method03");
+        stu.setAge(11);
+        studentDoMapper.add(stu);
+
+        throw new Exception("aa");
+    }
+
+    @Override
+    public void method04() {
+        StudentDo stu = new StudentDo();
+        stu.setName("method04");
+        stu.setAge(12);
+        studentDoMapper.add(stu);
+
+        throw new RuntimeException("aa");
+    }
+
+    @Override
+    public void method05() {
+        StudentDo stu = new StudentDo();
+        stu.setName("method05");
+        stu.setAge(13);
+        studentDoMapper.add(stu);
+
+        throw new RuntimeException("aa");
+    }
+
+    @Override
+    public void method06() throws Exception {
+        StudentDo stu = new StudentDo();
+        stu.setName("method06");
+        stu.setAge(14);
+        studentDoMapper.add(stu);
+
+        throw new Exception("aa");
     }
 
 
