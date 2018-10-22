@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface StudentMapper {
+    
     long countByExample(StudentExample example);
 
     int deleteByExample(StudentExample example);
@@ -20,4 +21,5 @@ public interface StudentMapper {
     int updateByExampleSelective(@Param("record") Student record, @Param("example") StudentExample example);
 
     int updateByExample(@Param("record") Student record, @Param("example") StudentExample example);
+    
 }
