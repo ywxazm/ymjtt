@@ -3,15 +3,25 @@
 
 <configuration>
 
-    <!--<plugins>
-        <plugin interceptor="com.github.pagehelper.PageHelper">
-            <property name="dialect" value="mysql"/>
-        </plugin>
-    </plugins>-->
-
     <settings>
         <!-- 打印查询语句 -->
         <setting name="logImpl" value="SLF4J" />        <!-- STDOUT_LOGGING由mybatis定义    支持日志类型：SLF4J/LOG4J/LOG4J2/STDOUT_LOGGING/NO_LOGGING-->
+        <!-- 开启二级缓存 -->
+        <setting name="cacheEnabled" value="true"/>
     </settings>
+
+    <!-- 分页插件 -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+            <!--<property name="offsetAsPageNum" value="false"/>
+            <property name="rowBoundsWithCount" value="false"/>
+            <property name="pageSizeZero" value="true"/>
+            <property name="reasonable" value="false"/>
+            <property name="supportMethodsArguments" value="false"/>
+            <property name="returnPageInfo" value="none"/>-->
+        </plugin>
+    </plugins>
+
 
 </configuration>

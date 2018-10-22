@@ -59,7 +59,7 @@
 
     <!-- 扫描到*.java文件-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ywx.ymjtt.dao.test"/>
+        <property name="basePackage" value="com.ywx.ymjtt.dao"/>
     </bean>
 
 </beans>

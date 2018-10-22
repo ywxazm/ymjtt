@@ -5,13 +5,13 @@ import com.ywx.ymjtt.pojo.test.StudentDo;
 import com.ywx.ymjtt.service.test.StudentDoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Random;
 
 @Service
+//@Scope(value = "prototype")     //只有单例,才会在Spring创建时,同时创建实例
 public class StudentDoServiceImpl implements StudentDoService {
 
     @Autowired
@@ -200,6 +200,22 @@ public class StudentDoServiceImpl implements StudentDoService {
         studentDoMapper.add(stu);
 
         throw new Exception("aa");
+    }
+
+
+
+    //BeanPorpertyTest
+    @PostConstruct      //随Spring的启动而启动, 只出现在单例时
+    @Override
+    public void test01() {
+        System.out.println("----------@PostConstruct----------");
+    }
+
+    //死锁
+    @Override
+    public void update2(StudentDo studentDo) throws InterruptedException {
+        studentDoMapper.update(studentDo);
+        Thread.sleep(4000);
     }
 
 

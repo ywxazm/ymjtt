@@ -2,7 +2,6 @@ package com.ywx.ymjtt.service.test;
 
 import com.ywx.ymjtt.pojo.test.StudentDo;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface StudentDoService {
@@ -43,4 +42,10 @@ public interface StudentDoService {
     void method05();
     void method06() throws Exception;
 
+
+    //BeanPorpertyTest
+    void test01();
+
+    //死锁
+    void update2(StudentDo studentDo) throws InterruptedException;
 }

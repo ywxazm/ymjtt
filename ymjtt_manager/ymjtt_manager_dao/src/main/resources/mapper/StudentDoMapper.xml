@@ -3,6 +3,9 @@
 
 <mapper namespace="com.ywx.ymjtt.dao.test.StudentDoMapper">
 
+    <!-- 指定二级缓存实现类 -->
+    <cache type="org.apache.ibatis.cache.impl.PerpetualCache" />
+
     <!-- sql片段 -->
     <sql id="studentCloum">stu.id, stu.name, stu.age</sql>
     <sql id="studentWhere">
