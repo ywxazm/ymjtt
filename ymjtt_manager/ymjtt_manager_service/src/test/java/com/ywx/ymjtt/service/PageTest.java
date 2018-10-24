@@ -37,6 +37,6 @@ public class PageTest {
         }
 
         List<StudentDo> list = studentDoService.query(null);
-        list.stream().forEach(System.out::println);                             //上一个分布信息,带到了下一个查询中,查询的结果永远都是2条
+        list.stream().forEach(System.out::println);                             //上一个分页信息,带到了下一个查询中,查询的结果永远都是2条
     }
 }
