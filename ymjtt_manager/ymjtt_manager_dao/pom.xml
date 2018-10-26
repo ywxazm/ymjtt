@@ -23,7 +23,15 @@
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
         </dependency>
 
         <!-- mybatis-->
@@ -51,5 +59,19 @@
             <artifactId>druid</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <!-- 配置了此方式后，classpath更改为src/main/java目录下所有的如下属性文件 -->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>false</filtering>    <!-- false: 将<include>属性文件设计为classpath -->
+            </resource>                         <!-- true : 将<exclude>属性文件设计为classpath -->
+        </resources>
+    </build>
 
 </project>
