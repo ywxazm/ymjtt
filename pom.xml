@@ -7,6 +7,7 @@
     <modules>
         <module>ymjtt_common</module>
         <module>ymjtt_manager</module>
+        <module>ymjtt_manager_web</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>
@@ -32,6 +33,8 @@
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
+
+        <httpclient.version>4.5.2</httpclient.version>
 
         <tomcat.version>2.2</tomcat.version>
         <surefirePlugin.version>2.22.0</surefirePlugin.version>
@@ -145,6 +148,14 @@
                 <artifactId>plexus-utils</artifactId>
                 <version>${plexusUtils.version}</version>
             </dependency>
+
+            <!-- httpClient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
