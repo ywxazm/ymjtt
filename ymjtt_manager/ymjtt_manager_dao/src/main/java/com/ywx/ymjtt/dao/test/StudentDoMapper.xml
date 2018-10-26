@@ -5,6 +5,8 @@
 
     <!-- 指定二级缓存实现类 -->
     <cache type="org.apache.ibatis.cache.impl.PerpetualCache" />
+    <!-- 自定义缓存 -->
+    <!--<cache type="com.ywx.ymjtt.common.test.MySelfCacheTest" />-->
 
     <!-- sql片段 -->
     <sql id="studentCloum">stu.id id, stu.name name, stu.age age</sql>      <!-- 别名必需与POJO中的名称一致,否则无法设置POJO的属性值 -->

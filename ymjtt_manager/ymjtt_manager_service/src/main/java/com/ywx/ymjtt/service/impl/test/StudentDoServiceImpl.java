@@ -99,14 +99,6 @@ public class StudentDoServiceImpl implements StudentDoService {
     public List<StudentDo> chaXunDate02() {
         return studentDoMapper.query(null);
     }
-    @Override
-    public void tianJiaDate02() {
-
-    }
-    @Override
-    public void shanChuDate02() {
-
-    }
 
     //串行化
     @Override
@@ -205,18 +197,11 @@ public class StudentDoServiceImpl implements StudentDoService {
 
 
     //BeanPorpertyTest
-    @PostConstruct      //随Spring的启动而启动, 只出现在单例时
-    @Override
-    public void test01() {
-        System.out.println("----------@PostConstruct----------");
-    }
-
-    //死锁
-    @Override
-    public void update2(StudentDo studentDo) throws InterruptedException {
-        studentDoMapper.update(studentDo);
-        Thread.sleep(4000);
-    }
+    //@PostConstruct      //随Spring的启动而启动, 只出现在单例时
+    //@Override
+    //public void test01() {
+    //    System.out.println("----------@PostConstruct----------");
+    //}
 
 
 }

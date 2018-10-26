@@ -20,4 +20,10 @@ public interface UserDoMapper {
     OrdersDo queryOrdersByOrderId(int oid);
     //返回的数据不进行组装至POJO, 而是放在Map中
     Map<String, Object> queryDate2Map(int oid);
+
+    //Sql注入
+    //成功注入
+    List<UserDo> Injection(String uname);
+    //无法注入
+    List<UserDo> NoInjection(String uname);
 }

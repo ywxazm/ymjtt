@@ -20,7 +20,7 @@ import java.util.List;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:applicationContext_*.xml"})
-public class TxTest {
+public class TrasactionTest {
 
     @Autowired
     private StudentDoService studentDoService;

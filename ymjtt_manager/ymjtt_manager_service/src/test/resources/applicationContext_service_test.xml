@@ -4,7 +4,6 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.ywx.ymjtt" /> <!-- 包名a.b.c包手a.b.c.d 和 a.b.c.d.e，只需要配置前面的包名，它包含的包全部被扫描 -->
-
+    <context:component-scan base-package="com.ywx.ymjtt.service" />
 
 </beans>

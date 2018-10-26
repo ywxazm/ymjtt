@@ -24,8 +24,6 @@ public interface StudentDoService {
     void gengXinDate02();
     void gengXinDate0201();
     List<StudentDo> chaXunDate02();
-    void tianJiaDate02();
-    void shanChuDate02();
 
         //串行化
     void gengXinDate05();
@@ -44,8 +42,6 @@ public interface StudentDoService {
 
 
     //BeanPorpertyTest
-    void test01();
+    //void test01();
 
-    //死锁
-    void update2(StudentDo studentDo) throws InterruptedException;
 }

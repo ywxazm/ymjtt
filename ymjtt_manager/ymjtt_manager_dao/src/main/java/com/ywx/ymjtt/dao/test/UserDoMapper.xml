@@ -87,4 +87,16 @@
         </where>
     </select>
 
+    <!-- Sql注入 -->
+    <!-- 成功注入 -->
+    <select id="Injection" parameterType="string" resultType="UserDo">
+        SELECT u.uid, u.uname FROM user u
+        WHERE u.uname = ${_parameter}
+    </select>
+    <!-- 无法注入 -->
+    <select id="NoInjection" parameterType="string" resultType="UserDo">
+        SELECT u.uid, u.uname FROM user u
+        WHERE u.uname = #{_parameter}
+    </select>
+
 </mapper>
