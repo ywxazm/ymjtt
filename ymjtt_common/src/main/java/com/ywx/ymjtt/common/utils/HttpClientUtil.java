@@ -1,11 +1,7 @@
 package com.ywx.ymjtt.common.utils;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.ywx.ymjtt.common.consts.CommonConsts;
+import org.apache.commons.codec.Charsets;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -19,14 +15,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 public class HttpClientUtil {
 
 	public static String doGet(String url, Map<String, String> param) {
 
 		// 创建HttpClient对象
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-
-		String resultString = "";
+		String resultString = CommonConsts.NULL_STR;
 		CloseableHttpResponse response = null;
 		try {
 			// 创建uri
@@ -37,7 +39,6 @@ public class HttpClientUtil {
 				}
 			}
 			URI uri = builder.build();
-
 			// 创建http GET请求
 			HttpGet httpGet = new HttpGet(uri);
 
@@ -45,7 +46,7 @@ public class HttpClientUtil {
 			response = httpClient.execute(httpGet);
 			// 判断返回状态是否为200
 			if (response.getStatusLine().getStatusCode() == 200) {
-				resultString = EntityUtils.toString(response.getEntity(), "UTF-8");
+				resultString = EntityUtils.toString(response.getEntity());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,12 +82,12 @@ public class HttpClientUtil {
 					paramList.add(new BasicNameValuePair(key, param.get(key)));
 				}
 				// 模拟表单
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);		//此处指定请求参数编码集
 				httpPost.setEntity(entity);
 			}
 			// 执行http请求
 			response = httpClient.execute(httpPost);
-			resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+			resultString = EntityUtils.toString(response.getEntity());			//此处指定返回参数编码集
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -118,7 +119,7 @@ public class HttpClientUtil {
 			httpPost.setEntity(entity);
 			// 执行http请求
 			response = httpClient.execute(httpPost);
-			resultString = EntityUtils.toString(response.getEntity(), "utf-8");
+			resultString = EntityUtils.toString(response.getEntity());
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
