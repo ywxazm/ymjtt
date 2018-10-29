@@ -6,8 +6,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>ymjtt_common</module>
-        <module>ymjtt_manager</module>
-        <module>ymjtt_manager_web</module>
+        <module>ymjtt_test</module>
+        <module>ymjtt_test_web</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>

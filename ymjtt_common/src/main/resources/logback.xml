@@ -13,7 +13,7 @@
     <appender name="DebugMsg" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
-            <fileNamePattern>${catalina.home}/logs/logback-debug.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>C:/Users/ywx_azm/Desktop/logs/logback-debug.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
@@ -30,7 +30,7 @@
     <appender name="InfoMsg" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
-            <fileNamePattern>${catalina.home}/logs/logback-info.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>C:/Users/ywx_azm/Desktop/logs/logback-info.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
@@ -49,7 +49,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
             <!-- log.dir 在maven profile里配置 -->
-            <fileNamePattern>${catalina.home}/logs/logback-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>C:/Users/ywx_azm/Desktop/logs/logback-error.log.%d{yyyy-MM-dd}</fileNamePattern>
             <!-- 日志最大的历史 60天 -->
             <maxHistory>60</maxHistory>
         </rollingPolicy>
