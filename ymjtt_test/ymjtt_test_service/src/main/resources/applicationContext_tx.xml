@@ -48,7 +48,7 @@
 
     <!-- 切面 -->
     <aop:config>
-        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.ywx.ymjtt.test.service.impl.*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.ymjtt.test.service.impl.*.*(..))"/>
     </aop:config>
 
 </beans>

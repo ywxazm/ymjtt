@@ -73,7 +73,7 @@
     </root>
 
     <!-- 控制框架日志输出级别 -->
-    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework" level="DEBUG"/>
     <logger name="org.apache.ibatis" level="INFO" />
     <logger name="com.ywx.ymjtt" level="DEBUG" />
 

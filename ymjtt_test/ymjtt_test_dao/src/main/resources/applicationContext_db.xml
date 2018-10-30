@@ -52,14 +52,14 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.ywx.ymjtt.test.dto, com.ywx.ymjtt.test.vo, com.ywx.ymjtt.test.xdo" />            <!-- 添加此配置就可以支持*Mapper.xml中入参、出参为javaBean,首字母大小写皆可-->
+        <property name="typeAliasesPackage" value="com.ymjtt.test.dto, com.ymjtt.test.vo, com.ymjtt.test.xdo" />            <!-- 添加此配置就可以支持*Mapper.xml中入参、出参为javaBean,首字母大小写皆可-->
         <property name="configLocation"  value="classpath:/SqlMapConfig.xml"/>
         <!--<property name="mapperLocations" value="classpath:*Mapper.xml"/> -->     <!-- 可省 -->      <!-- 由pom文件中<resources>配置使其有效, 扫描到配置文件 -->
     </bean>
 
     <!-- 扫描到*.java文件-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ywx.ymjtt.test.mapper"/>
+        <property name="basePackage" value="com.ymjtt.test.mapper"/>
     </bean>
 
 </beans>
