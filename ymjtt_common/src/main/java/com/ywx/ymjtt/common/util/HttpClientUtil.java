@@ -1,7 +1,6 @@
 package com.ywx.ymjtt.common.util;
 
 import com.ywx.ymjtt.common.consts.CommonConsts;
-import org.apache.commons.codec.Charsets;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -17,7 +16,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -130,7 +128,6 @@ public class HttpClientUtil {
 				e.printStackTrace();
 			}
 		}
-
 		return resultString;
 	}
 }

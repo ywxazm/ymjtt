@@ -15,7 +15,7 @@
         <module>ymjtt_test_interface</module>
         <module>ymjtt_test_service</module>
     </modules>
-    <artifactId>ymjtt_manager</artifactId>
+    <artifactId>ymjtt_test</artifactId>
 
     <dependencies>
         <!-- 内部依赖 -->

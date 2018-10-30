@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ywx.ymjtt.test.mapper.StudentDoMapper">
+
+    <!-- 指定二级缓存实现类 -->
+    <cache type="org.apache.ibatis.cache.impl.PerpetualCache" />
+    <!-- 自定义缓存 -->
+    <!--<cache type="com.ywx.ymjtt.common.test.MySelfCacheTest" />-->
+
+    <!-- sql片段 -->
+    <sql id="studentDoCloum">stu.id id, stu.name name, stu.age age</sql>      <!-- 别名必需与POJO中的名称一致,否则无法设置POJO的属性值 -->
+    <sql id="studentDoWhere">
+        WHERE 1 = 1
+        <if test="id != null">
+            AND stu.id = #{id}
+        </if>
+        <if test="name != null">
+            AND stu.name = #{name}
+        </if>
+    </sql>
+
+    <!-- 查询 -->
+    <select id="getStudentDo" parameterType="StudentDo" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum"/>
+        FROM student stu
+        <include refid="studentDoWhere"/>
+    </select>
+
+    <!-- 增加 -->
+    <insert id="saveStudentDo" parameterType="StudentDo">
+        INSERT INTO student VALUES (null, #{name}, #{age})
+    </insert>
+
+    <!-- 删除 -->
+    <delete id="removeStudentDo" parameterType="StudentDo">
+        DELETE FROM student
+        <if test="id != null">
+            WHERE id = #{id}
+        </if>
+    </delete>
+
+    <!-- 更新 -->
+    <update id="updateStudentDo" parameterType="StudentDo">
+        UPDATE student stu
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">stu.name = #{name},</if>
+            <if test="age != null">stu.age = #{age}</if>
+        </trim>
+        WHERE stu.id = #{id}
+    </update>
+
+
+    <!-- parameterType test -->
+    <!-- 简单类型 -->
+    <select id="getStudentDoById" parameterType="Integer" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        WHERE stu.id = #{id}
+    </select>
+    <select id="getStudentDoByName" parameterType="string" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        WHERE stu.name = #{name}
+    </select>
+    <!-- pojo参数 -->
+    <select id="getStudentDoByPojo" parameterType="StudentDo" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        <include refid="studentDoWhere" />
+    </select>
+    <!-- 包装pojo参数 -->
+    <select id="getStudentDoByPojoVo" parameterType="StudentVo" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        WHERE 1 = 1
+            <if test="studentDo.id != null">
+                AND id = #{studentDo.id}
+            </if>
+            <if test="studentDo.name != null">
+                AND name = #{studentDo.name}
+            </if>
+    </select>
+    <!-- String参数切割类型 -->
+    <select id="getStudentDoByIds" parameterType="string" resultType="StudentDo">      /* 入参为String类型的ids */     /* 注意入参的表示及字符串的切割 */
+        SELECT                                                                  /* _parameter: 如果是非基本数据类型,不会用get()到String中去取值, 如果是基本数据类型,则表示做任意传入的值 */
+        <include refid="studentDoCloum" />
+        FROM student stu
+        <where>
+            <if test="_parameter != null and _parameter.length != 0">
+                stu.id IN 
+                <foreach collection="_parameter.split(',')" item="id" open="(" close=")" separator="," index="index">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY id       /* 排序只有用这种方式,不可用stu.id */
+    </select>
+    <!-- 数组参数类型 -->
+    <select id="listStudentDoByArray" parameterType="int" resultType="StudentDo">    /* 数组作为入参, parameterType为数组的存储数据类型, test和collection为array */
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        <where>
+            <if test="array != null">
+                stu.id IN
+                <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        ORDER BY id
+    </select>
+    <!-- List参数类型 -->
+    <select id="ListStudentDoByList" parameterType="java.util.List" resultType="StudentDo">   /* List集合作为入参, parameterType为List, test和collection为list */
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        <where>
+            <if test="list != null and list.size() != 0">
+                stu.id IN
+                <foreach collection="list" item="id" separator="," close=")" open="(" index="index">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!-- Map参数 -->
+    <select id="ListStudentDoByMap" parameterType="java.util.Map" resultType="StudentDo">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        WHERE 1 = 1
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="name != null">
+            AND name LIKE concat("%", #{name}, "%")
+            /* "%${name}%" 这种方式也可以,但不如上面这种 */
+        </if>
+    </select>
+
+
+
+    <!--ResultType Test-->
+    <!-- 简单数据类型 -->
+    <select id="countStudentDo" resultType="int">
+        SELECT count(id) FROM student stu
+    </select>
+    <!-- POJO类型 -->
+    <!-- List集合类型 -->
+    <!-- ResultMap类型 -->
+    <resultMap id="voMap" type="StudentAlia">
+        <id column="id" property="stuId" />
+        <result column="name" property="stuName"/>
+        <result column="age" property="stuAge" />
+    </resultMap>
+    <select id="getStudentVoById" parameterType="Integer" resultMap="voMap">
+        SELECT
+        <include refid="studentDoCloum" />
+        FROM student stu
+        <where>
+            <if test="_parameter != null">
+                stu.id = #{_parameter}
+            </if>
+        </where>
+    </select>
+
+
+
+
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ywx.ymjtt.test.mapper.UserDoMapper">
+
+    <sql id="userDoCloumn">
+        user.uid uid, user.uname uname
+    </sql>
+
+    <!-- 如果POJO没有实现Serializable接口,对于读取与写入的影响 -->
+    <select id="listUserDo" resultType="UserDo">
+        SELECT
+        <include refid="userDoCloumn" />
+        FROM user user
+    </select>
+    <insert id="saveUserDo" parameterType="UserDo">
+        INSERT INTO user VALUES (#{uid}, #{uname});
+    </insert>
+
+    <!-- 一对多的查询方式 -->
+    <resultMap id="OneUserAndAllOrder" type="UserDo">     <!-- 重新定义查询结果的封装方式 -->
+        <id column="uid" property="uid"/>
+        <result column="uname" property="uname" />
+        <collection property="ordersDos" ofType="OrdersDo">     <!-- 对应POJO中List -->
+            <id column="oid" property="oid" />
+            <result column="createDate" property="createDate"/>
+        </collection>
+    </resultMap>
+    <select id="listOrdersByUserId" parameterType="int" resultMap="OneUserAndAllOrder">
+        SELECT
+          u.uid,
+          u.uname,
+          o.oid,
+          o.createDate
+        FROM user u
+        LEFT JOIN orders o ON o.uid = u.uid
+        <where>
+            <if test="_parameter != null" >
+                u.uid  = #{_parameter}
+            </if>
+        </where>
+    </select>
+
+    <!-- 一对一的查询方式 -->
+    <resultMap id="OneOrderAndOneUser" type="OrdersDo">     <!-- 重新定义查询结果的封装方式 -->
+        <id column="oid" property="oid"/>
+        <result column="createDate" property="createDate" />
+        <association property="userDo" javaType="UserDo">
+            <id column="uid" property="uid" />
+            <result column="uname" property="uname" />
+        </association>
+    </resultMap>
+    <select id="getOrdersByOrderId" parameterType="int" resultMap="OneOrderAndOneUser">
+        SELECT
+          u.uid,
+          u.uname,
+          o.oid,
+          o.createDate
+        FROM user u
+        LEFT JOIN orders o ON o.uid = u.uid
+        <where>
+            <if test="_parameter != null" >
+                o.oid  = #{_parameter}
+            </if>
+        </where>
+    </select>
+
+    <!-- 返回的数据不进行组装至POJO, 而是放在Map中 -->
+    <resultMap id="userAndOrdersMap" type="java.util.HashMap">          <!-- type: 封装实现类 -->
+        <result column="uid" property="uid"/>                           <!-- column: sql查询结果名称  property:封装数据的key -->
+        <result column="uname" property="uname"/>
+        <result column="oid" property="oid"/>
+        <result column="createDate" property="createDate"/>
+    </resultMap>
+    <select id="getDate2Map" parameterType="int" resultMap="userAndOrdersMap">
+        SELECT
+        u.uid uid,
+        u.uname uname,
+        o.oid oid,
+        o.createDate createDate
+        FROM user u
+        LEFT JOIN orders o ON o.uid = u.uid
+        <where>
+            <if test="_parameter != null" >
+                o.oid  = #{_parameter}
+            </if>
+        </where>
+    </select>
+
+    <!-- Sql注入 -->
+    <!-- 成功注入 -->
+    <select id="Injection" parameterType="string" resultType="UserDo">
+        SELECT u.uid, u.uname FROM user u
+        WHERE u.uname = ${_parameter}
+    </select>
+    <!-- 无法注入 -->
+    <select id="NoInjection" parameterType="string" resultType="UserDo">
+        SELECT u.uid, u.uname FROM user u
+        WHERE u.uname = #{_parameter}
+    </select>
+
+</mapper>
