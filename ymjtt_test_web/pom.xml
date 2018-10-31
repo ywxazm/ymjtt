@@ -53,6 +53,16 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- logback -->
+        <dependency>
+            <groupId>org.logback-extensions</groupId>       <!-- logback和spring的整合包 -->
+            <artifactId>logback-ext-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>                    <!-- spring采用的日志方式是commons-log/log4j, 此包是commons-log和slf4j的整合包 -->
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

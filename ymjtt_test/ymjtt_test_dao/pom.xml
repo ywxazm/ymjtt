@@ -64,7 +64,7 @@
         <!-- 配置了此方式后，classpath更改为src/main/java目录下所有的如下属性文件 -->
         <resources>
             <resource>
-                <directory>src/main/java</directory>
+                <directory>src/main/java</directory>            <!-- 此配置仅对本工程有效, 同时不可跨工程的指定 -->
                 <includes>
                     <include>**/*.properties</include>
                     <include>**/*.xml</include>

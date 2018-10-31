@@ -30,9 +30,12 @@
         <jsp.version>2.2</jsp.version>
         <servlet.version>2.5</servlet.version>
         <aspectj.version>1.9.1</aspectj.version>
-        <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
+
+        <logback.version>1.2.3</logback.version>
+        <logbackextspring.version>0.1.4</logbackextspring.version>
+        <jcloverslf4j.version>1.7.25</jcloverslf4j.version>
 
         <httpclient.version>4.5.2</httpclient.version>
 
@@ -129,6 +132,16 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
                 <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.logback-extensions</groupId>       <!-- logback和spring的整合包 -->
+                <artifactId>logback-ext-spring</artifactId>
+                <version>${logbackextspring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>                    <!-- spring采用的日志方式是commons-log/log4j, 此包是commons-log和slf4j的整合包 -->
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${jcloverslf4j.version}</version>
             </dependency>
             <!-- junit -->
             <dependency>
