@@ -1,6 +1,7 @@
 package com.ymjtt.common.util;
 
 import com.ymjtt.common.consts.CommonConsts;
+import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -13,14 +14,19 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class HttpClientUtil {
+
+	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 	public static String doGet(String url, Map<String, String> param) {
 
@@ -30,7 +36,7 @@ public class HttpClientUtil {
 		CloseableHttpResponse response = null;
 		try {
 			// 创建uri
-			URIBuilder builder = new URIBuilder(url);
+			URIBuilder builder = new URIBuilder(url);		//此处默认使用"utf-8", 进行URLEncoding
 			if (param != null) {
 				for (String key : param.keySet()) {
 					builder.addParameter(key, param.get(key));
@@ -41,7 +47,8 @@ public class HttpClientUtil {
 			HttpGet httpGet = new HttpGet(uri);
 
 			// 执行请求
-			response = httpClient.execute(httpGet);
+			response = httpClient.execute(httpGet);			//返回的数据HttpClient会自动识别Content-Type并进行解码
+
 			// 判断返回状态是否为200
 			if (response.getStatusLine().getStatusCode() == 200) {
 				resultString = EntityUtils.toString(response.getEntity());
@@ -80,12 +87,12 @@ public class HttpClientUtil {
 					paramList.add(new BasicNameValuePair(key, param.get(key)));
 				}
 				// 模拟表单
-				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList);		//此处指定请求参数编码集
+				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList, Consts.UTF_8);		//源码显示,默认字符集为iso-8859-1, 此处指定请求参数编码集
 				httpPost.setEntity(entity);
 			}
 			// 执行http请求
 			response = httpClient.execute(httpPost);
-			resultString = EntityUtils.toString(response.getEntity());			//此处指定返回参数编码集
+			resultString = EntityUtils.toString(response.getEntity(), Consts.UTF_8);			//源码显示,默认字符集为iso-8859-1, 此处指定返回参数编码集
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -74,6 +74,7 @@
                 <configuration>
                     <path>/test_web</path>
                     <port>9001</port>
+                    <!--<uriEncoding>ISO-8859-1</uriEncoding>-->          <!--url编码解析使用字符集-->
                 </configuration>
             </plugin>
         </plugins>
