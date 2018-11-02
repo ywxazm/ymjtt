@@ -13,6 +13,11 @@
 
     <!-- 依赖管理 -->
     <dependencies>
+        <!-- jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
         <!-- logback -->                                <!-- <scope>的分类 -->
         <dependency>                                    <!-- compile: 默认值，依赖参与 编译、测试、运行，打包，强依赖 -->
             <groupId>ch.qos.logback</groupId>           <!-- test:    依赖参与编译、测试，不打包，如junit -->
@@ -34,6 +39,16 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+        </dependency>
+        <!-- okHttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <!-- druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
         </dependency>
     </dependencies>
 
