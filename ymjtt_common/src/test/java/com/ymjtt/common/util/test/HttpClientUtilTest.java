@@ -1,6 +1,6 @@
 package com.ymjtt.common.util.test;
 
-import com.ymjtt.common.util.HttpClientUtil;
+import com.ymjtt.common.httpclient.HttpClientUtil;
 import org.junit.Test;
 
 public class HttpClientUtilTest {

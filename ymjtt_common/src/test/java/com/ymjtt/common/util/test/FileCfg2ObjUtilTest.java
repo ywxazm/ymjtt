@@ -1,7 +1,7 @@
 package com.ymjtt.common.util.test;
 
-import com.ymjtt.common.dto.OkHttp3DTO;
-import com.ymjtt.common.util.FileCfg2ObjUtil;
+import com.ymjtt.common.okhttp3.OkHttp3DTO;
+import com.ymjtt.common.util.PropertiesCfg2ObjUtil;
 import org.junit.Test;
 
 /**
@@ -12,7 +12,7 @@ public class FileCfg2ObjUtilTest {
 
     @Test
     public void test01() {
-        OkHttp3DTO okHttp3DTO = (OkHttp3DTO)FileCfg2ObjUtil.getObj("okhttp.properties", OkHttp3DTO.class);
+        OkHttp3DTO okHttp3DTO = (OkHttp3DTO) PropertiesCfg2ObjUtil.getObjFromPropertiesFile("okhttp.properties", OkHttp3DTO.class);
         System.out.println(okHttp3DTO);
     }
 }

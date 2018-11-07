@@ -41,6 +41,10 @@
         <httpclient.version>4.5.2</httpclient.version>
         <okhttp.version>3.8.1</okhttp.version>
 
+        <dubbo.version>2.5.3</dubbo.version>
+        <zk.version>3.4.6</zk.version>
+        <zkclient.version>0.1</zkclient.version>
+
         <tomcat.version>2.2</tomcat.version>
         <surefirePlugin.version>2.22.0</surefirePlugin.version>
     </properties>
@@ -182,6 +186,27 @@
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
             </dependency>
+
+            <!-- dubbo -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <!-- zk -->
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zk.version}</version>
+                <type>pom</type>
+            </dependency>
+            <!-- zkclient -->
+            <dependency>
+                <groupId>com.github.sgroschupf</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>${zkclient.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

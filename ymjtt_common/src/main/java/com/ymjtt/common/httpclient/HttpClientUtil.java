@@ -1,6 +1,7 @@
-package com.ymjtt.common.util;
+package com.ymjtt.common.httpclient;
 
 import com.ymjtt.common.consts.CommonConsts;
+import com.ymjtt.common.util.PropertiesCfg2ObjUtil;
 import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -12,7 +13,6 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,15 +31,27 @@ public class HttpClientUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
-    private static final int connectTimeout = 1000;
-    private static final int connectionRequestTimeout = 1000;
-    private static final int socketTimeout = 1000;
+    private static final String FILENAME = "httpclient.properties";
+
+    private static Map<String, String> cfgMap = new HashMap<>();
 
     private HttpClientUtil() {
     }
 
-    public static String doGet(String url, Map<String, String> param) {
+    /**
+     * 读取配置文件
+     * @return
+     */
+    private static RequestConfig init() {
+        if (null == cfgMap || cfgMap.size() == 0) {
+            cfgMap = PropertiesCfg2ObjUtil.getMapFromPropertiesFile(FILENAME);
+        }
+        return RequestConfig.custom().setConnectTimeout(Integer.parseInt(cfgMap.get("connectTimeout"))) //从连接池中获取可用连接超时
+                .setConnectionRequestTimeout(Integer.parseInt(cfgMap.get("connectionRequestTimeout")))  //连接目标超时
+                .setSocketTimeout(Integer.parseInt(cfgMap.get("socketTimeout"))).build();               //等待响应超时（读取数据超时）
+    }
 
+    public static String doGet(String url, Map<String, String> param) {
         // 创建HttpClient对象
         CloseableHttpClient httpClient = HttpClients.createDefault();
         String resultString = CommonConsts.NULL_STR;
@@ -54,7 +67,7 @@ public class HttpClientUtil {
             URI uri = builder.build();
             // 创建http GET请求
             HttpGet httpGet = new HttpGet(uri);
-            httpGet.setConfig(setTimeout(connectTimeout, connectionRequestTimeout, socketTimeout));
+            httpGet.setConfig(init());
 
             // 执行请求
             response = httpClient.execute(httpGet);            //返回的数据HttpClient会自动识别Content-Type并进行解码
@@ -99,7 +112,7 @@ public class HttpClientUtil {
                 // 模拟表单
                 UrlEncodedFormEntity entity = new UrlEncodedFormEntity(paramList, Consts.UTF_8);        //源码显示,默认字符集为iso-8859-1, 此处指定请求参数编码集
                 httpPost.setEntity(entity);
-                httpPost.setConfig(setTimeout(connectTimeout, connectionRequestTimeout, socketTimeout));
+                httpPost.setConfig(init());
             }
             // 执行http请求
             response = httpClient.execute(httpPost);
@@ -132,7 +145,7 @@ public class HttpClientUtil {
             // 创建请求内容
             StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
             httpPost.setEntity(entity);
-            httpPost.setConfig(setTimeout(connectTimeout, connectionRequestTimeout, socketTimeout));
+            httpPost.setConfig(init());
             // 执行http请求
             response = httpClient.execute(httpPost);
             resultString = EntityUtils.toString(response.getEntity(), Consts.UTF_8);
@@ -147,17 +160,5 @@ public class HttpClientUtil {
             }
         }
         return resultString;
-    }
-
-    /**
-     * @param connectTimeout    从连接池中获取可用连接超时
-     * @param connectionRequestTimeout  连接目标超时
-     * @param socketTimeout     等待响应超时（读取数据超时）
-     * @return RequestConfig
-     */
-    private static RequestConfig setTimeout(int connectTimeout, int connectionRequestTimeout, int socketTimeout) {
-        return RequestConfig.custom().setConnectTimeout(connectTimeout)
-                .setConnectionRequestTimeout(connectionRequestTimeout)
-                .setSocketTimeout(socketTimeout).build();
     }
 }

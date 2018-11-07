@@ -1,4 +1,4 @@
-package com.ymjtt.common.dto;
+package com.ymjtt.common.okhttp3;
 
 /**
  * *.properties可转换为本类实例

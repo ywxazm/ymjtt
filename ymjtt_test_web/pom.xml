@@ -63,6 +63,23 @@
             <groupId>org.slf4j</groupId>                    <!-- spring采用的日志方式是commons-log/log4j, 此包是commons-log和slf4j的整合包 -->
             <artifactId>jcl-over-slf4j</artifactId>
         </dependency>
+
+        <!-- dubbo -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- zkclient -->
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -74,7 +91,7 @@
                 <configuration>
                     <path>/test_web</path>
                     <port>9001</port>
-                    <!--<uriEncoding>ISO-8859-1</uriEncoding>-->          <!--url编码解析使用字符集-->
+                    <uriEncoding>UTF8</uriEncoding>          <!-- url编码解析使用字符集 -->
                 </configuration>
             </plugin>
         </plugins>

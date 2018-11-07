@@ -1,0 +1,5 @@
+1.启动zookeeper集群
+    cd /
+    /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo00.cfg
+    /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo01.cfg
+    /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo02.cfg

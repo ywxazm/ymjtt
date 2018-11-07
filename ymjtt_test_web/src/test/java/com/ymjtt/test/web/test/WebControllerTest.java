@@ -1,6 +1,6 @@
 package com.ymjtt.test.web.test;
 
-import com.ymjtt.common.util.HttpClientUtil;
+import com.ymjtt.common.httpclient.HttpClientUtil;
 import org.junit.Test;
 
 public class WebControllerTest {
