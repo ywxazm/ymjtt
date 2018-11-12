@@ -1,4 +1,4 @@
-package com.ymjtt.test.web;
+package com.ymjtt.test.web.springmvc;
 
 import com.ymjtt.test.xdo.StudentDo;
 import org.springframework.stereotype.Controller;

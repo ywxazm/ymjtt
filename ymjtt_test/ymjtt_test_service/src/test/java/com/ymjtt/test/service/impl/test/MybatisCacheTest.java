@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:applicationContext_*.xml"})
+@ContextConfiguration(locations={"classpath*:spring/applicationContext_*.xml"})
 public class MybatisCacheTest {
 
     @Autowired

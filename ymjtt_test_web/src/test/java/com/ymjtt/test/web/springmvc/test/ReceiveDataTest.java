@@ -1,7 +1,7 @@
-package com.ymjtt.test.web.test;
+package com.ymjtt.test.web.springmvc.test;
 
-import com.ymjtt.common.okhttp3.OkHttp3Util;
 import com.ymjtt.common.util.JSONConvertUtil;
+import com.ymjtt.test.web.util.OkHttp3Util;
 import okhttp3.Response;
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class ReceiveDataTest {
         map.put("id", "3");
         map.put("name", "小胆");
         map.put("age", "22");
-        Response post_response = OkHttp3Util.postSyn(addr + "/requestMapper01", map);
+        Response post_response = OkHttp3Util.postSyn(addr + "/requestMapper01", JSONConvertUtil.map2Json(map));
         System.out.println("post: " + post_response);
         System.out.println("post: " + post_response.body().string());
     }
@@ -43,19 +43,12 @@ public class ReceiveDataTest {
         map.put("id", "3");
         map.put("name", "小胆");
         map.put("age", "22");
-        Response get_response1 = OkHttp3Util.postSyn(addr + "/requestMapper030", map);
+        Response get_response1 = OkHttp3Util.postSyn(addr + "/requestMapper030", JSONConvertUtil.map2Json(map));
         System.out.println("post1: " + get_response1);
         System.out.println("post1: " + get_response1.body().string());
 
-        Response get_response2 = OkHttp3Util.postSyn(addr + "/requestMapper031", map);
+        Response get_response2 = OkHttp3Util.postSyn(addr + "/requestMapper031",  JSONConvertUtil.map2Json(map));
         System.out.println("post2: " + get_response2);
         System.out.println("post2: " + get_response2.body().string());
-    }
-    @Test
-    public void test04() throws IOException {
-        String[] array = {"aaa","bbb","ccc","ddd","eee"};
-        Response get_response = OkHttp3Util.postSynAppointContextType(addr + "/requestMapper040", JSONConvertUtil.array2Json(array), "application/json;charset=utf-8");
-        System.out.println("post: " + get_response);
-        System.out.println("post: " + get_response.body().string());
     }
 }

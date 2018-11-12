@@ -1,8 +1,11 @@
-package com.ymjtt.test.web.test;
+package com.ymjtt.test.web.encoding.test;
 
-import com.ymjtt.common.httpclient.HttpClientUtil;
+import com.ymjtt.common.util.JSONConvertUtil;
+import com.ymjtt.test.web.util.OkHttp3Util;
+import okhttp3.Response;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,10 +26,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding01() {
+    public void encoding01() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doGet(url + "/encoding01", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding01", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:  name:  å°æ                  //浏览器编码用UrlEncoding("utf-8")的方式, 服务器解码用ISO-8859-1的方式
         //返回数据:    result ===>  å°æ, ????
     }
@@ -37,10 +40,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding02() {
+    public void encoding02() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doGet(url + "/encoding02", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding02", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:  tomcat封装数据name:  å°æ   自行编码解码处理的name:  小明     请求乱码处理完成
         //返回数据:      result ===>  ??, ????
     }
@@ -51,10 +54,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding03() {
+    public void encoding03() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doGet(url + "/encoding03", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding03", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:  自行编码解码处理的name:  小明
         //返回数据:      result ===>  小明, 返回成功          已解决
     }
@@ -76,10 +79,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding04() {
+    public void encoding04() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doPost(url + "/encoding04", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding04", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:   name:  ??
         //返回数据:     result ===>  ??, ????
     }
@@ -91,10 +94,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding05() {
+    public void encoding05() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doPost(url + "/encoding05", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding05", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:   name:  小明            //此处看似没有问题了, 但没有明确指定tomcat的编码
         //返回数据:     result ===>  ??, ????
     }
@@ -106,10 +109,10 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding06() {
+    public void encoding06() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doPost(url + "/encoding06", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding06", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
         //服务器数据:   name:  小明            //结果与上面一致,说明Tomcat默认字符集为Utf8
         //返回数据:     result ===>  å°æ, è¿åæå
     }
@@ -121,10 +124,11 @@ public class EncodingTest {
      * 入参: name = "小明"
      */
     @Test
-    public void encoding07() {
+    public void encoding07() throws IOException {
         queryMap.put("name", "小明");
-        String result = HttpClientUtil.doPost(url + "/encoding07", queryMap);
-        System.out.println("result ===>  " + result);
+        Response response = OkHttp3Util.postSyn(url + "/encoding07", JSONConvertUtil.map2Json(queryMap));
+        System.out.println("response ===>  " + response);
+        System.out.println("response ===>  " + response.body().string());
         //服务器数据:   name:  小明
         //返回数据:     result ===>  小明, 返回成功           //此处虽然没有用代码指定Content-Type,但请求是有指定字符集的,所以返回也将与请求一致
     }

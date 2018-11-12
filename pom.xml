@@ -38,12 +38,14 @@
         <logbackextspring.version>0.1.4</logbackextspring.version>
         <jcloverslf4j.version>1.7.25</jcloverslf4j.version>
 
-        <httpclient.version>4.5.2</httpclient.version>
         <okhttp.version>3.8.1</okhttp.version>
+        <fileupload.version>1.3.1</fileupload.version>
+        <commons-io.version>2.4</commons-io.version>
 
         <dubbo.version>2.5.3</dubbo.version>
         <zk.version>3.4.6</zk.version>
         <zkclient.version>0.1</zkclient.version>
+        <fastdfs.version>1.25</fastdfs.version>
 
         <tomcat.version>2.2</tomcat.version>
         <surefirePlugin.version>2.22.0</surefirePlugin.version>
@@ -169,22 +171,28 @@
             </dependency>
             <!-- plexus-utils -->
             <dependency>
-                <groupId>org.codehaus.plexus</groupId>
+                <groupId>org.codehaus.plexus</groupId>      <!-- Spring之外的IOC容器, Maven刚出来时, Spring还不成熟, Maven自已开发的容器 -->
                 <artifactId>plexus-utils</artifactId>
                 <version>${plexusUtils.version}</version>
             </dependency>
 
-            <!-- httpClient -->
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
-            </dependency>
             <!-- okHttp -->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>${okhttp.version}</version>
+            </dependency>
+            <!-- fileupload -->
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${fileupload.version}</version>
+            </dependency>
+            <!-- commons-io -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
             </dependency>
 
             <!-- dubbo -->
@@ -205,6 +213,13 @@
                 <groupId>com.github.sgroschupf</groupId>
                 <artifactId>zkclient</artifactId>
                 <version>${zkclient.version}</version>
+            </dependency>
+
+            <!-- fastdfs -->
+            <dependency>
+                <groupId>com.ywx</groupId>
+                <artifactId>fastdfs_client_java</artifactId>
+                <version>${fastdfs.version}</version>
             </dependency>
 
         </dependencies>

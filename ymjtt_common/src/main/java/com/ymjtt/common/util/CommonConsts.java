@@ -1,4 +1,4 @@
-package com.ymjtt.common.consts;
+package com.ymjtt.common.util;
 
 public class CommonConsts {
 

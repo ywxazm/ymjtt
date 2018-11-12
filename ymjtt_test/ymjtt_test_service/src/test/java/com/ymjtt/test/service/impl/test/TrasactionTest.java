@@ -18,7 +18,7 @@ import java.util.List;
  * 事务结束：方法的最后一条语句执行完成后
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:applicationContext_*.xml"})
+@ContextConfiguration(locations={"classpath*:spring/applicationContext_*.xml"})
 public class TrasactionTest {
 
     @Autowired

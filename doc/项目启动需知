@@ -1,5 +1,21 @@
-1.启动zookeeper集群
+1.启动zookeeper集群(已开机自启)
     cd /
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo00.cfg
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo01.cfg
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo02.cfg
+    zookeeper部署3台, 占用端口 2181, 2182, 2183,  zookeeper的启动会有些慢, 开完机后, 要等一会
+
+    2.dubbo监控中心(已开机自启)
+    帐号: root   密码: root
+    url:  http://192.168.190.129:18080/dubbo-admin-2.6.0/
+    占用端口号:18080, 18005, 18443
+
+3.fastDFS tracker (已开机自启) ,占用端口号22100, 22101;  storage(已开启自启), 占用端口: 23000, 23001(2台, 一主一备)
+
+4.不使用tomcat9(已开机自启), 占用端口号: 8080, 8005, 8443
+
+5.redis占用端口号: 6379
+
+6.mysql占用端口号: 3306
+
+7.oracle占用端口号: 1521

@@ -1,6 +1,6 @@
 package com.ymjtt.test.web.test;
 
-import com.ymjtt.common.okhttp3.OkHttp3Util;
+import com.ymjtt.test.web.util.OkHttp3Util;
 import okhttp3.Response;
 import org.junit.Test;
 

@@ -13,17 +13,7 @@
 
     <!-- 依赖管理 -->
     <dependencies>
-        <!-- jackson -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <!-- logback -->                                <!-- <scope>的分类 -->
-        <dependency>                                    <!-- compile: 默认值，依赖参与 编译、测试、运行，打包，强依赖 -->
-            <groupId>ch.qos.logback</groupId>           <!-- test:    依赖参与编译、测试，不打包，如junit -->
-            <artifactId>logback-classic</artifactId>    <!-- runtime: 依赖参与测试、运行，不参与编译，如jdbc -->
-        </dependency>                                   <!-- provided:依赖参与编译、测试、运行，不打包，如servlet -->
-        <!-- junit -->                                  <!-- system:  与provided类似，但依赖不从Maven仓库中拿，而是取本地的，需要配置systemPath指定依赖位置 -->
+        <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -34,34 +24,39 @@
             <groupId>org.codehaus.plexus</groupId>
             <artifactId>plexus-utils</artifactId>
         </dependency>
-
-        <!-- httpClient -->
+        <!-- jackson -->
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
+
         <!-- okHttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
         </dependency>
-        <!-- druid -->
+        <!-- fileupload -->
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <!-- commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <!-- 在此项目中，打成可执行包，即包含第三方jar -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.3</version>
                 <configuration>
-                    <minimizeJar>true</minimizeJar>         <!-- 将不使用的jar，不打入jar包-->
-                    <createDependencyReducedPom>false</createDependencyReducedPom>      <!-- 避免在打包时生成 dependency-reduced-pom.xml 文件 -->
+                    <minimizeJar>true</minimizeJar>         &lt;!&ndash; 将不使用的jar，不打入jar包&ndash;&gt;
+                    <createDependencyReducedPom>false</createDependencyReducedPom>      &lt;!&ndash; 避免在打包时生成 dependency-reduced-pom.xml 文件 &ndash;&gt;
                 </configuration>
                 <executions>
                     <execution>
@@ -71,7 +66,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

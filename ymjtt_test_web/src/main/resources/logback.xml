@@ -10,6 +10,7 @@
     </appender>
 
     <!-- RollingFileAppender: 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其它文件 -->
+
     <appender name="DebugMsg" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 按天回滚 daily -->
@@ -77,8 +78,6 @@
     <logger name="org.apache.ibatis" level="DEBUG" />
     <logger name="org.mybatis" level="DEBUG" />
     <logger name="com.ywx.ymjtt" level="DEBUG" />
-    <logger name="okhttp3" level="DEBUG" />
-    <logger name="okio" level="DEBUG" />
 
     <!-- 日志原理说明 -->
     <!-- 即Spring对于日志的选择机制,无其它jar导入时,默认使用commons-log的实现类,如果有其它实现,则用其它实现类  -->

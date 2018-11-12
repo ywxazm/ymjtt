@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:applicationContext_db.xml"})    //classpath  :只包含本工程下的文件
-public class StudentDoMapperTest {                                               //classpath* :包含本工程及父工程下的文件
+@ContextConfiguration(locations={"classpath:spring/applicationContext_db.xml"})   //classpath  :只包含本工程下的文件
+public class StudentDoMapperTest {                                                //classpath* :包含本工程及父工程下的文件
 
     @Autowired
     private StudentDoMapper studentDoMapper;

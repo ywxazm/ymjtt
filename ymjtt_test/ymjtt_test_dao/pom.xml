@@ -20,6 +20,13 @@
         </dependency>
 
         <!-- 外部依赖 -->
+        <!-- logback -->                                <!-- <scope>的分类 -->
+        <dependency>                                    <!-- compile: 默认值，依赖参与 编译、测试、运行，打包，强依赖 -->
+            <groupId>ch.qos.logback</groupId>           <!-- test:    依赖参与编译、测试，不打包，如junit -->
+            <artifactId>logback-classic</artifactId>    <!-- runtime: 依赖参与测试、运行，不参与编译，如jdbc -->
+        </dependency>                                   <!-- provided:依赖参与编译、测试、运行，不打包，如servlet -->
+                                                        <!-- system:  与provided类似，但依赖不从Maven仓库中拿，而是取本地的，需要配置systemPath指定依赖位置 -->
+
         <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>

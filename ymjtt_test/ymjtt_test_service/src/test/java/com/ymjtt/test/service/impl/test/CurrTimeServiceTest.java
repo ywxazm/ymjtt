@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath*:applicationContext_*.xml"})
+@ContextConfiguration(locations={"classpath*:spring/applicationContext_*.xml"})
 /*
 @ContextConfiguration(locations={"classpath:applicationContext_db.xml", "classpath:applicationContext_service.xml",
                                  "classpath:applicationContext_tx.xml"})        //这二者等效

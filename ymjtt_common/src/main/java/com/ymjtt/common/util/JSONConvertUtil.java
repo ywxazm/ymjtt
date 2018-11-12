@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.Map;
  **/
 public class JSONConvertUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(JSONConvertUtil.class);
     private static ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -26,14 +23,8 @@ public class JSONConvertUtil {
      * @return
      * @throws JsonProcessingException
      */
-    public static String obj2Json(Object pojo) {
-        String result = null;
-        try {
-            result = mapper.writeValueAsString(pojo);
-        } catch (JsonProcessingException ex) {
-            logger.error("the thread {}, catch pojo2Json error {}", Thread.currentThread().getName(), ex.getMessage());
-        }
-        return result;
+    public static String obj2Json(Object pojo) throws JsonProcessingException {
+        return mapper.writeValueAsString(pojo);
     }
 
     /**
@@ -42,14 +33,8 @@ public class JSONConvertUtil {
      * @return
      * @throws IOException
      */
-    public static Object json2Obj(String json, Class<?> clazz) {
-        Object result = null;
-        try {
-            result = mapper.readValue(json, clazz);
-        } catch (IOException ex) {
-            logger.error("the thread {}, catch pojo2Json error {}", Thread.currentThread().getName(), ex.getMessage());
-        }
-        return result;
+    public static Object json2Obj(String json, Class<?> clazz) throws IOException {
+        return mapper.readValue(json, clazz);
     }
 
     /**
@@ -57,7 +42,7 @@ public class JSONConvertUtil {
      * @param map
      * @return
      */
-    public static String map2Json(Map<String, String> map) {
+    public static String map2Json(Map<String, String> map) throws JsonProcessingException {
         return obj2Json(map);
     }
 
@@ -66,15 +51,9 @@ public class JSONConvertUtil {
      * @param json
      * @return
      */
-    public static Map<String, String> json2map(String json) {
+    public static Map<String, String> json2map(String json) throws IOException {
         JavaType javaType = mapper.getTypeFactory().constructParametricType(Map.class, String.class, String.class);
-        Map<String, String> map = null;
-        try {
-            map = mapper.readValue(json, javaType);
-        } catch (IOException ex) {
-            logger.error("the thread {}, catch json2map error {}", Thread.currentThread().getName(), ex.getMessage());
-        }
-        return map;
+        return mapper.readValue(json, javaType);
     }
 
     /**
@@ -82,7 +61,7 @@ public class JSONConvertUtil {
      * @param list
      * @return
      */
-    public static String list2Json(List<?> list) {
+    public static String list2Json(List<?> list) throws JsonProcessingException {
         return obj2Json(list);
     }
 
@@ -91,15 +70,9 @@ public class JSONConvertUtil {
      * @param json
      * @return
      */
-    public static List<String> json2List(String json) {
+    public static List<String> json2List(String json) throws IOException {
         JavaType javaType = mapper.getTypeFactory().constructParametricType(Map.class, String.class);
-        List<String> list = null;
-        try {
-            list = mapper.readValue(json, javaType);
-        } catch (IOException ex) {
-            logger.error("the thread {}, catch json2map error {}", Thread.currentThread().getName(), ex.getMessage());
-        }
-        return list;
+        return mapper.readValue(json, javaType);
     }
 
     /**
@@ -107,7 +80,7 @@ public class JSONConvertUtil {
      * @param array
      * @return
      */
-    public static String array2Json(String[] array) {
+    public static String array2Json(String[] array) throws JsonProcessingException {
         return obj2Json(array);
     }
 
@@ -116,15 +89,9 @@ public class JSONConvertUtil {
      * @param json
      * @return
      */
-    public static String[] json2Array(String json) {
+    public static String[] json2Array(String json) throws IOException {
         ArrayType arrayType = mapper.getTypeFactory().constructArrayType(String.class);
-        String[] array = null;
-        try {
-            array = mapper.readValue(json, arrayType);
-        } catch (IOException ex) {
-            logger.error("the thread {}, catch json2map error {}", Thread.currentThread().getName(), ex.getMessage());
-        }
-        return array;
+        return mapper.readValue(json, arrayType);
     }
 
 }
