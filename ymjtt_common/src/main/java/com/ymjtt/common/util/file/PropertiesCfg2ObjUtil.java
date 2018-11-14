@@ -1,4 +1,6 @@
-package com.ymjtt.common.util;
+package com.ymjtt.common.util.file;
+
+import com.ymjtt.common.util.json.JSONConvertUtil;
 
 import java.io.File;
 import java.io.FileInputStream;

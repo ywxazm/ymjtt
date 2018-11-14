@@ -1,7 +1,7 @@
 package com.ymjtt.common.util.test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ymjtt.common.util.JSONConvertUtil;
+import com.ymjtt.common.util.json.JSONConvertUtil;
 import org.junit.Test;
 
 import java.io.IOException;

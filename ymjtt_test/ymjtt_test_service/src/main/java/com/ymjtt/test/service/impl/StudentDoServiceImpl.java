@@ -19,7 +19,10 @@ public class StudentDoServiceImpl implements StudentDoService {
 
     @Override
     public List<StudentDo> listStudentDo() {
-        return studentDoMapper.getStudentDo(null);
+        long start = System.currentTimeMillis();
+        List<StudentDo> list = studentDoMapper.getStudentDo(null);
+        System.out.println("the db query cast time is " + (System.currentTimeMillis() - start));
+        return list;
     }
 
     @Override

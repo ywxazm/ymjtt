@@ -1,8 +1,8 @@
 package com.ymjtt.test.service.util;
 
-import com.ymjtt.common.util.CommonConsts;
-import com.ymjtt.common.util.JSONConvertUtil;
-import com.ymjtt.common.util.PropertiesCfg2ObjUtil;
+import com.ymjtt.common.util.consts.CommonConsts;
+import com.ymjtt.common.util.json.JSONConvertUtil;
+import com.ymjtt.common.util.file.PropertiesCfg2ObjUtil;
 import okhttp3.*;
 
 import java.io.File;

@@ -5,7 +5,9 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <context:component-scan base-package="com.ymjtt.test.web"/>
+    <context:component-scan base-package="com.ymjtt.test.web">
+        <context:exclude-filter type="annotation" expression="com.ymjtt.test.web.util" />
+    </context:component-scan>
 
     <mvc:annotation-driven/>
 
@@ -15,9 +17,9 @@
         <property name="maxUploadSize" value="1024000000"/>
     </bean>
 
-    <!-- 引用dubbo服务 -->
+    <!-- 订阅dubbo服务 -->
     <dubbo:application name="ymjtt_test_web"/>
-    <dubbo:registry protocol="zookeeper" address="192.168.190.129:2181,192.168.190.129:2182,192.168.190.129:2183"/>
-    <dubbo:reference interface="com.ymjtt.test.service.StudentDoService" id="studentDoService" timeout="300000"/>
+    <dubbo:registry protocol="zookeeper" address="192.168.190.129:2181,192.168.190.129:2182,192.168.190.129:2183" group="dubboRoot"/>
+    <dubbo:reference interface="com.ymjtt.test.service.StudentDoService" id="studentDoService" timeout="3000"/>
 
 </beans>

@@ -1,6 +1,6 @@
 package com.ymjtt.test.web.springmvc.test;
 
-import com.ymjtt.common.util.JSONConvertUtil;
+import com.ymjtt.common.util.json.JSONConvertUtil;
 import com.ymjtt.test.web.util.OkHttp3Util;
 import okhttp3.Response;
 import org.junit.Test;

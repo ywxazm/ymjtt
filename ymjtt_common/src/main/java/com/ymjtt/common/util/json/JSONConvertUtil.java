@@ -1,4 +1,4 @@
-package com.ymjtt.common.util;
+package com.ymjtt.common.util.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;

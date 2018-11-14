@@ -19,3 +19,14 @@
 6.mysql占用端口号: 3306
 
 7.oracle占用端口号: 1521
+
+
+
+zookeeper命令:
+    /zkCli.sh
+    ls /
+    ls2 /
+
+    zookeeper日志为乱码, 需要在日志的目录下加slf4j-api-1.7.2.jar, zookeeper-3.4.13.jar, 再执行如下命令:
+            java -classpath .:slf4j-api-1.7.2.jar:zookeeper-3.4.13.jar org.apache.zookeeper.server.LogFormatter /home/zookeeperCloud/zk/log00/version-2/log.1400000001
+

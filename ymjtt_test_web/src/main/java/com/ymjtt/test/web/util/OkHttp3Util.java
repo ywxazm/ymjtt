@@ -1,8 +1,8 @@
 package com.ymjtt.test.web.util;
 
-import com.ymjtt.common.util.CommonConsts;
-import com.ymjtt.common.util.JSONConvertUtil;
-import com.ymjtt.common.util.PropertiesCfg2ObjUtil;
+import com.ymjtt.common.util.consts.CommonConsts;
+import com.ymjtt.common.util.json.JSONConvertUtil;
+import com.ymjtt.common.util.file.PropertiesCfg2ObjUtil;
 import okhttp3.*;
 
 import java.io.File;
@@ -91,7 +91,7 @@ public class OkHttp3Util {
     }
 
     public static Response getSyn(String url) throws IOException {
-        return syn(url, null, REQUEST_TYPE_GET, null, null);
+        return syn(url, null, REQUEST_TYPE_GET, CONTEXT_TYPE_DEFAULT, null);
     }
 
     public static Response postSyn(String url, String paramJson) throws IOException {
