@@ -46,6 +46,7 @@
         <zk.version>3.4.6</zk.version>
         <zkclient.version>0.1</zkclient.version>
         <fastdfs.version>1.25</fastdfs.version>
+        <jedis.version>2.9.0</jedis.version>
 
         <tomcat.version>2.2</tomcat.version>
         <surefirePlugin.version>2.22.0</surefirePlugin.version>
@@ -214,14 +215,18 @@
                 <artifactId>zkclient</artifactId>
                 <version>${zkclient.version}</version>
             </dependency>
-
             <!-- fastdfs -->
             <dependency>
                 <groupId>com.ywx</groupId>
                 <artifactId>fastdfs_client_java</artifactId>
                 <version>${fastdfs.version}</version>
             </dependency>
-
+            <!-- jedis -->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

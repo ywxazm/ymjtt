@@ -14,7 +14,13 @@
 
 4.不使用tomcat9(已开机自启), 占用端口号: 8080, 8005, 8443
 
-5.redis占用端口号: 6379
+5.redis集群: 7001, 7002, 7003, 7004, 7005, 7006   (不知道怎么自启)(三主三备)
+    启动redis:
+            cd /home/redis/redisCloud
+            ./start-all.sh
+    unix下启动:
+            /home/redis/redisCloud/redis01/src/redis-cli -c -h 192.168.190.129 -p 7001
+            ./redis-cli -c -h 192.168.190.129 -p 7001
 
 6.mysql占用端口号: 3306
 
@@ -30,3 +36,5 @@ zookeeper命令:
     zookeeper日志为乱码, 需要在日志的目录下加slf4j-api-1.7.2.jar, zookeeper-3.4.13.jar, 再执行如下命令:
             java -classpath .:slf4j-api-1.7.2.jar:zookeeper-3.4.13.jar org.apache.zookeeper.server.LogFormatter /home/zookeeperCloud/zk/log00/version-2/log.1400000001
 
+    cluster info  查看集群信息
+    cluster nodes 查看各节点信息
