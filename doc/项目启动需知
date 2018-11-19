@@ -1,3 +1,12 @@
+tt基础: 		root   Over12340
+	 	    ywx	Over12340
+	redis	密码: Over12340
+	mysql 	用户名：root 	密码：root
+
+
+
+
+
 1.启动zookeeper集群(已开机自启)
     cd /
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo00.cfg
@@ -14,7 +23,7 @@
 
 4.不使用tomcat9(已开机自启), 占用端口号: 8080, 8005, 8443
 
-5.redis集群: 7001, 7002, 7003, 7004, 7005, 7006   (不知道怎么自启)(三主三备)
+5.redis集群: 7001, 7002, 7003, 7004, 7005, 7006   (已自启)(三主三备)
     启动redis:
             cd /home/redis/redisCloud
             ./start-all.sh
@@ -38,3 +47,9 @@ zookeeper命令:
 
     cluster info  查看集群信息
     cluster nodes 查看各节点信息
+
+    书写自启脚本 xxx.sh
+            开头:
+                   #!/bin/sh
+                   #chkconfig: 2345 80 90
+                   #description:hello.sh

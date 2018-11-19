@@ -230,7 +230,7 @@ public class OkHttp3Util {
         Map<String, String> paramMap = JSONConvertUtil.json2map(paramJson);
         StringBuilder paramStr = new StringBuilder();
         for (String key : paramMap.keySet()) {
-            paramStr.append(key).append(CommonConsts.EQUALS_STR).append(paramMap.get(key)).append(CommonConsts.AND_STR);
+            paramStr.append(key).append("=").append(paramMap.get(key)).append("&");
         }
         return RequestBody.create(MediaType.parse(requestTypeDefault), paramStr.substring(0, paramStr.length() - 1));
     }

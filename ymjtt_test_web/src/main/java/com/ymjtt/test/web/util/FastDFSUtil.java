@@ -2,8 +2,8 @@ package com.ymjtt.test.web.util;
 
 import com.alibaba.druid.util.StringUtils;
 import com.ymjtt.common.util.consts.CommonConsts;
+import com.ymjtt.common.util.file.FileUtils;
 import com.ymjtt.common.util.json.JSONConvertUtil;
-import com.ymjtt.common.util.file.FileNameUtils;
 import org.apache.commons.io.IOUtils;
 import org.csource.common.MyException;
 import org.csource.common.NameValuePair;
@@ -74,7 +74,7 @@ public class FastDFSUtil {
      * @throws MyException
      */
     public String fastDFSSave(String fileName, String paramJson) throws IOException, MyException {
-        if (fileName.lastIndexOf(CommonConsts.POINT_STR) == -1) {
+        if (fileName.lastIndexOf(".") == -1) {
             return null;
         }
 
@@ -88,10 +88,10 @@ public class FastDFSUtil {
             nvp = (NameValuePair[]) paramList.toArray();
         }
 
-        String fileInfo[] = storageClient.upload_file(fileName, FileNameUtils.getExtensionName(fileName), nvp);
-        StringBuffer sb = new StringBuffer();
+        String fileInfo[] = storageClient.upload_file(fileName, FileUtils.getExtensionName(fileName), nvp);
+        StringBuilder sb = new StringBuilder();
         for (String s : fileInfo) {
-            sb.append(s).append(CommonConsts.SPRIT_STR);
+            sb.append(s).append("/");
         }
 
         return sb.toString();
@@ -108,7 +108,7 @@ public class FastDFSUtil {
         if (null == fileByte) {
             throw new FileNotFoundException("found not file: " + fastDFSPath + ", at fastDFS server");
         }
-        IOUtils.write(fileByte, new FileOutputStream(downPath + FileNameUtils.createFileName(FileNameUtils.getExtensionName(fastDFSPath))));
+        IOUtils.write(fileByte, new FileOutputStream(downPath + FileUtils.createFileName(FileUtils.getExtensionName(fastDFSPath))));
     }
 
     /**
