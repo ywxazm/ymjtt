@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class FileUtils {
 
     /**
-     * 当前目录路径
+     * 当前工程目录路径, G:\WorkSpace\ymjtt_parent\ymjtt_parent\ymjtt_common\
      *
      * @author ywx
      * @date 2018/11/16 8:33
@@ -51,7 +51,7 @@ public class FileUtils {
     }
 
     /**
-     * 向左侧填充不足的长度
+     * 向左侧字符串填充不足的长度
      *
      * @param str    被填充字符串
      * @param length 要求长度
@@ -160,7 +160,7 @@ public class FileUtils {
      * @author ywx
      * @date 2018/11/16 8:57
      */
-    public static String read(String fileName, Integer byteNum) throws IOException {
+    public static String read(final String fileName) {
         File file = new File(fileName);
         FileInputStream fis = null;
         StringBuilder sb = new StringBuilder();
@@ -169,14 +169,13 @@ public class FileUtils {
             fis = new FileInputStream(file);
             FileChannel channel = fis.getChannel();
 
-            //允许读取文件最大字节数
-            int capacity = byteNum;
+            int capacity = 1024 * 8;
             ByteBuffer bf = ByteBuffer.allocate(capacity);
 
-            int length;
-            while ((length = channel.read(bf)) != -1) {
+            while (channel.read(bf) != -1) {
                 byte[] bytes = bf.array();
                 sb.append(new String(bytes, StandardCharsets.UTF_8));
+                bf.clear();
             }
             channel.close();
 
@@ -203,16 +202,31 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static boolean write(String fileName, String fileContent) throws IOException {
+    public static boolean write(final String fileName, final String fileContent){
         boolean result = false;
         File f = new File(fileName);
-        FileOutputStream fs = new FileOutputStream(f);
-        byte[] b = fileContent.getBytes();
-        fs.write(b);
-        fs.flush();
-        fs.close();
-        result = true;
-        return result;
+        FileOutputStream fs = null;
+        try {
+            fs = new FileOutputStream(f);
+            byte[] b = fileContent.getBytes();
+            fs.write(b);
+            fs.flush();
+            fs.close();
+            return true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -223,20 +237,30 @@ public class FileUtils {
      * @return
      * @throws IOException
      */
-    public static boolean append(String fileName, String fileContent) throws IOException {
-        boolean result = false;
+    public static boolean append(String fileName, String fileContent){
         File f = new File(fileName);
         if (f.exists()) {
-            RandomAccessFile rFile = new RandomAccessFile(f, "rw");
-            byte[] b = fileContent.getBytes();
-            long originLen = f.length();
-            rFile.setLength(originLen + b.length);
-            rFile.seek(originLen);
-            rFile.write(b);
-            rFile.close();
+            RandomAccessFile rFile = null;
+            try {
+                rFile = new RandomAccessFile(f, "rw");
+                byte[] b = fileContent.getBytes();
+                long originLen = f.length();
+                rFile.setLength(originLen + b.length);
+                rFile.seek(originLen);
+                rFile.write(b);
+                rFile.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    rFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        result = true;
-        return result;
+        return false;
     }
 
     /**
@@ -247,12 +271,13 @@ public class FileUtils {
      * @return 拆分后的文件名列表
      * @throws IOException
      */
-    public List<String> splitBySize(String fileName, int byteSize) throws IOException {
-        List<String> parts = new ArrayList<String>();
+    public List<String> splitBySize(String fileName, int byteSize) {
+        List<String> parts = new ArrayList<>();
         File file = new File(fileName);
         int count = (int) Math.ceil(file.length() / (double) byteSize);
         int countLen = (count + "").length();
-        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(count, count * 3, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(count * 2));
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(count, count * 3
+                , 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(count * 2));
 
         for (int i = 0; i < count; i++) {
             String partFileName = file.getName() + "." + leftPad((i + 1) + "", countLen, '0') + ".part";
@@ -271,15 +296,29 @@ public class FileUtils {
      * @param mergeFileName  合并后的文件名
      * @throws IOException
      */
-    public void mergePartFiles(String dirPath, String partFileSuffix, int partFileSize, String mergeFileName) throws IOException {
+    public void mergePartFiles(String dirPath, String partFileSuffix, int partFileSize, String mergeFileName){
         List<File> partFiles = FileUtils.getDirFiles(dirPath, partFileSuffix);
-        Collections.sort(partFiles, new FileComparator());
+        partFiles.sort(new FileComparator());
 
-        RandomAccessFile randomAccessFile = new RandomAccessFile(mergeFileName, "rw");
-        randomAccessFile.setLength(partFileSize * (partFiles.size() - 1) + partFiles.get(partFiles.size() - 1).length());
-        randomAccessFile.close();
+        RandomAccessFile randomAccessFile = null;
+        try {
+            randomAccessFile = new RandomAccessFile(mergeFileName, "rw");
+            randomAccessFile.setLength(partFileSize * (partFiles.size() - 1) + partFiles.get(partFiles.size() - 1).length());
+            randomAccessFile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (randomAccessFile != null) {
+                try {
+                    randomAccessFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(partFiles.size(), partFiles.size() * 3, 1, TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(partFiles.size() * 2));
+        ThreadPoolExecutor threadPool = new ThreadPoolExecutor(partFiles.size(), partFiles.size() * 3
+                , 1, TimeUnit.SECONDS, new ArrayBlockingQueue<>(partFiles.size() * 2));
 
         for (int i = 0; i < partFiles.size(); i++) {
             threadPool.execute(new MergeRunnable(i * partFileSize, mergeFileName, partFiles.get(i)));
@@ -289,8 +328,8 @@ public class FileUtils {
 
     /**
      * 根据文件名，比较文件
-     *
-     * @author yjmyzz@126.com
+     * @author  ywx
+     * @date    2018/11/19 14:52
      */
     private class FileComparator implements Comparator<File> {
         public int compare(File o1, File o2) {
@@ -300,8 +339,8 @@ public class FileUtils {
 
     /**
      * 分割处理Runnable
-     *
-     * @author yjmyzz@126.com
+     * @author  ywx
+     * @date    2018/11/19 14:52
      */
     private class SplitRunnable implements Runnable {
         int byteSize;
@@ -336,8 +375,8 @@ public class FileUtils {
 
     /**
      * 合并处理Runnable
-     *
-     * @author yjmyzz@126.com
+     * @author  ywx
+     * @date    2018/11/19 14:52
      */
     private class MergeRunnable implements Runnable {
         long startPos;
@@ -352,10 +391,11 @@ public class FileUtils {
 
         public void run() {
             RandomAccessFile rFile;
+            FileInputStream fs = null;
             try {
                 rFile = new RandomAccessFile(mergeFileName, "rw");
                 rFile.seek(startPos);
-                FileInputStream fs = new FileInputStream(partFile);
+                fs = new FileInputStream(partFile);
                 byte[] b = new byte[fs.available()];
                 fs.read(b);
                 fs.close();
@@ -363,6 +403,14 @@ public class FileUtils {
                 rFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (null != fs) {
+                    try {
+                        fs.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
