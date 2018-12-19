@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath*:spring/applicationContext_*.xml"})
 /*
-@ContextConfiguration(locations={"classpath:applicationContext_db.xml", "classpath:applicationContext_service.xml",
+@ContextConfiguration(locations={"classpath:applicationContext_db.xml", "classpath:applicationContext_common.xml",
                                  "classpath:applicationContext_tx.xml"})        //这二者等效
 */
 public class CurrTimeServiceTest {

@@ -8,6 +8,8 @@
         <module>ymjtt_common</module>
         <module>ymjtt_test</module>
         <module>ymjtt_test_web</module>
+        <module>ymjtt_manager</module>
+        <module>ymjtt_manager_web</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>
@@ -21,18 +23,21 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <spring.version>5.0.8.RELEASE</spring.version>
-        <mybatis.version>3.4.6</mybatis.version>
+        <mybatis.version>3.2.8</mybatis.version>
         <mybatisSpring.version>1.3.2</mybatisSpring.version>
-        <pagehelper.version>4.2.0</pagehelper.version>
+        <pagehelper.version>4.2.1</pagehelper.version>
 
         <mysql.version>8.0.12</mysql.version>
         <druid.version>1.1.12</druid.version>
         <jsp.version>2.2</jsp.version>
         <servlet.version>2.5</servlet.version>
+        <servlet2.version>3.0.1</servlet2.version>
+        <freemarker.version>2.3.23</freemarker.version>
         <jackson.version>2.9.0</jackson.version>        <!-- 这个版本与Spring5兼容,其它的不行 -->
         <aspectj.version>1.9.1</aspectj.version>
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
+        <persistence.version>2.2</persistence.version>
 
         <logback.version>1.2.3</logback.version>
         <logbackextspring.version>0.1.4</logbackextspring.version>
@@ -104,6 +109,11 @@
                 <artifactId>pagehelper</artifactId>
                 <version>${pagehelper.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.persistence</groupId>            <!-- 由Idea生成javaBean,依赖此jar -->
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${persistence.version}</version>
+            </dependency>
 
             <!-- mysql -->
             <dependency>
@@ -130,6 +140,17 @@
                 <artifactId>servlet-api</artifactId>
                 <version>${servlet.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.servlet</groupId>            <!-- spring4 和 servlet2.5兼容性不好, 以jar可以解决 -->
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet2.version}</version>
+            </dependency>
+            <!-- freeMarck -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
             </dependency>
             <!-- jackson -->
             <dependency>

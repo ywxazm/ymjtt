@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.mapper.MenuMapper">
+
+    <resultMap id="menuDoMap" type="menuDo" >
+        <id property="menuId" column="menu_id" />
+        <result property="menuName" column="menu_name" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="url" column="url" />
+        <result property="parentId" column="parent_id" />
+        <result property="createTime" column="createTime" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+    </resultMap>
+
+    <sql id="menuCloumn">
+        m.menu_id, m.menu_name, m.sort_order, m.sort_order,m.url, m.parent_id, m.createTime, m.lastupdateTime
+    </sql>
+
+    <sql id="menuPidWhere">
+        WHERE 1 = 1
+        <if test="_parameter != null">
+            AND m.parent_id = #{id}
+        </if>
+    </sql>
+
+    <!-- 查询子Menu集合 -->
+    <select id="listByPid" parameterType="Long" resultMap="menuDoMap">
+        SELECT
+        <include refid="menuCloumn"/>
+        FROM menu m
+        <include refid="menuPidWhere" />
+    </select>
+
+    <!-- 查询Menu -->
+    <select id="getById" parameterType="Long" resultMap="menuDoMap">
+        SELECT
+        <include refid="menuCloumn"/>
+        FROM menu m
+        WHERE m.menu_id = #{id}
+    </select>
+
+</mapper>

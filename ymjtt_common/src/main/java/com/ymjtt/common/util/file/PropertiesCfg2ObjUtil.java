@@ -29,7 +29,7 @@ public class PropertiesCfg2ObjUtil {
      * @return Object
      */
     public static Object getObjFromPropertiesFile(String fileName, Class<?> clazz) throws IOException {
-        Map<String, String> dtoMap = getMapFromPropertiesFile(fileName);
+        Map<String, Object> dtoMap = getMapFromPropertiesFile(fileName);
         String JsonObj = JSONConvertUtil.map2Json(dtoMap);
         return JSONConvertUtil.json2Obj(JsonObj, clazz);
     }
@@ -40,7 +40,7 @@ public class PropertiesCfg2ObjUtil {
      * @param fileName 文件名
      * @return Map<String, String>
      */
-    public static Map<String, String> getMapFromPropertiesFile(String fileName) throws IOException {
+    public static Map<String, Object> getMapFromPropertiesFile(String fileName) throws IOException {
         URL url = Thread.currentThread().getContextClassLoader().getResource(fileName);
         String filePath;
         if (null != url) {
@@ -53,7 +53,7 @@ public class PropertiesCfg2ObjUtil {
         properties.load(new FileInputStream(new File(filePath)));
         Enumeration<?> enumeration = properties.propertyNames();
 
-        Map<String, String>dtoMap = new HashMap<>();
+        Map<String, Object> dtoMap = new HashMap<>();
         while (enumeration.hasMoreElements()) {
             String key = (String) enumeration.nextElement();
             dtoMap.put(key, properties.getProperty(key));

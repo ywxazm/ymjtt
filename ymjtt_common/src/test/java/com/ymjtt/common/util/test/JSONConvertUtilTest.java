@@ -21,7 +21,7 @@ public class JSONConvertUtilTest {
      */
     @Test
     public void test01() throws JsonProcessingException {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("name", "小明");
         map.put("age", "19");
         String json = JSONConvertUtil.map2Json(map);
@@ -33,7 +33,7 @@ public class JSONConvertUtilTest {
      */
     @Test
     public void test02() throws IOException {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("name", "小明");
         map.put("age", "19");
         String json = JSONConvertUtil.map2Json(map);

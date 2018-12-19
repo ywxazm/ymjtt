@@ -23,7 +23,7 @@ public class ReceiveDataTest {
         System.out.println("get: " + get_response);
         System.out.println("get: " + get_response.body().string());
 
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", "3");
         map.put("name", "小胆");
         map.put("age", "22");
@@ -39,7 +39,7 @@ public class ReceiveDataTest {
     }
     @Test
     public void test03() throws IOException {
-        Map<String, String> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", "3");
         map.put("name", "小胆");
         map.put("age", "22");

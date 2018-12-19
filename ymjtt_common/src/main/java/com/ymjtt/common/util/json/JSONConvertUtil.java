@@ -42,7 +42,7 @@ public class JSONConvertUtil {
      * @param map
      * @return
      */
-    public static String map2Json(Map<String, String> map) throws JsonProcessingException {
+    public static String map2Json(Map<String, Object> map) throws JsonProcessingException {
         return obj2Json(map);
     }
 

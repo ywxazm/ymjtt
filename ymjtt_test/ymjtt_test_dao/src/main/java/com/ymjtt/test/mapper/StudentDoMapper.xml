@@ -24,18 +24,18 @@
     <select id="getStudentDo" parameterType="StudentDo" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum"/>
-        FROM student stu
+        FROM test_student stu
         <include refid="studentDoWhere"/>
     </select>
 
     <!-- 增加 -->
     <insert id="saveStudentDo" parameterType="StudentDo">
-        INSERT INTO student VALUES (null, #{name}, #{age})
+        INSERT INTO test_student VALUES (null, #{name}, #{age})
     </insert>
 
     <!-- 删除 -->
     <delete id="removeStudentDo" parameterType="StudentDo">
-        DELETE FROM student
+        DELETE FROM test_student
         <if test="id != null">
             WHERE id = #{id}
         </if>
@@ -43,7 +43,7 @@
 
     <!-- 更新 -->
     <update id="updateStudentDo" parameterType="StudentDo">
-        UPDATE student stu
+        UPDATE test_student stu
         <trim prefix="set" suffixOverrides=",">
             <if test="name != null">stu.name = #{name},</if>
             <if test="age != null">stu.age = #{age}</if>
@@ -57,27 +57,27 @@
     <select id="getStudentDoById" parameterType="Integer" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         WHERE stu.id = #{id}
     </select>
     <select id="getStudentDoByName" parameterType="string" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         WHERE stu.name = #{name}
     </select>
     <!-- pojo参数 -->
     <select id="getStudentDoByPojo" parameterType="StudentDo" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         <include refid="studentDoWhere" />
     </select>
     <!-- 包装pojo参数 -->
     <select id="getStudentDoByPojoVo" parameterType="StudentVo" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         WHERE 1 = 1
             <if test="studentDo.id != null">
                 AND id = #{studentDo.id}
@@ -90,7 +90,7 @@
     <select id="getStudentDoByIds" parameterType="string" resultType="StudentDo">      /* 入参为String类型的ids */     /* 注意入参的表示及字符串的切割 */
         SELECT                                                                  /* _parameter: 如果是非基本数据类型,不会用get()到String中去取值, 如果是基本数据类型,则表示做任意传入的值 */
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         <where>
             <if test="_parameter != null and _parameter.length != 0">
                 stu.id IN 
@@ -105,7 +105,7 @@
     <select id="listStudentDoByArray" parameterType="int" resultType="StudentDo">    /* 数组作为入参, parameterType为数组的存储数据类型, test和collection为array */
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         <where>
             <if test="array != null">
                 stu.id IN
@@ -120,7 +120,7 @@
     <select id="ListStudentDoByList" parameterType="java.util.List" resultType="StudentDo">   /* List集合作为入参, parameterType为List, test和collection为list */
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         <where>
             <if test="list != null and list.size() != 0">
                 stu.id IN
@@ -134,7 +134,7 @@
     <select id="ListStudentDoByMap" parameterType="java.util.Map" resultType="StudentDo">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         WHERE 1 = 1
         <if test="id != null">
             AND id = #{id}
@@ -150,7 +150,7 @@
     <!--ResultType Test-->
     <!-- 简单数据类型 -->
     <select id="countStudentDo" resultType="int">
-        SELECT count(id) FROM student stu
+        SELECT count(id) FROM test_student stu
     </select>
     <!-- POJO类型 -->
     <!-- List集合类型 -->
@@ -163,7 +163,7 @@
     <select id="getStudentVoById" parameterType="Integer" resultMap="voMap">
         SELECT
         <include refid="studentDoCloum" />
-        FROM student stu
+        FROM test_student stu
         <where>
             <if test="_parameter != null">
                 stu.id = #{_parameter}

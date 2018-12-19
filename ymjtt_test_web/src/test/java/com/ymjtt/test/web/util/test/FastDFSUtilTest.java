@@ -22,9 +22,15 @@ public class FastDFSUtilTest {
     private FastDFSUtil fastDFSUtil;
 
     @Test
+    public void fastDFSSave() throws Exception {
+        String path = fastDFSUtil.fastDFSSave("C:\\Users\\ywx_azm\\Desktop\\1542778819.png", null);
+        System.out.println(path);
+    }
+
+    @Test
     public void fastDFSDown() throws Exception {
-        fastDFSUtil.setDownPath("D:/");
-        fastDFSUtil.fastDFSDown("M00/00/00/wKi-gVvkTNWAH7GDAIzU2E27KwY452.pdf");
+        fastDFSUtil.setDownPath("D:/Down/");
+        fastDFSUtil.fastDFSDown("M00/00/00/wKi-gVv1AHSAEZDtAAJxPWATF9I688.png");
     }
 
     @Test

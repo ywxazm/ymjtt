@@ -1,6 +1,5 @@
 package com.ymjtt.test.web.util;
 
-import com.ymjtt.common.util.consts.CommonConsts;
 import com.ymjtt.common.util.json.JSONConvertUtil;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Value;

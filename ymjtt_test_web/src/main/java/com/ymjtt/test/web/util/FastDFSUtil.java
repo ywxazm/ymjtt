@@ -1,7 +1,6 @@
 package com.ymjtt.test.web.util;
 
 import com.alibaba.druid.util.StringUtils;
-import com.ymjtt.common.util.consts.CommonConsts;
 import com.ymjtt.common.util.file.FileUtils;
 import com.ymjtt.common.util.json.JSONConvertUtil;
 import org.apache.commons.io.IOUtils;
@@ -89,6 +88,34 @@ public class FastDFSUtil {
         }
 
         String fileInfo[] = storageClient.upload_file(fileName, FileUtils.getExtensionName(fileName), nvp);
+        StringBuilder sb = new StringBuilder();
+        for (String s : fileInfo) {
+            sb.append(s).append("/");
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     *
+     * @author  ywx
+     * @date    2018/11/22 9:20
+     * @param   [fileName, paramJson]
+     * @return  java.lang.String
+     */
+    public String fastDFSSave(byte[] bytes, String extensionName, String paramJson) throws IOException, MyException {
+
+        NameValuePair[] nvp = null;
+        if (!StringUtils.isEmpty(paramJson)) {
+            Map<String, String> paramMap = JSONConvertUtil.json2map(paramJson);
+            List<NameValuePair> paramList = new ArrayList<>();
+            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                paramList.add(new NameValuePair(entry.getKey(), entry.getValue()));
+            }
+            nvp = (NameValuePair[]) paramList.toArray();
+        }
+
+        String fileInfo[] = storageClient.upload_file(bytes, extensionName, nvp);
         StringBuilder sb = new StringBuilder();
         for (String s : fileInfo) {
             sb.append(s).append("/");

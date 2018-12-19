@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.mapper.ProductMapper">
+
+    <resultMap id="productContainCatMap" type="java.util.Map">
+        <id property="productId" column="product_id"/>
+        <result property="title" column="title"/>
+        <result property="sellPoint" column="sell_point"/>
+        <result property="price" column="price"/>
+        <result property="barcode" column="barcode"/>
+        <result property="image" column="image"/>
+        <result property="cid" column="cid"/>
+        <result property="productStatus" column="product_status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="update_counts"/>
+        <association property="productCatDo" javaType="productCatDo">
+            <id property="productCatId" column="product_cat_id" />
+            <result property="productCatName" column="product_cat_name" />
+            <result property="productCatStatus" column="product_cat_status" />
+            <result property="sortOrder" column="sort_order" />
+            <result property="parentId" column="parent_id" />
+            <result property="parentCat" column="parent_cat" />
+            <result property="createTime" column="createTime" />
+            <result property="lastupdateTime" column="lastupdateTime" />
+            <result property="updateCounts" column="update_counts" />
+        </association>
+    </resultMap>
+
+    <resultMap id="productDoMap" type="productDo">
+        <id property="productId" column="product_id"/>
+        <result property="title" column="title"/>
+        <result property="sellPoint" column="sell_point"/>
+        <result property="price" column="price"/>
+        <result property="barcode" column="barcode"/>
+        <result property="image" column="image"/>
+        <result property="cid" column="cid"/>
+        <result property="productStatus" column="product_status"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="update_counts"/>
+    </resultMap>
+
+    <sql id="productContainCatCloumn">
+        p.product_id, p.title, p.sell_point, p.price, p.barcode, p.image, p.product_status, p.cid,
+        p.createTime, p.createOper, p.lastupdateTime, p.lastupdateOper, p.update_counts,
+        pc.product_cat_id, pc.product_cat_name, pc.product_cat_status, pc.sort_order, pc.parent_id,
+        pc.parent_cat, pc.createTime, pc.lastupdateTime, pc.update_counts
+    </sql>
+
+    <sql id="productCloumn">
+        p.product_id, p.title, p.sell_point, p.price, p.barcode, p.image, p.product_status, p.cid,
+        p.createTime, p.createOper, p.lastupdateTime, p.lastupdateOper, p.update_counts
+    </sql>
+
+    <!-- 通过商品各属性混合查询 -->
+    <sql id="productCriteriaWhere">
+        <where>
+            <if test="criteria != null and criteria != ''">
+                AND (p.title LIKE CONCAT('%',#{criteria},'%')
+                OR p.sell_point LIKE CONCAT('%',#{criteria},'%')
+                OR p.price LIKE CONCAT('%',#{criteria},'%')
+                OR p.cid LIKE CONCAT('%',#{criteria},'%')
+                OR p.createOper LIKE CONCAT('%',#{criteria},'%')
+                OR p.lastupdateOper LIKE CONCAT('%',#{criteria},'%')
+                )
+            </if>
+        </where>
+    </sql>
+    <select id="list" parameterType="string" resultMap="productContainCatMap">
+        SELECT
+        <include refid="productContainCatCloumn"/>
+        FROM product p LEFT JOIN product_cat pc ON p.cid = pc.product_cat_id
+        <include refid="productCriteriaWhere"/>
+        ORDER BY p.lastupdateTime DESC
+    </select>
+
+    <!-- 商品类别ID查询 -->
+    <sql id="productCatIdWhere">
+        <where>
+            <if test="_parameter  != null and _parameter  != ''">
+                AND p.cid = #{cid}
+            </if>
+        </where>
+    </sql>
+    <select id="listByCid" parameterType="long" resultMap="productDoMap">
+        SELECT
+        <include refid="productCloumn"/>
+        FROM product p
+        <include refid="productCatIdWhere"/>
+        ORDER BY p.lastupdateTime DESC
+    </select>
+
+    <!-- 商品DO查询-->
+    <sql id="productDoWhere">
+        <where>
+            <if test="productId != null and productId != ''">
+                AND p.product_id = #{productId}
+            </if>
+            <if test="title != null and title != ''">
+                AND p.title LIKE concat('%', #{title}, '%')
+            </if>
+            <if test="barcode != null and barcode != ''">
+                AND p.barcode = #{barcode}
+            </if>
+            <if test="(price != null and price != '') || (priceAgain != null and priceAgain != '')">
+                <if test="(price != null and price != '') and (priceAgain != null and priceAgain != '')">
+                    AND p.price &gt;= #{price}
+                    AND p.price &lt;= #{priceAgain}
+                </if>
+                <if test="price != null and price != ''">
+                    AND p.price &gt;= #{price}
+                </if>
+                <if test="priceAgain != null and priceAgain != ''">
+                    AND p.price &lt;= #{priceAgain}
+                </if>
+            </if>
+            <if test="cid != null and cid != ''">
+                AND p.cid = #{cid}
+            </if>
+            <if test="productStatus != null and productStatus != ''">
+                AND p.product_status = #{productStatus}
+            </if>
+            <if test="createOper != null and createOper != ''">
+                AND p.createOper = #{createOper}
+            </if>
+            <if test="lastupdateOper != null and lastupdateOper != ''">
+                AND p.lastupdateOper = #{lastupdateOper}
+            </if>
+        </where>
+    </sql>
+    <select id="listByDo" parameterType="productDo" resultMap="productDoMap">
+        SELECT
+        <include refid="productCloumn"/>
+        FROM product p
+        <include refid="productDoWhere"/>
+        ORDER BY p.lastupdateTime DESC
+    </select>
+
+
+    <!-- 商品id查询-->
+    <sql id="productIdWhere">
+        <where>
+            <if test="_parameter != null">
+                AND p.product_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getById" parameterType="Long" resultMap="productDoMap">
+        SELECT
+        <include refid="productCloumn"/>
+        FROM product p
+        <include refid="productIdWhere"/>
+        ORDER BY p.lastupdateTime DESC
+    </select>
+
+    <!-- 删除, 支持批量操作 -->
+    <sql id="removeWhere">
+        <where>
+            <if test="pids != null and pids != ''">          /* delete使用别名, 需要将别名添加至delete之后 */
+                product_id IN
+                <foreach collection="pids.split(',')" item="id" open="(" close=")" separator="," index="index">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </sql>
+    <delete id="removeList" parameterType="string">
+        DELETE FROM product
+        <include refid="removeWhere"/>
+    </delete>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="productDo">
+        UPDATE product SET
+        <if test="title != null and title != ''">
+            title = #{title},
+        </if>
+        <if test="sellPoint != null and sellPoint != ''">
+            sell_point = #{sellPoint},
+        </if>
+        <if test="price != null and price != ''">
+            price = #{price},
+        </if>
+        <if test="barcode != null and barcode != ''">
+            barcode = #{barcode},
+        </if>
+        <if test="image != null and image != ''">
+            image = #{image},
+        </if>
+        <if test="cid != null and cid != ''">
+            cid = #{cid},
+        </if>
+        <if test="productStatus != null and productStatus != ''">
+            product_status = #{productStatus},
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">            /* TODO: 数据库存设置某属性有默认值时, 不添加此列, 则会默认添加, 并设置为默认值 */
+            createTime = createTime,
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1,
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now())
+        </if>
+        WHERE
+            product_id = #{productId}
+    </update>
+
+</mapper>

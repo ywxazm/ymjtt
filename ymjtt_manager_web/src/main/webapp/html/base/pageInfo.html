@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="../../static/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <script src="../../static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../static/js/bootstrap.min.js?v=3.3.6"></script>
+
+</head>
+
+<body>
+
+<div>
+    <ul class="pagination" style="color: black">
+        <li><a id="last" style="display: none">上一页</a></li>
+        <li><a id="page01" style="display: none">1</a></li>
+        <li><a id="page02" style="display: none">2</a></li>
+        <li><a id="page03" style="display: none">3</a></li>
+        <li><a id="page04" style="display: none">4</a></li>
+        <li><a id="page05" style="display: none">5</a></li>
+        <li><a id="page06" style="display: none">6</a></li>
+        <li><a id="page07" style="display: none">7</a></li>
+        <li><a id="page08" style="display: none">8</a></li>
+        <li><a id="next" style="display: none">下一页</a></li>
+        <li>
+            &nbsp;<span style="border: none">共<span id="totalId"></span>条记录, 共<span id="pagesId"></span>页, 当前第<span id="pageNumId"></span>页, 到第&nbsp;<input type="text" id="toPageId"
+                                                                             style="width: 35px; height: 25px">&nbsp;页</span>
+            <button type="button" class="btn btn-primary">跳转</button>
+        </li>
+    </ul>
+</div>
+
+<script>
+    /* 父页面传输过来的数据 */
+    var pageData = parent.pageData;
+
+    /* 分页信息 */
+    $(function () {
+        var pages = pageData.pages;
+        var hasNextPage = pageData.hasNextPage;
+        var hasPreviousPage = pageData.hasPreviousPage;
+        var nextPage = pageData.nextPage;
+        var prePage = pageData.prePage;
+        var navigatepageNums = pageData.navigatepageNums;
+        var pageNum = pageData.pageNum;
+        var total = pageData.total;
+
+        if (hasPreviousPage) {
+            $("#last").css("display", "block");
+            $("#last").attr("onclick", 'toPage('+ prePage +')');
+        }
+        for (var i = 0; i < navigatepageNums.length; i++) {
+            if(pageNum == navigatepageNums[i]) {
+                $("#page0" + (i + 1)).css("background-color", "#999");
+            }
+            $("#page0" + (i + 1)).css("display", "block");
+            $("#page0" + (i + 1)).attr("onclick", 'toPage('+ navigatepageNums[i] +')');
+            $("#page0" + (i + 1)).text(navigatepageNums[i]);
+        }
+        if (hasNextPage) {
+            $("#next").css("display", "block");
+            $("#next").attr("onclick", 'toPage('+ nextPage +')');
+        }
+
+        $("#totalId").text(total);
+        $("#pageNumId").text(pageNum);
+        $("#pagesId").text(pages);
+
+        $(".pagination :button").click(function () {
+            var toPageIdValue = $("#toPageId").val();
+            if(null == toPageIdValue || '' == toPageIdValue) {
+                toPageIdValue = 1;
+            }
+            toPage(toPageIdValue);
+        });
+
+        $(".pagination>li>a, .pagination>li>span").css("color", "black");
+        $(".pagination>li>a, .pagination>li>span").css("margin-left", "1px");
+    });
+
+    /* 分页请求 */
+    function toPage(pageNum) {
+        parent.showData(pageNum);
+//        location.reload();     //重新加载当前页面
+    }
+</script>
+
+</body>
+</html>

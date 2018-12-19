@@ -11,10 +11,10 @@
     <select id="listUserDo" resultType="UserDo">
         SELECT
         <include refid="userDoCloumn" />
-        FROM user user
+        FROM test_user user
     </select>
     <insert id="saveUserDo" parameterType="UserDo">
-        INSERT INTO user VALUES (#{uid}, #{uname});
+        INSERT INTO test_user VALUES (#{uid}, #{uname});
     </insert>
 
     <!-- 一对多的查询方式 -->
@@ -32,8 +32,8 @@
           u.uname,
           o.oid,
           o.createDate
-        FROM user u
-        LEFT JOIN orders o ON o.uid = u.uid
+        FROM test_user u
+        LEFT JOIN test_orders o ON o.uid = u.uid
         <where>
             <if test="_parameter != null" >
                 u.uid  = #{_parameter}
@@ -56,8 +56,8 @@
           u.uname,
           o.oid,
           o.createDate
-        FROM user u
-        LEFT JOIN orders o ON o.uid = u.uid
+        FROM test_user u
+        LEFT JOIN test_orders o ON o.uid = u.uid
         <where>
             <if test="_parameter != null" >
                 o.oid  = #{_parameter}
@@ -78,8 +78,8 @@
         u.uname uname,
         o.oid oid,
         o.createDate createDate
-        FROM user u
-        LEFT JOIN orders o ON o.uid = u.uid
+        FROM test_user u
+        LEFT JOIN test_orders o ON o.uid = u.uid
         <where>
             <if test="_parameter != null" >
                 o.oid  = #{_parameter}
@@ -90,12 +90,12 @@
     <!-- Sql注入 -->
     <!-- 成功注入 -->
     <select id="Injection" parameterType="string" resultType="UserDo">
-        SELECT u.uid, u.uname FROM user u
+        SELECT u.uid, u.uname FROM test_user u
         WHERE u.uname = ${_parameter}
     </select>
     <!-- 无法注入 -->
     <select id="NoInjection" parameterType="string" resultType="UserDo">
-        SELECT u.uid, u.uname FROM user u
+        SELECT u.uid, u.uname FROM test_user u
         WHERE u.uname = #{_parameter}
     </select>
 

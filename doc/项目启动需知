@@ -12,7 +12,7 @@ tt基础: 		root   Over12340
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo00.cfg
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo01.cfg
     /home/zookeeperCloud/zk/bin/zkServer.sh start /home/zookeeperCloud/zk/conf/zoo02.cfg
-    zookeeper部署3台, 占用端口 2181, 2182, 2183,  zookeeper的启动会有些慢, 开完机后, 要等一会
+    zookeeper部署3台, 占用端口 3181, 3182, 3183,  zookeeper的启动会有些慢, 开完机后, 要等一会
 
     2.dubbo监控中心(已开机自启)
     帐号: root   密码: root

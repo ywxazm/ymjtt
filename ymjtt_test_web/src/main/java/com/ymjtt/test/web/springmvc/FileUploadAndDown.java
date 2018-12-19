@@ -43,7 +43,7 @@ public class FileUploadAndDown {
     }
 
     /**
-     * 下载文件, 直接使用 http://localhost:9001/test_web/fileDown?fileName=JAVA并发编程实战.pdf
+     * 下载文件, 直接使用 http://localhost:9001/test_web/fileDown?fileName=JAVA并发编程实战.=
      * @param response
      * @param request
      * @param fileName

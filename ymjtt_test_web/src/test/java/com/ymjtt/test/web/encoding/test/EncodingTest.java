@@ -17,7 +17,7 @@ public class EncodingTest {
 
     private static final String url = "http://localhost:9001/test_web";
 
-    private static Map<String, String> queryMap = new HashMap<>();
+    private static Map<String, Object> queryMap = new HashMap<>();
 
     /**
      * Get请求

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.mapper.ProductCatMapper">
+
+    <resultMap id="productCatDoMap" type="productCatDo" >
+        <id property="productCatId" column="product_cat_id" />
+        <result property="productCatName" column="product_cat_name" />
+        <result property="productCatStatus" column="product_cat_status" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="parentId" column="parent_id" />
+        <result property="parentCat" column="parent_cat" />
+        <result property="createTime" column="createTime" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="productCatCloumn">
+        pc.product_cat_id, pc.product_cat_name, pc.product_cat_status, pc.sort_order, pc.parent_id, pc.parent_cat,
+        pc.createTime, pc.lastupdateTime, pc.update_counts
+    </sql>
+
+    <!-- 父ID查询 -->
+    <sql id="pidWhere">
+        WHERE 1 = 1
+        <if test="pid != null">
+            AND pc.parent_id = #{pid}
+        </if>
+    </sql>
+    <select id="listByPid" parameterType="Long" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="pidWhere" />
+    </select>
+
+    <!-- ID查询 -->
+    <sql id="idWhere">
+        WHERE 1 = 1
+        <if test="_parameter != null">
+            AND pc.product_cat_id = #{id}
+        </if>
+    </sql>
+    <select id="getById" parameterType="Long" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="idWhere" />
+    </select>
+
+</mapper>
