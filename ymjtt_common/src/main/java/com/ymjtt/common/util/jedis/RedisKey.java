@@ -12,5 +12,6 @@ public class RedisKey {
     /* 商品模块 */
     public static final String PRODUCT_ID = "product_id";
     public static final String PRODUCT_BARCODE = "product_barCode";
+    public static final String PRODUCT_CAT_ID = "product_cat_id";
 
 }

@@ -1,5 +1,6 @@
 package com.ymjtt.common.vo;
 
+
 import java.io.Serializable;
 
 /**
@@ -15,6 +16,8 @@ public class ProductCatNodeVO implements Serializable {
     private String name;
     /** 种类状态 */
     private String status;
+    /** 是否为父种类 */
+    private Boolean parentType;
 
     public Long getId() {
         return id;
@@ -40,28 +43,11 @@ public class ProductCatNodeVO implements Serializable {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ProductCatNodeVO that = (ProductCatNodeVO) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        return status != null ? status.equals(that.status) : that.status == null;
+    public Boolean getParentType() {
+        return parentType;
     }
 
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "ItemCatNodeVO{" + "id=" + id + ", name='" + name + '\'' + ", status='" + status + '\'' + '}';
+    public void setParentType(Boolean parentType) {
+        this.parentType = parentType;
     }
 }

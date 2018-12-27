@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.mapper.ProductImgMapper">
+
+    <resultMap id="productImgDoMap" type="productImgDo" >
+        <id property="productImgId" column="product_img_id" />
+        <result property="productId" column="product_id" />
+        <result property="img" column="img" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="productImgCloumn">
+        pi.product_img_id, pi.product_id, pi.img, pi.sort_order, pi.createTime, pi.createOper, pi.lastupdateTime, pi.lastupdateOper, pi.update_counts
+    </sql>
+
+    <sql id="productImgPidWhere">
+        WHERE 1 = 1
+        <if test="productId != null">
+            AND pi.product_id = #{productId}
+        </if>
+    </sql>
+
+    <!-- 查询productId子集合 -->
+    <select id="listByPid" parameterType="Long" resultMap="productImgDoMap">
+        SELECT
+        <include refid="productImgCloumn"/>
+        FROM product_img pi
+        <include refid="productImgPidWhere" />
+        ORDER BY pi.sort_order ASC
+    </select>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="productImgDo">
+        UPDATE product_img SET
+        <if test="productId != null and productId != ''">
+            product_id = #{productId},
+        </if>
+        <if test="img != null and img != ''">
+            img = #{img},
+        </if>
+        <if test="sortOrder != null and sortOrder != ''">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="1 != 2">            /* TODO: 数据库存设置某属性有默认值时, 不添加此列, 则会默认添加, 并设置为默认值 */
+            createTime = createTime,
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="1 != 2">
+            createOper = createOper,
+        </if>
+        <if test="1 != 2">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = updateCounts + 1
+        </if>
+        WHERE
+        product_img_id = #{productImgId}
+    </update>
+
+</mapper>

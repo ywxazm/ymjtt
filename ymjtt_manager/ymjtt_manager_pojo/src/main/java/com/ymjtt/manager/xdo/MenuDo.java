@@ -11,13 +11,13 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "menu", schema = "ymjtt")
 public class MenuDo implements Serializable{
-    private Long menuId;
-    private String menuName;
-    private Byte sortOrder;
-    private String url;
-    private Byte parentId;
-    private Timestamp createTime;
-    private Timestamp lastupdateTime;
+    protected Long menuId;
+    protected String menuName;
+    protected Byte sortOrder;
+    protected String url;
+    protected Byte parentId;
+    protected Timestamp createTime;
+    protected Timestamp lastupdateTime;
 
     @Id
     @Column(name = "menu_id")

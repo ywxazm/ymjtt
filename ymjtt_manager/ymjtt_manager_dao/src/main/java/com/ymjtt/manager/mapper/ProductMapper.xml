@@ -77,7 +77,7 @@
         <include refid="productContainCatCloumn"/>
         FROM product p LEFT JOIN product_cat pc ON p.cid = pc.product_cat_id
         <include refid="productCriteriaWhere"/>
-        ORDER BY p.lastupdateTime DESC
+        ORDER BY p.lastupdateTime ASC
     </select>
 
     <!-- 商品类别ID查询 -->
@@ -93,7 +93,7 @@
         <include refid="productCloumn"/>
         FROM product p
         <include refid="productCatIdWhere"/>
-        ORDER BY p.lastupdateTime DESC
+        ORDER BY p.lastupdateTime ASC
     </select>
 
     <!-- 商品DO查询-->
@@ -139,7 +139,7 @@
         <include refid="productCloumn"/>
         FROM product p
         <include refid="productDoWhere"/>
-        ORDER BY p.lastupdateTime DESC
+        ORDER BY p.lastupdateTime ASC
     </select>
 
 
@@ -156,7 +156,7 @@
         <include refid="productCloumn"/>
         FROM product p
         <include refid="productIdWhere"/>
-        ORDER BY p.lastupdateTime DESC
+        ORDER BY p.lastupdateTime ASC
     </select>
 
     <!-- 删除, 支持批量操作 -->

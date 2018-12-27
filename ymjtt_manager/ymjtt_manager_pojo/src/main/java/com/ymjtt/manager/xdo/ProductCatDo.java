@@ -24,7 +24,7 @@ public class ProductCatDo implements Serializable{
     /** 商品类别父目录ID */
     private Long parentId;
     /** 是否为父类别目录, 0: 非父类目录   1: 父类目录 */
-    private Byte parentCat;
+    private Integer parentCat;
     /** 商品类别创建时间 */
     private Timestamp createTime;
     /** 商品类别最后更新时间 */
@@ -84,11 +84,11 @@ public class ProductCatDo implements Serializable{
 
     @Basic
     @Column(name = "parent_cat")
-    public Byte getParentCat() {
+    public Integer getParentCat() {
         return parentCat;
     }
 
-    public void setParentCat(Byte parentCat) {
+    public void setParentCat(Integer parentCat) {
         this.parentCat = parentCat;
     }
 

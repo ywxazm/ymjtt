@@ -21,6 +21,10 @@ public class ResultVO<T> implements Serializable {
         return new ResultVO<>(codeResult);
     }
 
+    public static <T> ResultVO<T> buildErrorResult(CodeResult codeResult, String msg) {
+        return new ResultVO<>(codeResult, msg);
+    }
+
     private ResultVO(T data) {
         this.code = 200;
         this.msg = "Success";
@@ -30,6 +34,11 @@ public class ResultVO<T> implements Serializable {
     private ResultVO(CodeResult codeResult) {
         this.code = codeResult.getCode();
         this.msg = codeResult.getMsg();
+    }
+
+    private ResultVO(CodeResult codeResult, String msg) {
+        this.code = codeResult.getCode();
+        this.msg = msg;
     }
 
     public Integer getCode() {

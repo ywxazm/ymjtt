@@ -48,4 +48,22 @@ public class GenerateID {
         }
         return productBarCodeValue;
     }
+
+    /**
+     * 以自增长的方式, 商品种类, 30000开始
+     * @author  ywx
+     * @date    2018/12/18 21:00
+     * @param   []
+     * @return  java.lang.String
+     */
+    public String generateProductCatId() {
+        String productBarCodeValue = jedisClient.get(RedisKey.PRODUCT_CAT_ID);
+        if (null != productBarCodeValue) {
+            productBarCodeValue = String.valueOf(jedisClient.incr(RedisKey.PRODUCT_CAT_ID));
+        }else {
+            jedisClient.set(RedisKey.PRODUCT_CAT_ID, "30000");
+            productBarCodeValue = "30000";
+        }
+        return productBarCodeValue;
+    }
 }

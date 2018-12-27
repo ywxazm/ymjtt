@@ -12,10 +12,16 @@ import java.util.List;
 
 public interface ProductCatService {
 
-    List<ProductCatNodeVO> listByPid(Long pid);
+    List<ProductCatNodeVO> listByPid(Long pid, String productCatName);
 
-    List<ProductCatDo> listDetailByPid(Long pid);
+    List<ProductCatDo> listDetailByPid(Long pid, String productCatName);
 
     ProductCatDo getById(Long id);
+
+    Boolean update(ProductCatDo productCatDo);
+
+    Boolean add(ProductCatDo productCatDo);
+
+    String remove(Long id);
 
 }

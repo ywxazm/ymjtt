@@ -26,12 +26,16 @@
         <if test="pid != null">
             AND pc.parent_id = #{pid}
         </if>
+        <if test="productCatName != null">
+            AND pc.product_cat_name = #{productCatName}
+        </if>
     </sql>
     <select id="listByPid" parameterType="Long" resultMap="productCatDoMap">
         SELECT
         <include refid="productCatCloumn"/>
         FROM product_cat pc
         <include refid="pidWhere" />
+        ORDER BY pc.sort_order DESC
     </select>
 
     <!-- ID查询 -->
@@ -46,6 +50,56 @@
         <include refid="productCatCloumn"/>
         FROM product_cat pc
         <include refid="idWhere" />
+        ORDER BY pc.sort_order DESC
     </select>
+
+    <!-- Name查询 -->
+    <sql id="nameWhere">
+        WHERE 1 = 1
+        <if test="productCatName != null">
+            AND pc.product_cat_name = #{productCatName}
+        </if>
+    </sql>
+    <select id="getByName" parameterType="String" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="nameWhere" />
+        ORDER BY pc.sort_order DESC
+    </select>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="productCatDo">
+        UPDATE product_cat SET
+        <if test="productCatId != null and productCatId != ''">
+            product_cat_id = #{productCatId},
+        </if>
+        <if test="productCatName != null and productCatName != ''">
+            product_cat_name = #{productCatName},
+        </if>
+        <if test="productCatStatus != null and productCatStatus != ''">
+            product_cat_status = #{productCatStatus},
+        </if>
+        <if test="sortOrder != null and sortOrder != ''">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="parentId != null and parentId != ''">
+            parent_id = #{parentId},
+        </if>
+        <!--<if test="parentCat != null and parentCat != ''">-->
+            parent_cat = #{parentCat},
+        <!--</if>-->
+        <if test="1 != 2">
+            createTime = createTime,
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1,
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now())
+        </if>
+        WHERE
+        product_cat_id = #{productCatId}
+    </update>
 
 </mapper>

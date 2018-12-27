@@ -46,5 +46,6 @@
     <dubbo:reference interface="com.ymjtt.manager.service.ProductCatService" id="productCatServiceImpl" timeout="3000"/>
     <dubbo:reference interface="com.ymjtt.manager.service.ProductService" id="productServiceImpl" timeout="3000"/>
     <dubbo:reference interface="com.ymjtt.manager.service.MenuService" id="menuServiceImpl" timeout="3000"/>
+    <dubbo:reference interface="com.ymjtt.manager.service.ProductImgService" id="productImgServiceImpl" timeout="3000"/>
 
 </beans>

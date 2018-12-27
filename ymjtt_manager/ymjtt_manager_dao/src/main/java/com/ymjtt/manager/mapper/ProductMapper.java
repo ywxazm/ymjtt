@@ -30,7 +30,7 @@ public interface ProductMapper {
      * @author  ywx
      * @date    2018/11/27 23:04
      * @param   [cid]
-     * @return  java.util.List<com.ymjtt.manager.xdo.ProductDo>
+     * @return  java.util.List<ProductDo>
      */
     List<ProductDo> listByCid(Long cid);
 
@@ -39,7 +39,7 @@ public interface ProductMapper {
      * @author  ywx
      * @date    2018/11/27 21:35
      * @param   [productDo]
-     * @return  java.util.List<com.ymjtt.manager.xdo.ProductDo>
+     * @return  java.util.List<ProductDo>
      */
     List<ProductDo> listByDo(ProductDo productDo);
 
@@ -48,7 +48,7 @@ public interface ProductMapper {
      * @author  ywx
      * @date    2018/11/27 10:55
      * @param   [pid]   商品id
-     * @return  com.ymjtt.manager.xdo.ProductDo
+     * @return  ProductDo
      */
     ProductDo getById(Long id);
 
@@ -57,7 +57,7 @@ public interface ProductMapper {
      * @author  ywx
      * @date    2018/11/27 10:55
      * @param   [pid]   商品id
-     * @return  com.ymjtt.manager.xdo.ProductDo
+     * @return  ProductDo
      */
     @Select("SELECT pc.product_cat_id id, pc.product_cat_name name, pc.product_cat_status status " +
             "FROM product p " +

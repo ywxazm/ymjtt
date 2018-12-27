@@ -30,6 +30,7 @@
         <include refid="menuCloumn"/>
         FROM menu m
         <include refid="menuPidWhere" />
+        ORDER BY m.sort_order ASC
     </select>
 
     <!-- 查询Menu -->
@@ -38,6 +39,32 @@
         <include refid="menuCloumn"/>
         FROM menu m
         WHERE m.menu_id = #{id}
+        ORDER BY m.sort_order ASC
     </select>
+
+    <!-- 更新 -->
+    <update id="update" parameterType="menuDo">
+        UPDATE menu SET
+        <if test="menuName != null and menuName != ''">
+            menu_name = #{menuName},
+        </if>
+        <if test="sortOrder != null and sortOrder != ''">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="url != null and url != ''">
+            url = #{url},
+        </if>
+        <if test="parentId != null and parentId != ''">
+            parent_id = #{parentId},
+        </if>
+        <if test="1 != 2">            /* TODO: 数据库存设置某属性有默认值时, 不添加此列, 则会默认添加, 并设置为默认值 */
+            createTime = createTime,
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now())
+        </if>
+        WHERE
+        menu_id = #{menuId}
+    </update>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.ymjtt.manager.service;
 
+import com.ymjtt.manager.vo.MenuVo;
 import com.ymjtt.manager.xdo.MenuDo;
 
 import java.util.List;
@@ -11,8 +12,14 @@ import java.util.List;
  */
 public interface MenuService {
 
-    List<MenuDo> listByPid(Long pid);
+    List<MenuVo> listByPid(Long pid);
 
     MenuDo getById(Long id);
+
+    boolean add(MenuDo menuDo);
+
+    boolean remove(Long id);
+
+    boolean update(MenuDo menuDo);
 
 }

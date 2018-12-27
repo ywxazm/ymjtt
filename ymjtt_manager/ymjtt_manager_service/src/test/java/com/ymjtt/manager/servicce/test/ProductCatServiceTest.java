@@ -24,13 +24,13 @@ public class ProductCatServiceTest {
 
     @Test
     public void listByPid() {
-        List<ProductCatNodeVO> listByPid = productCatService.listByPid(0L);
+        List<ProductCatNodeVO> listByPid = productCatService.listByPid(0L, null);
         listByPid.forEach(System.out::println);
     }
 
     @Test
     public void listDetailByPid() {
-        List<ProductCatDo> listByPid = productCatService.listDetailByPid(1L);
+        List<ProductCatDo> listByPid = productCatService.listDetailByPid(1L, null);
         listByPid.forEach(System.out::println);
     }
 
@@ -38,5 +38,19 @@ public class ProductCatServiceTest {
     public void getById() {
         ProductCatDo productCatDo = productCatService.getById(1L);
         System.out.println(productCatDo);
+    }
+
+
+    @Test
+    public void update() {
+        ProductCatDo productCatDo = new ProductCatDo();
+        productCatDo.setProductCatId(30026L);
+        productCatDo.setProductCatName("adsf");
+        productCatDo.setProductCatStatus(1);
+        productCatDo.setSortOrder(1);
+        productCatDo.setParentId(0L);
+        productCatDo.setParentCat(0);
+        boolean b = productCatService.update(productCatDo);
+        System.out.println(b);
     }
 }

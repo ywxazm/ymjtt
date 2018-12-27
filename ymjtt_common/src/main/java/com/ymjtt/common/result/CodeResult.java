@@ -14,6 +14,7 @@ public class CodeResult {
     public static CodeResult SERVER_ERROR = new CodeResult(500, "Server Error");
 
     /* 后台管理模块共用异常 */
+        /* 商品部分 */
     public static CodeResult BACK_MANAGER_ERROR = new CodeResult(500100, "Back Manager Error");
     public static CodeResult QUERY_DATA_NULL = new CodeResult(500101, "Query Data Is Null");
     public static CodeResult ID_NOT_ALLOW_NULL = new CodeResult(500102, "ID Not Allow Null");
@@ -21,6 +22,12 @@ public class CodeResult {
     public static CodeResult ADD_PRODUCT_FAIL = new CodeResult(500104, "Add Product Fail");
     public static CodeResult UPDATE_PRODUCT_FAIL = new CodeResult(500105, "Update Product Fail");
     public static CodeResult REMOVE_A_LITTLE_PRODUCT_FAIL = new CodeResult(500105, "Remove A Little Product Fail");
+    public static CodeResult REMOVE_PRODUCT_CAT_FAIL = new CodeResult(500106, "Remove Product Cat Fail");
+    public static CodeResult ADD_PRODUCT_CAT_FAIL = new CodeResult(500107, "Add Product Cat Fail");
+    public static CodeResult UPDATE_PRODUCT_CAT_FAIL = new CodeResult(500108, "Update Product Cat Fail");
+    public static CodeResult REMOVE_PRODUCT_IMG_FAIL = new CodeResult(500106, "Remove Product Img Fail");
+    public static CodeResult ADD_PRODUCT_IMG_FAIL = new CodeResult(500107, "Add Product Img Fail");
+    public static CodeResult UPDATE_PRODUCT_IMG_FAIL = new CodeResult(500108, "Update Product Img Fail");
 
     /* 图片处理异常 */
     public static CodeResult UPDATE_FILE_FAIL = new CodeResult(500901, "Update File Fail");

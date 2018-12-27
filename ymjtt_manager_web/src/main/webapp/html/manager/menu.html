@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+
+    <link href="../../static/favicon.ico" rel="shortcut icon">
+    <link href="../../static/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="../../static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../../static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="../../static/css/animate.css" rel="stylesheet">
+
+    <script src="../../static/js/jquery.min.js?v=2.1.4"></script>
+    <script src="../../static/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="../../static/js/plugins/jeditable/jquery.jeditable.js"></script>
+    <script src="../../static/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="../../static/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="../../static/myjs/jquery.serializejson.min.js"></script>
+    <script src="../../static/myjs/crud.js"></script>
+
+    <script>
+
+        /* 菜单Controller Url */
+        var commonUrl = "../../manager/menu";
+
+        /* 显示数据 */
+        function showData(pid, num) {
+            if (undefined == num) {
+                $(".ibox-content ol").remove();
+            }
+
+            if (null == num) {
+                num = 1;
+                pid = 0;
+            }
+            //只显示二级目录
+            if (3 == num) {
+                return;
+            }
+
+            //防止反复拼接
+            if (undefined != $("#n" + pid + " > li > ol").html()) {
+                $("#n" + pid + " > li > ol").remove();
+                return;
+            }
+
+            //展示数据
+            var url = commonUrl + "/listByPid?pid=" + pid;
+            $.get(url, function (data) {
+                if(200 == data.code) {
+                    var productCatArray = data.data;
+                    var addHtml = '';
+                    for(var i = 0; i < productCatArray.length; i++) {
+                        addHtml += '<ol class="dd-list" id="'+ "n" + productCatArray[i].menuId +'">';
+                        addHtml += '<li class="dd-item">';
+                        addHtml += '<div class="dd-handle" id="'+ productCatArray[i].menuId +'">';
+                        addHtml += '<span onclick="showData('+ productCatArray[i].menuId +','+ (num + 1) +')"><span class="label label-info"><i class="fa"></i></span> ' + productCatArray[i].menuName +'</span>';
+                        if (0 == productCatArray[i].parentMenu) {
+                            addHtml +=  '<span style="position:absolute;right:'+ (30 - (num - 1) * 10) +'px">' +
+                                        '<button class="btn btn-primary btn-xs" onclick="dataDisplay('+ productCatArray[i].menuId +')"  data-toggle="modal" data-target="#myModal">修改</button>' +
+                                        '<button class="btn btn-danger btn-xs" onclick="del('+ productCatArray[i].menuId +')">删除</button> </span>';
+                        }else {
+                            addHtml +=  '<span style="position:absolute;right:'+ (30 - (num - 1) * 10) +'px; top: 2px;">' +
+                                        '<button class="btn btn-primary btn-xs" onclick="dataDisplay('+ productCatArray[i].menuId +', '+ num +')"  data-toggle="modal" data-target="#myModal">修改</button>' +
+                                        '<button class="btn btn-default btn-xs" disabled="disabled">删除</button></span>';
+                        }
+                        addHtml += '</div>';
+                        addHtml += '</li>';
+                        addHtml += '</ol>';
+                    }
+
+                    addHtml += '<ol class="dd-list">';
+                    addHtml += '<li class="dd-item" >';
+                    addHtml += '<div class="dd-handle">';
+                    addHtml += '<button class="label label-info" onclick="clearForm('+ pid +')" data-toggle="modal" data-target="#myModal"><i class="fa">添加菜单</i></button>';
+                    addHtml += '</div>';
+                    addHtml += '</li>';
+                    addHtml += '</ol>';
+
+                    $("#" + pid).after(addHtml);
+                }
+            });
+        }
+
+        /* 数据回显 */
+        function dataDisplay(id) {
+            var mapping = "/getById";
+            $.get(commonUrl + mapping + "?id=" + id, function (data) {
+                if(200 == data.code) {
+                    var menuDo = data.data;
+                    $("input[name='menuId']").val(menuDo.menuId);
+                    $("input[name='menuName']").val(menuDo.menuName);
+                    $("input[name='sortOrder']").val(menuDo.sortOrder);
+                    $("input[name='url']").val(menuDo.url);
+                    $("input[name='parentId']").val(menuDo.parentId);
+                }
+            });
+
+            $("#submitForm").val("update");
+        }
+
+        //不显示二级目录以下
+        function noShowAll() {
+            $(".ibox-content > ol > li > ol").css("display", "none");
+        }
+
+        /* 清空表单 */
+        function clearForm(id) {
+            $("input").val("");
+            $("input[name='parentId']").val(id);
+            $("#submitForm").val("add");
+        }
+
+    </script>
+
+</head>
+
+<body class="gray-bg">
+
+<script>
+    $(function () {
+        /* 完成加载事件 */
+        showData(0, 1);
+    });
+</script>
+
+<div class="wrapper wrapper-content  animated fadeInRight">
+
+    <!-- 提示框 -->
+    <div class="alert alert-success" id="alertSuccess01" style="display: none;">
+    </div>
+    <div class="alert alert-danger" id="alertFail01" style="display: none;">
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div id="nestable-menu">
+                <button type="button" data-action="collapse-all" class="btn btn-white btn-sm" onclick="noShowAll()">收起所有</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>菜单管理</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <div class="dd" id="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 新增/修改 对话框 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    菜单管理
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="bs-example bs-example-form" role="form" enctype="multipart/form-data">
+                    <div class="input-group" style="display: none;">
+                        <span class="input-group-addon">菜单Id</span>
+                        <input type="text" name="menuId" class="form-control">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">菜单名称</span>
+                        <input type="text" name="menuName" class="form-control" placeholder="菜单名称...">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">菜单排序</span>
+                        <input type="text" name="sortOrder" class="form-control" placeholder="菜单名称...">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon">菜单URL</span>
+                        <input type="text" name="url" class="form-control" placeholder="菜单url...">
+                    </div>
+                    <br>
+
+                    <!-- 父菜单类型 -->
+                    <div class="input-group">
+                        <span class="input-group-addon">父菜单类型</span>
+                        <input type="text" name="parentId" class="form-control" placeholder="父菜单...">
+                    </div>
+                    <br>
+
+                    <!-- 弹框提示框 -->
+                    <div class="alert alert-success" id="alertSuccess02" style="display: none;">
+                    </div>
+                    <div class="alert alert-danger" id="alertFail02" style="display: none;">
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" id="submitForm" class="btn btn-primary" data-dismiss="modal" onclick="updateOrAdd()">
+                    提交
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

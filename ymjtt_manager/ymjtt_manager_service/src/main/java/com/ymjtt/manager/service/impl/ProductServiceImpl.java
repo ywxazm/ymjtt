@@ -36,7 +36,7 @@ public class ProductServiceImpl<T> implements ProductService {
      * @author  ywx
      * @date    2018/11/27 10:57
      * @param   [pid] 商品id
-     * @return  com.ymjtt.manager.xdo.ProductDo
+     * @return  ProductDo
      */
     @Override
     public ProductDo getById(Long id) {
@@ -55,7 +55,7 @@ public class ProductServiceImpl<T> implements ProductService {
      * @author  ywx
      * @date    2018/11/27 23:13
      * @param   [criteria, currPage, pageSize]
-     * @return  com.github.pagehelper.PageInfo<com.ymjtt.manager.xdo.ProductDo>
+     * @return  com.github.pagehelper.PageInfo<ProductDo>
      */
     @Override
     public PageInfo<List<Map<String, Object>>> list(String criteria, Integer currPage, Integer pageSize) {
@@ -143,7 +143,7 @@ public class ProductServiceImpl<T> implements ProductService {
      * @author  ywx
      * @date    2018/11/27 10:57
      * @param   [cid]   商品类别id
-     * @return  java.util.List<com.ymjtt.manager.xdo.ProductDo>
+     * @return  java.util.List<ProductDo>
      */
     @Override
     public List<ProductDo> listByCid(Long cid) {
@@ -162,7 +162,7 @@ public class ProductServiceImpl<T> implements ProductService {
      * @author  ywx
      * @date    2018/11/27 21:38
      * @param   [productDo, currPage, pageSize]
-     * @return  com.github.pagehelper.PageInfo<com.ymjtt.manager.xdo.ProductDo>
+     * @return  com.github.pagehelper.PageInfo<ProductDo>
      */
     @Override
     public PageInfo<ProductDo> listByDo(ProductDo productDo, Integer currPage, Integer pageSize) {
