@@ -3,32 +3,46 @@ package com.ymjtt.common.result;
 import java.io.Serializable;
 
 /**
- *
+ * 1.全流程操作成功, 才为成功, 否则为失败
+ * 2.数据操作失败, 不带自定义消息
+ * 3.可预估的操作失败, 带自定义消息
  * @auther ywx
  * @date 2018/12/18 8:41
  **/
 public class ResultVO<T> implements Serializable {
 
-    private Integer code;
-    private String msg;
-    private T data;
+    private Integer code;   //编码, 由CodeResult统一定义;
+    private String msg;     //信息, 由CodeResult统一定义;
+    private T data;         //错误时为Null, 成功时, 如有数据, 则放于此字段, 否则亦为Null
 
-    public static <T> ResultVO<T> buildSuccessResult(T data) {
-        return new ResultVO<>(data);
+    /** save/del/update一般是此方法返回 */
+    public static <T> ResultVO<T> buildResult(Boolean result, CodeResult successResult, CodeResult errorResult) {
+        return result ? buildSuccessResult(successResult) : buildSuccessResult(errorResult);
     }
 
-    public static <T> ResultVO<T> buildErrorResult(CodeResult codeResult) {
+    /** 失败, 不带自定义消息 */
+    public static <T> ResultVO<T> buildFailResult(CodeResult codeResult) {
         return new ResultVO<>(codeResult);
     }
 
-    public static <T> ResultVO<T> buildErrorResult(CodeResult codeResult, String msg) {
-        return new ResultVO<>(codeResult, msg);
+    /** 失败, 带自定义消息 */
+    public static <T> ResultVO<T> buildFailResult(CodeResult codeResult, String message) {
+        return new ResultVO<>(codeResult, message);
     }
 
-    private ResultVO(T data) {
-        this.code = 200;
-        this.msg = "Success";
-        this.data = data;
+    /** 成功, 不返回数据*/
+    public static <T> ResultVO<T> buildSuccessResult(CodeResult codeResult) {
+        return new ResultVO<>(codeResult);
+    }
+
+    /** 成功, 返回数据*/
+    public static <T> ResultVO<T> buildSuccessResult(CodeResult codeResult, T data) {
+        return new ResultVO<>(codeResult, data);
+    }
+
+    /** 成功, 返回数据(使用默认CodeResult) */
+    public static <T> ResultVO<T> buildSuccessResult(T data) {
+        return new ResultVO<>(CodeResult.DEFAULT_SUCCESS, data);
     }
 
     private ResultVO(CodeResult codeResult) {
@@ -36,9 +50,15 @@ public class ResultVO<T> implements Serializable {
         this.msg = codeResult.getMsg();
     }
 
-    private ResultVO(CodeResult codeResult, String msg) {
+    private ResultVO(CodeResult codeResult, T data) {
         this.code = codeResult.getCode();
-        this.msg = msg;
+        this.msg = codeResult.getMsg();
+        this.data = data;
+    }
+
+    private ResultVO(CodeResult codeResult, String message) {       //message为自定义增加的消息
+        this.code = codeResult.getCode();
+        this.msg = codeResult.getMsg() + ", " + message;
     }
 
     public Integer getCode() {
@@ -63,5 +83,10 @@ public class ResultVO<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "ResultVO{" + "code=" + code + ", msg='" + msg + '\'' + ", data=" + data + '}';
     }
 }

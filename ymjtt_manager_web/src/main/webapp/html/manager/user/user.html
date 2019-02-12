@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户</title>
+</head>
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/icon.css">
+    <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="../../../static/css/ymjttForEasyUi.css">
+
+    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../../static/css/ymjttForEasyUi.css">
+    <script type="text/javascript" src="../../../static/js/common/data.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/crud.js"></script>
+    <script type="text/javascript" src="../../../static/js/user/user.js"></script>
+
+    <script type="text/javascript">
+        var modelUrl = '../../../manager/user/';
+        var columns=[[
+            {field:'userName',title:'用户名称',width:100,align:'center'},
+            {field:'-',title:'操作',width:220,align:'center',formatter: function(value,row,index){
+                var oper = '<label><button class="btn btn-default btn-xs" id="update" data-toggle="modal" data-target="#myModal" onclick="edit('+ row.userId +')">修改</button></label>&nbsp;';
+                if (row.status == 1) {
+                    oper += '<label><button class="btn btn-default btn-xs" onclick="cancelOrActive(' + row.userId + ', 0)">注销</button></label>&nbsp;';
+                }else {
+                    oper += '<label><button class="btn btn-default btn-xs" onclick="cancelOrActive(' + row.userId + ', 1)">激活</button></label>&nbsp;';
+                }
+                oper += '<label><button class="btn btn-default btn-xs" onclick="del(' + row.userId + ')">删除</button></label>&nbsp;';
+                oper += '<label><button class="btn btn-default btn-xs" onclick="initPassword(' + row.userId + ')">初始化密码</button></label>';
+                return oper;
+            }},
+            {field:'phone',title:'电话',width:120},
+            {field:'email',title:'邮箱',width:180},
+            {field:'status',title:'状态',width:60,align:'center',formatter: function(value,row,index){
+                return '0' == value ? "注销" : "正常";
+            }},
+            {field:'userType',title:'用户类型',width:65,align:'center',formatter: function(value,row,index){
+                if(0 == value) {
+                    return "客户";
+                }else if (1 == value) {
+                    return "商家";
+                }else if (2 == value) {
+                    return "管理员";
+                }else {
+                    return "未知";
+                }
+            }},
+            {field:'image',title:'头像',width:600},
+            {field:'createOper',title:'创建者',width:60,align:'center'},
+            {field:'createTime',title:'创建时间',width:150,align:'center', formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'lastupdateOper',title:'最后修改者',width:75,align:'center'},
+            {field:'lastupdateTime',title:'最后修改时间',width:150,align:'center', formatter: function(value,row,index){
+                return fmtData(value);
+            }}
+        ]];
+    </script>
+
+<body>
+
+<div>
+    <div class="container" style="width: 100%; height: 100%">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <!-- 搜索 -->
+                <br/>
+                <div class="row clearfix">
+                    <div class="col-md-12 column" style="height: 40px">
+                        <form id="searchForm">
+                            <div class="form-group" >
+                                <label style="width: 55px; font-weight: 500;">用户名</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="userName" placeholder="请输入用户名..." style=" height: 25px; width: 150px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 55px; font-weight: 500;">email</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="email" placeholder="请输入email..." style=" height: 25px; width: 150px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 55px; font-weight: 500;">phone</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="phone" placeholder="请输入phone..." style=" height: 25px; width: 150px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 55px; font-weight: 500;">状态</label>
+                                <div style="display: inline; position: relative; top: 5px">
+                                    <select class="form-control" name="status" style="height: 25px; width: 150px; font-size: 10px; display: inline">
+                                        <option value="" style=" height: 25px; width: 150px;">--请选择--</option>
+                                        <option value="0" style=" height: 25px; width: 150px;">注销</option>
+                                        <option value="1" style=" height: 25px; width: 150px;">正常</option>
+                                    </select>
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 60px; font-weight: 500;">用户类型</label>
+                                <div style="display: inline; position: relative; top: 5px">
+                                    <select class="form-control" name="userType" style="height: 25px; width: 150px; font-size: 10px; display: inline">
+                                        <option value="" style=" height: 25px; width: 150px;">--请选择--</option>
+                                        <option value="0" style=" height: 25px; width: 150px;">客户</option>
+                                        <option value="1" style=" height: 25px; width: 150px;">商家</option>
+                                        <option value="2" style=" height: 25px; width: 150px;">管理员</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label style="position: absolute; right: 60px; top: -2px;">
+                                <button type="button" class="btn btn-default btn-sm" id="btnSearch">搜索</button>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 列表 -->
+                <table id="grid"></table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 提示框 -->
+<div class="alert alert-success" id="successMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+<div class="alert alert-danger" id="failMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+
+<!-- 表单 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    用户编辑
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="editForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: none">
+                        <label>用户ID</label>
+                        <input type="hidden" class="form-control" name="userId">
+                    </div>
+                    <div class="form-group">
+                        <label>用户名</label>
+                        <input type="text" class="form-control" name="userName" placeholder="请输入用户名" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>email</label>
+                        <input type="text" class="form-control" name="email" placeholder="请输入eamil" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>电话号码</label>
+                        <input type="text" class="form-control" name="phone" placeholder="请输入iphone">
+                    </div>
+                    <div class="form-group">
+                        <label>状态</label>
+                        <div style="display: inline; position: relative; top: 5px">
+                            <select class="form-control" name="status" style="font-size: 10px; ">
+                                <option value="" style=" height: 25px; ">--请选择--</option>
+                                <option value="0" style=" height: 25px;">注销</option>
+                                <option value="1" style=" height: 25px; ">正常</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>用户类型</label>
+                        <div style="display: inline; position: relative; top: 5px">
+                            <select class="form-control" name="userType" style=" font-size: 10px;">
+                                <option value="" style=" height: 25px; ">--请选择--</option>
+                                <option value="0" style=" height: 25px;">客户</option>
+                                <option value="1" style=" height: 25px;">商家</option>
+                                <option value="2" style=" height: 25px;">管理员</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="imgProcess" style="position: absolute; top: 25px; left: 410px">
+                        <div>
+                            <img src="../../../static/img/uploader.png" style="width: 115px; height: 115px;">
+                        </div>
+                        <input type="file" onchange="changeImg(this,event)" name="multipartFiles" style='width: 20px; padding-left: 20px; padding-top: 10px'>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="btnSaveContainImg()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

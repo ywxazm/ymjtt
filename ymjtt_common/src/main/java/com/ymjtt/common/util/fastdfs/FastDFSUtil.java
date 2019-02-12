@@ -2,9 +2,7 @@ package com.ymjtt.common.util.fastdfs;
 
 import com.ymjtt.common.util.file.FileUtils;
 import com.ymjtt.common.util.file.JarFileUtils;
-import com.ymjtt.common.util.json.JSONConvertUtil;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.csource.common.MyException;
 import org.csource.common.NameValuePair;
 import org.csource.fastdfs.*;
@@ -14,13 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +32,7 @@ public class FastDFSUtil {
     @Value("util/fastdfs.properties")        //自动注入不支持静态域
     private String confFile;
 
-    @Value("${nginx_server}")
+    @Value("${NGINX_SERVER}")
     private String nginxServer;
 
     private TrackerClient tracker;
@@ -50,6 +45,7 @@ public class FastDFSUtil {
      * @throws IOException
      * @throws MyException
      */
+    @PostConstruct
    public void init() throws IOException, MyException {
         logger.debug("FastDFS init()...");
         String newPath = System.getProperty("user.dir") + "/fastdfs.properties";
@@ -63,125 +59,60 @@ public class FastDFSUtil {
     }
 
     /**
-     * 图片上传(支持多张图片上传)
+     * 本地文件上传功能
+     * @author  ywx
+     * @date    2019/1/23 9:09
+     * @param   [bytes, extName, paramMap]
+     * @return  java.lang.String[]
+     */
+    public String save(String filePath, Map<String, String> paramMap) throws IOException, MyException {
+        NameValuePair[] nvp = Map2Nvp(paramMap);
+        String[] paths = storageClient.upload_file(filePath, FileUtils.getExtensionName(filePath), nvp);
+        return nginxServer + paths[0] + "/" + paths[1];
+    }
+
+    /**
+     * 字节码文件上传
+     * @author  ywx
+     * @date    2019/1/23 10:12
+     * @param   [bytes, extensionName, paramJson]
+     * @return  java.lang.String
+     */
+    public String save(byte[] bytes, String extensionName, Map<String, String> paramMap) throws IOException, MyException {
+        NameValuePair[] nvp = Map2Nvp(paramMap);
+        String paths[] = storageClient.upload_file(bytes, extensionName, nvp);
+        return nginxServer + paths[0] + "/" + paths[1];
+    }
+
+    /**
+     * MultipartFile类型文件上传
      * @author  ywx
      * @date    2018/11/27 21:44
      * @param   [multipartFiles, request]
      * @return
      */
-    public String upload(HttpServletRequest request, MultipartFile[] multipartFiles) throws IOException, MyException {
-        StringBuilder paths = new StringBuilder();
-        if (null != multipartFiles && multipartFiles.length > 0) {
-            for (MultipartFile multipartFile : multipartFiles) {
-                if (null != multipartFile) {
-                    String filename = multipartFile.getOriginalFilename();
-                    String path = fastDFSSave(multipartFile.getBytes(), FileUtils.getExtensionName(filename), null);
-                    if(null != path) {
-                        paths.append(nginxServer).append(path).append(",");
-                    }
-                }
-            }
-            return paths.substring(0, paths.length() - 1);
-        }
-        return null;
+    public String save(MultipartFile multipartFile, Map<String, String> paramMap) throws IOException, MyException {
+        String filename = multipartFile.getOriginalFilename();
+        return save(multipartFile.getBytes(), FileUtils.getExtensionName(filename), paramMap);
     }
 
     /**
-     * 删除fastDFS中的文件(支持多文件删除)
-     * 请求格式: ?filePath=group1/M00/00/00/wKi-gVwUbVmACp5oAACgIuTmy1Q005.jpg/,group1/M00/00/00/wKi-gVwUbVmAYa49AAA0aLoff8c550.jpg/,group1/M00/00/00/wKi-gVwUbVmAR_5tAADEqvzar4g503.jpg/
+     * 删除文件, 成功返回True
      * @author  ywx
-     * @date    2018/12/14 16:22
-     * @param   [fastDFSPath]
-     * @return  com.ymjtt.common.vo.YmjttResultVO  0: success   others: fail
+     * @date    2019/1/23 10:34
+     * @param   [filePath]
+     * @return  boolean
      */
-    public Map<String, String> remove(String filePath) throws IOException, MyException {
-        Map<String, String> resultMap = new HashMap<>();
-        StringBuilder successPath = new StringBuilder();
-        StringBuilder failPath = new StringBuilder();
-
-        if (!StringUtils.isEmpty(filePath)) {
-            filePath = filePath.replace(nginxServer, "");
-            String[] paths = filePath.split(",");
-            for (String path : paths) {
-
-                String groupN = path.substring(0, filePath.indexOf("/"));
-                String fileName = path.substring(filePath.indexOf("/") + 1);
-
-                if ((storageClient.delete_file(groupN, fileName) == 0)) {
-                    successPath.append(path);
-                } else {
-                    failPath.append(path);
-                }
-            }
-        }else {
-            return null;
-        }
-
-        resultMap.put("SuccessRemove", successPath.toString());
-        resultMap.put("FailRemove", failPath.toString());
-        return resultMap;
+    public boolean remove(final String filePath) throws IOException, MyException {
+        String path = filePath.replace(nginxServer, "");
+        String groupN = path.substring(0, path.indexOf("/"));
+        String fileName = path.substring(groupN.length() + 1);
+        return 0 == storageClient.delete_file(groupN, fileName);
     }
 
-    /**
-     * 上传文件
-     * @param fileName
-     * @param paramJson
-     * @return
-     * @throws IOException
-     * @throws MyException
-     */
-    public String fastDFSSave(String fileName, String paramJson) throws IOException, MyException {
-        if (fileName.lastIndexOf(".") == -1) {
-            return null;
-        }
 
-        NameValuePair[] nvp = null;
-        if (!StringUtils.isEmpty(paramJson)) {
-            Map<String, String> paramMap = JSONConvertUtil.json2map(paramJson);
-            List<NameValuePair> paramList = new ArrayList<>();
-            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-                paramList.add(new NameValuePair(entry.getKey(), entry.getValue()));
-            }
-            nvp = (NameValuePair[]) paramList.toArray();
-        }
 
-        String fileInfo[] = storageClient.upload_file(fileName, FileUtils.getExtensionName(fileName), nvp);
-        StringBuilder sb = new StringBuilder();
-        for (String s : fileInfo) {
-            sb.append(s).append("/");
-        }
-
-        return sb.toString();
-    }
-
-    /**
-     *
-     * @author  ywx
-     * @date    2018/11/22 9:20
-     * @param   [fileName, paramJson]
-     * @return  java.lang.String
-     */
-    public String fastDFSSave(byte[] bytes, String extensionName, String paramJson) throws IOException, MyException {
-
-        NameValuePair[] nvp = null;
-        if (!StringUtils.isEmpty(paramJson)) {
-            Map<String, String> paramMap = JSONConvertUtil.json2map(paramJson);
-            List<NameValuePair> paramList = new ArrayList<>();
-            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-                paramList.add(new NameValuePair(entry.getKey(), entry.getValue()));
-            }
-            nvp = (NameValuePair[]) paramList.toArray();
-        }
-
-        String fileInfo[] = storageClient.upload_file(bytes, extensionName, nvp);
-        StringBuilder sb = new StringBuilder();
-        for (String s : fileInfo) {
-            sb.append(s).append("/");
-        }
-        String s = sb.toString();
-        return s.substring(0, s.length() - 1);
-    }
-
+    /*  -------------------------以下未完善---------------------------  */
     /**
      * 下载文件至本地
      * @param fastDFSPath
@@ -235,6 +166,26 @@ public class FastDFSUtil {
             }
         }
         return map;
+    }
+
+    /**
+     * Map 转 NVP 格式
+     * @author  ywx
+     * @date    2019/1/23 10:16
+     * @param   [paramMap]
+     * @return  org.csource.common.NameValuePair[]
+     */
+    private NameValuePair[] Map2Nvp(Map<String, String> paramMap) {
+        NameValuePair[] nvp = new NameValuePair[0];
+        if (null != paramMap && !paramMap.isEmpty()) {
+            nvp = new NameValuePair[paramMap.size()];
+            int i = 0;
+            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                nvp[i] = new NameValuePair(entry.getKey(), entry.getValue());
+                i++;
+            }
+        }
+        return nvp;
     }
 
 }

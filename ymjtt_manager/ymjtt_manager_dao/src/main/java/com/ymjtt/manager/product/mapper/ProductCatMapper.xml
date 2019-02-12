@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductCatMapper">
+
+    <resultMap id="productCatDoMap" type="productCatDo" >
+        <id property="productCatId" column="product_cat_id" />
+        <result property="productCatName" column="product_cat_name" />
+        <result property="productCatStatus" column="product_cat_status" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="parentId" column="parent_id" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="productCatCloumn">
+        pc.product_cat_id, pc.product_cat_name, pc.product_cat_status, pc.sort_order, pc.parent_id,
+        pc.createTime, pc.createOper, pc.lastupdateTime, pc.lastupdateOper, pc.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="productCatByParentIdWhere">
+        <where>
+            <if test="parentId != null">
+                AND pc.parent_id = #{parentId}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productCatDo" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="productCatByParentIdWhere"/>
+        ORDER BY pc.sort_order ASC
+    </select>
+
+    <!-- get -->
+    <sql id="idWhere">
+        <where>
+            <if test="_parameter != null">
+                AND pc.product_cat_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getDO" parameterType="Long" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="idWhere" />
+    </select>
+
+    <!-- update -->
+    <update id="updateDO" parameterType="productCatDo">
+        UPDATE product_cat SET
+        <if test="productCatId != null">
+            product_cat_id = #{productCatId},
+        </if>
+        <if test="productCatName != null">
+            product_cat_name = #{productCatName},
+        </if>
+        <if test="productCatStatus != null">
+            product_cat_status = #{productCatStatus},
+        </if>
+        <if test="sortOrder != null">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+        product_cat_id = #{productCatId}
+    </update>
+
+
+    <!-- Others -->
+    <!-- list -->
+    <sql id="productCatWhere">
+        <where>
+            <if test="parentId != null">
+                AND pc.parent_id = #{parentId}
+            </if>
+        </where>
+    </sql>
+    <select id="listByParentId" parameterType="Long" resultMap="productCatDoMap">
+        SELECT
+        <include refid="productCatCloumn"/>
+        FROM product_cat pc
+        <include refid="productCatWhere"/>
+        ORDER BY pc.sort_order ASC
+    </select>
+</mapper>

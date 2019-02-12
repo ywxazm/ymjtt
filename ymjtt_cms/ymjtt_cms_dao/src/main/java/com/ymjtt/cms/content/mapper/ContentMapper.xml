@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.cms.content.mapper.ContentMapper">
+
+    <resultMap id="contentDoMap" type="contentDo" >
+        <id property="contentId" column="content_id" />
+        <result property="contentCatId" column="content_cat_id" />
+        <result property="contentName" column="content_name" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="contentDesc" column="content_desc" />
+        <result property="url" column="url" />
+        <result property="image" column="image" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="contentCloumn">
+        c.content_id, c.content_cat_id, c.content_name, c.sort_order, c.content_desc, c.url, c.image, c.createTime, c.createOper,
+        c.lastupdateTime, c.lastupdateOper, c.update_counts
+    </sql>
+
+    <sql id="contentWhere">
+        WHERE 1 = 1
+        <if test="contentId != null">
+            AND c.content_id = #{contentId}
+        </if>
+        <if test="contentCatId != null">
+            AND c.content_cat_id = #{contentCatId}
+        </if>
+        <if test="contentName != null and contentName != ''">
+            AND c.content_name LIKE concat('%', #{contentName}, '%')
+        </if>
+        <if test="contentDesc != null and contentDesc != ''">
+            AND c.content_desc LIKE concat('%', #{contentDesc}, '%')
+        </if>
+    </sql>
+
+    <!-- list -->
+    <select id="listDO" parameterType="contentDo" resultMap="contentDoMap">
+        SELECT
+        <include refid="contentCloumn"/>
+        FROM content c
+        <include refid="contentWhere" />
+        ORDER BY c.sort_order ASC
+    </select>
+
+    <!-- get -->
+    <select id="getDO" parameterType="Long" resultMap="contentDoMap">
+        SELECT
+        <include refid="contentCloumn"/>
+        FROM content c
+        WHERE c.content_id = #{contentId}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateDO" parameterType="contentDo">
+        UPDATE content SET
+        <if test="contentCatId != null">
+            content_cat_id = #{contentCatId},
+        </if>
+        <if test="contentName != null and contentName != ''">
+            content_name = #{contentName},
+        </if>
+        <if test="sortOrder != null and sortOrder != ''">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="contentDesc != null and contentDesc != ''">
+            content_desc = #{contentDesc},
+        </if>
+        <if test="url != null and url != ''">
+            url = #{url},
+        </if>
+        <if test="image != null and image != ''">
+            image = #{image},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now())
+        </if>
+        WHERE
+        content_id = #{contentId}
+    </update>
+
+
+</mapper>

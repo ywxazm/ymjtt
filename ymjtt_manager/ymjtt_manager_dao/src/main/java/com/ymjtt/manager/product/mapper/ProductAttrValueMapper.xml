@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductAttrValueMapper">
+
+    <resultMap id="productAttrValueDoMap" type="productAttrValueDo">
+        <id property="productAttrValueId" column="product_attr_value_id"/>
+        <result property="productAttrValueV" column="product_attr_value_v"/>
+        <result property="productAttrId" column="product_attr_id"/>
+        <result property="valueType" column="value_type"/>
+        <result property="attrParam" column="attr_param"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="update_counts"/>
+    </resultMap>
+
+    <sql id="productAttrValueCloumn">
+        pav.product_attr_value_id, pav.product_attr_value_v, pav.product_attr_id, pav.value_type, pav.attr_param,
+        pav.createTime, pav.createOper, pav.lastupdateTime, pav.lastupdateOper, pav.update_counts
+    </sql>
+
+    <!-- list-->
+    <sql id="productAttrValueDoWhere">
+        <where>
+            <if test="productAttrValueId != null and productAttrValueId != ''">
+                AND pav.product_attr_value_id = #{productAttrValueId}
+            </if>
+            <if test="productAttrValueV != null and productAttrValueV != ''">
+                AND pav.product_attr_value_v = #{productAttrValueV}
+            </if>
+            <if test="productAttrId != null and productAttrId != ''">
+                AND pav.product_attr_id = #{productAttrId}
+            </if>
+            <if test="valueType != null and valueType != ''">
+                AND pav.value_type = #{valueType}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productAttrValueDo" resultMap="productAttrValueDoMap">
+        SELECT
+        <include refid="productAttrValueCloumn"/>
+        FROM product_attr_value pav
+        <include refid="productAttrValueDoWhere"/>
+        ORDER BY pav.lastupdateTime DESC
+    </select>
+
+    <!-- get-->
+    <sql id="productAttrValueIdWhere">
+        <where>
+            <if test="_parameter != null">
+                AND pav.product_attr_value_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getDO" parameterType="Long" resultMap="productAttrValueDoMap">
+        SELECT
+        <include refid="productAttrValueCloumn"/>
+        FROM product_attr_value pav
+        <include refid="productAttrValueIdWhere"/>
+    </select>
+
+    <!-- update -->
+    <update id="updateDO" parameterType="productAttrValueDo">
+        UPDATE product_attr_value SET
+        <if test="productAttrValueV != null and productAttrValueV != ''">
+            product_attr_value_v = #{productAttrValueV},
+        </if>
+        <if test="productAttrId != null and productAttrId != ''">
+            product_attr_id = #{productAttrId},
+        </if>
+        <if test="valueType != null and valueType != ''">
+            value_type = #{valueType},
+        </if>
+        <if test="attrParam != null and attrParam != ''">
+            attr_param = #{attrParam},
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1,
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now())
+        </if>
+        WHERE
+            product_attr_value_id = #{productAttrValueId}
+    </update>
+    
+    
+    
+    
+    <!-- Others -->
+
+</mapper>

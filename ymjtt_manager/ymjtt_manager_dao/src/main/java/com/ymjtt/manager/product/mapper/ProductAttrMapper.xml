@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductAttrMapper">
+
+    <resultMap id="productAttrDoMap" type="productAttrDo">
+        <id property="productAttrId" column="product_attr_id"/>
+        <result property="productAttrName" column="product_attr_name"/>
+        <result property="belongId" column="belong_id"/>
+        <result property="attrType" column="attr_type"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="update_counts"/>
+    </resultMap>
+
+    <sql id="productAttrCloumn">
+        pa.product_attr_id, pa.product_attr_name, pa.belong_id, pa.attr_type, pa.sort_order, pa.createTime, pa.createOper,
+        pa.lastupdateTime, pa.lastupdateOper, pa.update_counts
+    </sql>
+
+    <!-- list-->
+    <sql id="productAttrDoWhere">
+        <where>
+            <if test="productAttrId != null and productAttrId != ''">
+                AND pa.product_attr_id = #{productAttrId}
+            </if>
+            <if test="productAttrName != null and productAttrName != ''">
+                AND pa.product_attr_name LIKE concat('%', #{productAttrName}, '%')
+            </if>
+            <if test="belongId != null and belongId != ''">
+                AND pa.belong_id = #{belongId}
+            </if>
+            <if test="attrType != null">
+                AND pa.attr_type = #{attrType}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productAttrDo" resultMap="productAttrDoMap">
+        SELECT
+        <include refid="productAttrCloumn"/>
+        FROM product_attr pa
+        <include refid="productAttrDoWhere"/>
+        ORDER BY pa.lastupdateTime DESC
+    </select>
+
+    <!-- get-->
+    <sql id="productAttrIdWhere">
+        <where>
+            <if test="_parameter != null">
+                AND pa.product_attr_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getDO" parameterType="Long" resultMap="productAttrDoMap">
+        SELECT
+        <include refid="productAttrCloumn"/>
+        FROM product_attr pa
+        <include refid="productAttrIdWhere"/>
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateDO" parameterType="productAttrDo">
+        UPDATE product_attr SET
+        <if test="productAttrName != null and productAttrName != ''">
+            product_attr_name = #{productAttrName},
+        </if>
+        <if test="belongId != null and belongId != ''">
+            belong_id = #{belongId},
+        </if>
+        <if test="attrType != null">
+            attr_type = #{attrType},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+            product_attr_id = #{productAttrId}
+    </update>
+
+
+    <!-- Others -->
+    <select id="listAttr" parameterType="Long" resultMap="productAttrDoMap">
+        SELECT
+        <include refid="productAttrCloumn" />
+        FROM product_attr pa
+        WHERE pa.belong_id = #{belongId}
+    </select>
+
+</mapper>

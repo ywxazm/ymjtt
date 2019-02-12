@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>内容详情</title>
+</head>
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/icon.css">
+    <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">-->
+
+    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../../static/css/ymjttForEasyUi.css">
+    <script type="text/javascript" src="../../../static/js/common/data.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/crud.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/Image.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/multiPullDown.js"></script>
+    <script type="text/javascript" src="../../../static/js/content/content.js"></script>
+
+    <script type="text/javascript">
+        var modelUrl = '../../../manager/content/';
+        var pullDownUrl = '../../../manager/contentCat/';
+        var topNodeParentId = 0;
+        var columns=[[
+            {field:'contentName',title:'内容名称',width:150,},
+            {field:'-',title:'操作',width:100,align:'center',formatter: function(value,row,index){
+                var oper = '<label><button class="btn btn-default btn-xs" id="update" data-toggle="modal" data-target="#myModal" onclick="loadNodeData('+ row.contentId +')">修改</button></label>&nbsp;';
+                oper += '<label><button class="btn btn-default btn-xs" onclick="del('+ row.contentId +')">删除</button></label>';
+                return oper;
+            }},
+            {field:'sortOrder',title:'排序',width:50,align:'center'},
+            {field:'contentDesc',title:'内容描述',width:350},
+            {field:'url',title:'url',width:200},
+            {field:'image',title:'图片',width:450},
+            {field:'createTime',title:'创建时间',width:150,align:'center',formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'createOper',title:'创建者',width:50,align:'center'},
+            {field:'lastupdateTime',title:'最后更新时间',width:150,align:'center',formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'lastupdateOper',title:'更新者',width:50,align:'center'}
+        ]];
+
+    </script>
+
+<body>
+
+<div>
+    <div class="container" style="width: 100%; height: 100%">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <!-- 搜索 -->
+                <br/>
+                <div class="row clearfix">
+                    <div class="col-md-12 column" style="height: 40px">
+                        <form id="searchForm">
+                            <div class="form-group" >
+                                <label style="width: 65px; font-weight: 500;">内容名称</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="contentName" placeholder="请输入内容名称..." style=" height: 25px; width: 120px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 65px; font-weight: 500;">内容描述</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="contentDesc" placeholder="请输入内容描述..." style=" height: 25px; width: 120px; display: inline">
+                                </div>
+                            </div>
+                            <label style="position: absolute; right: 60px; top: -2px;">
+                                <button type="button" class="btn btn-default btn-sm" id="btnSearch">搜索</button>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 列表 -->
+                <table id="grid"></table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-success" id="successMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+<div class="alert alert-danger" id="failMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+
+<!-- 表单 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    内容编辑
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="editForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: none">
+                        <label>内容详情ID</label>
+                        <input type="hidden" class="form-control" name="contentId">
+                    </div>
+                    <div class="form-group">
+                        <label>内容名称</label>
+                        <input type="text" class="form-control" name="contentName" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>内容描述</label>
+                        <input type="text" class="form-control" name="contentDesc" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="number" class="form-control" name="sortOrder">
+                    </div>
+                    <div class="form-group">
+                        <label>url</label>
+                        <input type="text" class="form-control" name="url">
+                    </div>
+                    <div class="form-group" id="imgProcess" style="position: absolute; top: 25px; left: 410px">
+                        <div>
+                            <img src="../../../static/img/uploader.png" style="width: 115px; height: 115px;">
+                        </div>
+                        <input type="file" onchange="changeImg(this,event)" name="multipartFiles" multiple style='width: 20px; padding-left: 20px; padding-top: 10px'>
+                    </div>
+                    <div class="form-group" id="multiPullDownDiv">
+                        <label>父菜单名称</label>
+                        <input type="hidden" class="form-control" name="parentId">
+                        <div></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="btnSaveContainImg()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

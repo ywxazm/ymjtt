@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.ArrayType;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Map;
  * @auther ywx
  * @date 2018/11/5 9:57
  **/
-public class JSONConvertUtil {
+public class JSONConvertUtil<T> {
 
     private static ObjectMapper mapper = new ObjectMapper();
 
@@ -71,7 +72,18 @@ public class JSONConvertUtil {
      * @return
      */
     public static List<String> json2List(String json) throws IOException {
-        JavaType javaType = mapper.getTypeFactory().constructParametricType(Map.class, String.class);
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, String.class);
+        return mapper.readValue(json, javaType);
+    }
+
+    /**
+     * 泛型为任何对象, 都可转List
+     * json --> list
+     * @param json
+     * @return
+     */
+    public List<T> json2List(String json, Class<T> clazz) throws IOException {
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(List.class, clazz);
         return mapper.readValue(json, javaType);
     }
 

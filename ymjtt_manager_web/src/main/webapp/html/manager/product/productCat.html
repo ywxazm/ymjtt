@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>菜单</title>
+</head>
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+    <link rel="stylesheet" href="../../../static/themes/style.css">
+    <link rel="stylesheet" href="../../../static/themes/icon.css">
+    <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
+    <link rel="stylesheet" href="../../../static/themes/easyui.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/crudNode.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/multiPullDown.js"></script>
+    <script type="text/javascript">
+        var modelUrl = '../../../manager/productCat/';    /* 公用Url */
+        var pullDownUrl = '../../../manager/productCat/';
+        var topNodeParentId = 0;                          /* 顶级ID */
+
+        //回显数据
+        function loadNodeData(productCatId) {
+            method = "update";
+            $.get(modelUrl +  'getContainParentDo?id=' + productCatId, function (data) {
+                if (data.code == 200) {
+                    var node = data.data;
+                    $("input[name='productCatId']").val(node.nodeId);
+                    $("input[name='productCatName']").val(node.nodeName);
+                    $("select[name='productCatStatus']").val(node.paramMap.productCatStatus);
+                    $("input[name='sortOrder']").val(node.paramMap.sortOrder);
+                    $("input[name='parentId']").val(node.lastNodeId);
+                    echoDisplayDownPull(node.upLevelNodeList);
+                }
+            });
+        }
+    </script>
+
+<body>
+
+<div>
+    <div class="container" style="width: 100%; height: 100%">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <!-- 新增 -->
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <br/>
+                        <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#myModal" id="btnAdd">添加菜单</button>
+                        <br/>
+                    </div>
+                </div>
+
+                <!-- 菜单 -->
+                <div class="row clearfix">
+                    <div class="col-md-12 column" id="0"> </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 提示框 -->
+<div class="alert alert-success" id="successMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+<div class="alert alert-danger" id="failMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+
+<!-- 表单 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    菜单详情
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group" style="display: none">
+                        <label>商品类别ID</label>
+                        <input type="hidden" class="form-control" name="productCatId">
+                    </div>
+                    <div class="form-group">
+                        <label>商品类别名称</label>
+                        <input type="text" class="form-control" name="productCatName">
+                    </div>
+                    <div class="form-group">
+                        <label>商品类别状态</label>
+                        <select class="form-control" name="productCatStatus">
+                            <option value="">--请选择--</option>
+                            <option value="0">无效</option>
+                            <option value="1">有效</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>商品类别排序</label>
+                        <input type="number" class="form-control" name="sortOrder">
+                    </div>
+                    <div class="form-group" id="multiPullDownDiv">
+                        <label>父类别名称</label>
+                        <input type="hidden" class="form-control" name="parentId">
+                        <div></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="btnSave">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

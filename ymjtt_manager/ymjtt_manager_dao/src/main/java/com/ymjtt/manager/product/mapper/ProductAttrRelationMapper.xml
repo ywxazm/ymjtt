@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductAttrRelationMapper">
+
+    <resultMap id="productAttrRelationDoMap" type="productAttrRelationDo">
+        <id property="productAttrRelationId" column="product_attr_relation_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productAttrId" column="product_attr_id"/>
+        <result property="productAttrValueId" column="product_attr_value_id"/>
+        <result property="buildType" column="build_type"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+    </resultMap>
+
+    <sql id="productAttrRelationCloumn">
+        par.product_attr_relation_id, par.product_id, par.product_attr_id, par.product_attr_value_id, par.build_type,
+        par.createTime, par.createOper
+    </sql>
+
+    <!-- list-->
+    <sql id="productAttrRelationWhere">
+        <where>
+            <if test="productAttrRelationId != null and productAttrRelationId != ''">
+                AND par.product_attr_relation_id = #{productAttrRelationId}
+            </if>
+            <if test="productAttrId != null and productAttrId != ''">
+                AND par.product_id = #{productAttrId}
+            </if>
+            <if test="productAttrValueId != null and productAttrValueId != ''">
+                AND par.product_attr_value_id = #{productAttrValueId}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productAttrRelationDo" resultMap="productAttrRelationDoMap">
+        SELECT
+        <include refid="productAttrRelationCloumn"/>
+        FROM product_attr_relation par
+        <include refid="productAttrRelationWhere"/>
+        ORDER BY par.createTime DESC
+    </select>
+
+    <!-- get-->
+    <sql id="productAttrRelationIdWhere">
+        <where>
+            <if test="_parameter != null">
+                AND par.product_attr_relation_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getDO" parameterType="Long" resultMap="productAttrRelationDoMap">
+        SELECT
+        <include refid="productAttrRelationCloumn"/>
+        FROM product_attr_relation par
+        <include refid="productAttrRelationIdWhere"/>
+    </select>
+
+
+</mapper>

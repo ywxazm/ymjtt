@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>商品</title>
+</head>
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/icon.css">
+    <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
+
+    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../../static/css/ymjttForEasyUi.css">
+    <script type="text/javascript" src="../../../static/js/common/data.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/crud.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/multiPullDown.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/Image.js"></script>
+    <script type="text/javascript" src="../../../static/js/product/product.js"></script>
+
+    <script type="text/javascript">
+        var modelUrl = '../../../manager/product/';
+        var pullDownUrl = '../../../manager/productCat/';
+        var topNodeParentId = 0;
+        var columns=[[
+            {field:'productId',title:'商品ID',width:120,align:'center'},
+            {field:'-',title:'操作',width:170,align:'center',formatter: function(value,row,index){
+                var oper = '<label><button class="btn btn-default btn-xs" id="update" data-toggle="modal" data-target="#myModal" onclick="loadNodeData('+ row.productId +')">修改</button></label>&nbsp;';
+                oper += '<label><button class="btn btn-default btn-xs" onclick="del('+ row.productId +')">删除</button></label>&nbsp;';
+                oper += '<label><button class="btn btn-default btn-xs" data-toggle="modal" data-target="#productDetail" onclick="loadDetailData('+ row.productId +')">详情管理</button></label>&nbsp;';
+                return oper;
+            }},
+            {field:'productName',title:'商品名称',width:350,},
+            {field:'sellPoint',title:'卖点',width:350},
+            {field:'basePrice',title:'价格',width:80,align:'center',formatter: function(value,row,index) {
+                return '¥' + value + '.00';
+            }},
+            {field:'barcode',title:'条形码',width:100,align:'center'},
+            {field:'image',title:'主图片',width:150,align:'center'},
+            {field:'cid',title:'类别',width:50,align:'center'},
+            {field:'productStatus',title:'状态',width:50,align:'center',formatter: function(value,row,index) {
+                return value == 0 ? '下架' : '上架';
+            }},
+            {field:'createTime',title:'创建时间',width:150,align:'center',formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'createOper',title:'创建者',width:60,align:'center'},
+            {field:'lastupdateTime',title:'最后操作时间',width:150,align:'center',formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'lastupdateOper',title:'最后操作者',width:60,align:'center'},
+            {field:'updateCounts',title:'操作次数',width:60,align:'center'}
+        ]];
+    </script>
+
+<body>
+
+<div>
+    <div class="container" style="width: 100%; height: 100%">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <!-- 搜索 -->
+                <br/>
+                <div class="row clearfix">
+                    <div class="col-md-12 column" style="height: 40px">
+                        <form id="searchForm">
+                            <div class="form-group" >
+                                <label style="width: 65px; font-weight: 500;">商品名称</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="productName" placeholder="请输入商品名称..." style=" height: 25px; width: 120px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 65px; font-weight: 500;">barcode</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="barcode" placeholder="请输入barcode..." style=" height: 25px; width: 120px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                                <label style="width: 55px; font-weight: 500;">状态</label>
+                                <div style="display: inline; position: relative; top: 5px">
+                                    <select class="form-control" name="productStatus" style="height: 25px; width: 120px; font-size: 10px; display: inline">
+                                        <option value="" style=" height: 25px; width: 120px;">--请选择--</option>
+                                        <option value="0" style=" height: 25px; width: 120px;">下架</option>
+                                        <option value="1" style=" height: 25px; width: 120px;">上架</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <label style="position: absolute; right: 60px; top: -2px;">
+                                <button type="button" class="btn btn-default btn-sm" id="btnSearch">搜索</button>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 列表 -->
+                <table id="grid"></table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 提示框 -->
+<div class="alert alert-success" id="successMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+<div class="alert alert-danger" id="failMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+
+<!-- 表单 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    商品编辑
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="editForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: none">
+                        <label>商品ID</label>
+                        <input type="hidden" class="form-control" name="productId">
+                    </div>
+                    <div class="form-group">
+                        <label>商品名称</label>
+                        <input type="text" class="form-control" name="productName" placeholder="请输入商品名称" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>商品卖点</label>
+                        <input type="text" class="form-control" name="sellPoint" placeholder="请输入sellPoint" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>价格</label>
+                        <input type="number" class="form-control" name="basePrice" placeholder="请输入价格">
+                    </div>
+                    <div class="form-group">
+                        <label>条形码</label>
+                        <input type="text" disabled class="form-control" name="barcode">
+                    </div>
+                    <div class="form-group">
+                        <label>状态</label>
+                        <div style="display: inline; position: relative; top: 5px">
+                            <select class="form-control" name="productStatus" style="font-size: 10px; ">
+                                <option value="" style=" height: 25px; ">--请选择--</option>
+                                <option value="0" style=" height: 25px;">下架</option>
+                                <option value="1" style=" height: 25px; ">上架</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="imgProcess" style="position: absolute; top: 25px; left: 410px">
+                        <div>
+                            <img src="../../../static/img/uploader.png" style="width: 115px; height: 115px;">
+                        </div>
+                        <input type="file" onchange="changeImg(this,event)" name="multipartFiles" style='width: 20px; padding-left: 20px; padding-top: 10px'>
+                    </div>
+                    <div class="form-group" id="multiPullDownDiv">
+                        <label>父类别名称</label>
+                        <input type="hidden" class="form-control" name="parentId">
+                        <div></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="btnSaveContainImg()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 商品详情 -->
+<div class="modal fade" id="productDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    商品详情编辑
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="productDetailForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: none">
+                        <label>商品ID</label>
+                        <input type="hidden" class="form-control" name="productId">
+                    </div>
+                    <div class="form-group" id="imgsProcess">
+                        <div>
+                            <img src="../../../static/img/uploader.png" style="width: 115px; height: 115px;">
+                        </div>
+                        <input type="file" onchange="changeImg(this, event)" name="multipartFiles" multiple style='width: 20px; padding-left: 20px; padding-top: 10px'>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="btvSaveDetail()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

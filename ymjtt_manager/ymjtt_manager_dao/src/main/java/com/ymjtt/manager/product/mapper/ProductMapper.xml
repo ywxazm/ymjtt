@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductMapper">
+
+    <resultMap id="productDoMap" type="productDo">
+        <id property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="sellPoint" column="sell_point"/>
+        <result property="basePrice" column="base_price"/>
+        <result property="barcode" column="barcode"/>
+        <result property="image" column="image"/>
+        <result property="cid" column="cid"/>
+        <result property="productStatus" column="product_status"/>
+        <result property="ifCreateProductAttrRelation" column="if_create_product_attr_relation"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="update_counts"/>
+    </resultMap>
+
+    <sql id="productCloumn">
+        p.product_id, p.product_name, p.sell_point, p.base_price, p.barcode, p.image, p.product_status, p.cid,
+        p.createTime, p.if_create_product_attr_relation, p.createOper, p.lastupdateTime, p.lastupdateOper, p.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="productDoWhere">
+        <where>
+            <if test="productId != null and productId != ''">
+                AND p.product_id = #{productId}
+            </if>
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE concat('%', #{productName}, '%')
+            </if>
+            <if test="basePrice != null and basePriceAgain != null">
+                AND p.base_price &gt;= #{basePrice}
+                AND p.base_price &lt;= #{basePriceAgain}
+            </if>
+            <if test="basePrice != null and basePriceAgain == null">
+                AND p.base_price &gt;= #{basePrice}
+            </if>
+            <if test="basePrice == null and basePriceAgain != null">
+                AND p.base_price &lt;= #{basePriceAgain}
+            </if>
+            <if test="barcode != null and barcode != ''">
+                AND p.barcode = #{barcode}
+            </if>
+            <if test="cid != null and cid != ''">
+                AND p.cid = #{cid}
+            </if>
+            <if test="productStatus != null">
+                AND p.product_status = #{productStatus}
+            </if>
+            <if test="createOper != null and createOper != ''">
+                AND p.createOper LIKE concat('%', #{createOper}, '%')
+            </if>
+            <if test="lastupdateOper != null and lastupdateOper != ''">
+                AND p.lastupdateOper LIKE concat('%', #{lastupdateOper}, '%')
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productDo" resultMap="productDoMap">
+        SELECT
+        <include refid="productCloumn"/>
+        FROM product p
+        <include refid="productDoWhere"/>
+        ORDER BY p.lastupdateTime DESC
+    </select>
+
+    <!-- get-->
+    <sql id="productIdWhere">
+        <where>
+            <if test="_parameter != null">
+                AND p.product_id = #{id}
+            </if>
+        </where>
+    </sql>
+    <select id="getDO" parameterType="Long" resultMap="productDoMap">
+        SELECT
+        <include refid="productCloumn"/>
+        FROM product p
+        <include refid="productIdWhere"/>
+    </select>
+
+    <!-- update -->
+    <update id="updateDO" parameterType="productDo">
+        UPDATE product SET
+        <if test="productName != null and productName != ''">
+            product_name = #{productName},
+        </if>
+        <if test="sellPoint != null and sellPoint != ''">
+            sell_point = #{sellPoint},
+        </if>
+        <if test="basePrice != null">
+            base_price = #{basePrice},
+        </if>
+        <if test="barcode != null and barcode != ''">
+            barcode = #{barcode},
+        </if>
+        <if test="image != null">
+            image = #{image},
+        </if>
+        <if test="cid != null">
+            cid = #{cid},
+        </if>
+        <if test="productStatus != null">
+            product_status = #{productStatus},
+        </if>
+        <if test="ifCreateProductAttrRelation != null">
+            if_create_product_attr_relation = #{ifCreateProductAttrRelation},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+            product_id = #{productId}
+    </update>
+
+</mapper>

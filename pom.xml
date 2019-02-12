@@ -10,6 +10,8 @@
         <module>ymjtt_test_web</module>
         <module>ymjtt_manager</module>
         <module>ymjtt_manager_web</module>
+        <module>ymjtt_portal_web</module>
+        <module>ymjtt_cms</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>
@@ -23,6 +25,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <spring.version>5.0.8.RELEASE</spring.version>
+        <aspectj.version>1.8.10</aspectj.version>
         <mybatis.version>3.2.8</mybatis.version>
         <mybatisSpring.version>1.3.2</mybatisSpring.version>
         <pagehelper.version>4.2.1</pagehelper.version>
@@ -38,12 +41,14 @@
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
         <persistence.version>2.2</persistence.version>
+        <javassist.version>3.20.0-GA</javassist.version>
 
         <logback.version>1.2.3</logback.version>
         <logbackextspring.version>0.1.4</logbackextspring.version>
         <jcloverslf4j.version>1.7.25</jcloverslf4j.version>
 
         <okhttp.version>3.8.1</okhttp.version>
+        <beanUtils.version>1.9.3</beanUtils.version>
         <fileupload.version>1.3.1</fileupload.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang3.version>3.7</commons-lang3.version>
@@ -93,6 +98,18 @@
                 <version>${spring.version}</version>
             </dependency>
 
+            <!-- spring注解 -->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${aspectj.version}</version>
+            </dependency>
+
             <!-- mybatis-->
             <dependency>
                 <groupId>org.mybatis</groupId>
@@ -113,6 +130,13 @@
                 <groupId>javax.persistence</groupId>            <!-- 由Idea生成javaBean,依赖此jar -->
                 <artifactId>javax.persistence-api</artifactId>
                 <version>${persistence.version}</version>
+            </dependency>
+
+            <!-- javassist -->
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
             </dependency>
 
             <!-- mysql -->
@@ -199,6 +223,12 @@
                 <version>${plexusUtils.version}</version>
             </dependency>
 
+            <!-- BeanUtils -->
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${beanUtils.version}</version>
+            </dependency>
             <!-- okHttp -->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>

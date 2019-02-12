@@ -3,9 +3,6 @@ package com.ymjtt.common.util.file;
 import java.io.*;
 import java.net.JarURLConnection;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 /**
  * 处理jar包中的文件

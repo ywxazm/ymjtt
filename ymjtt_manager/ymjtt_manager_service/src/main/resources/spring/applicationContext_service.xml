@@ -5,9 +5,9 @@
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <context:property-placeholder location="classpath:mybatis/*.properties, classpath:util/*.properties"/>
+    <context:property-placeholder location="classpath:mybatis/*.properties, classpath:util/*.properties, classpath:properties/*.properties"/>
 
-    <context:component-scan base-package="com.ymjtt.manager.service" />
+    <context:component-scan base-package="com.ymjtt.manager" />
 
     <!-- 使用dubbo发布服务 -->
     <!-- 提供方应用信息，用于计算依赖关系 --> <!-- group设置zookeeper的根节点 -->
@@ -16,10 +16,19 @@
                     address="192.168.190.129:2181,192.168.190.129:2182,192.168.190.129:2183" />   <!-- 当服务停止时, 清除掉/dubbo/com.ymjtt.test.service.StudentDoService/providers内容, 也就是方法名 -->
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <dubbo:protocol name="dubbo" port="20880" />
+
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.ymjtt.manager.service.ProductCatService" ref="productCatServiceImpl" timeout="3000" />
-    <dubbo:service interface="com.ymjtt.manager.service.ProductService" ref="productServiceImpl" timeout="3000" />
-    <dubbo:service interface="com.ymjtt.manager.service.MenuService" ref="menuServiceImpl" timeout="3000" />
-    <dubbo:service interface="com.ymjtt.manager.service.ProductImgService" ref="productImgServiceImpl" timeout="3000" />
+    <!-- 商品 -->
+    <dubbo:service interface="com.ymjtt.manager.product.service.ProductCatService" ref="productCatServiceImpl" timeout="3000" />
+    <dubbo:service interface="com.ymjtt.manager.product.service.ProductService" ref="productServiceImpl" timeout="3000" />
+    <dubbo:service interface="com.ymjtt.manager.product.service.ProductDetailService" ref="productDetailServiceImpl" timeout="3000" />
+    <dubbo:service interface="com.ymjtt.manager.product.service.ProductAttrService" ref="productAttrServiceImpl" timeout="3000" />
+    <dubbo:service interface="com.ymjtt.manager.product.service.ProductAttrValueService" ref="productAttrValueServiceImpl" timeout="3000" />
+
+    <!-- 菜单 -->
+    <dubbo:service interface="com.ymjtt.manager.menu.service.MenuService" ref="menuServiceImpl" timeout="3000" />
+
+    <!-- 用户 -->
+    <dubbo:service interface="com.ymjtt.manager.user.service.UserService" ref="userServiceImpl" timeout="3000" />
 
 </beans>

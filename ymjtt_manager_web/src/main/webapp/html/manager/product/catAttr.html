@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>类别规格</title>
+</head>
+
+    <link rel="shortcut icon" href="../../../static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../../../static/themes/icon.css">
+    <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
+
+    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../static/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../../../static/css/ymjttForEasyUi.css">
+    <script type="text/javascript" src="../../../static/js/common/data.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/crud.js"></script>
+    <script type="text/javascript" src="../../../static/js/common/multiPullDown.js"></script>
+    <script type="text/javascript" src="../../../static/js/product/catAttr.js"></script>
+
+    <script type="text/javascript">
+        var modelUrl = '../../../manager/productAttr/';
+        var pullDownUrl = '../../../manager/productCat/';
+        var topNodeParentId = 0;
+        var method = "listContainBelongName";
+        var listParam = "?attrType=2";
+        var columns=[[
+            {field:'productAttrName',title:'属性名称',width:120},
+            {field:'-',title:'操作',width:120,align:'center',formatter: function(value,row,index){
+                var oper = '<label><button class="btn btn-default btn-xs" id="update" data-toggle="modal" data-target="#myModal" onclick="loadData('+ row.productAttrId +')">修改</button></label>&nbsp;';
+                oper += '<label><button class="btn btn-default btn-xs" onclick="del('+ row.productAttrId +')">删除</button></label>&nbsp;';
+                return oper;
+            }},
+            {field:'belongName',title:'所属类别',width:100,align:'center'},
+            {field:'attrType',title:'规格所属',width:80,align:'center', formatter: function(value,row,index){
+                return value == 2 ? "类别" : "未知";
+            }},
+            {field:'sortOrder',title:'排序',width:60,align:'center'},
+            {field:'createOper',title:'创建者',width:60,align:'center'},
+            {field:'createTime',title:'创建时间',width:150,align:'center', formatter: function(value,row,index){
+                return fmtData(value);
+            }},
+            {field:'lastupdateOper',title:'最后修改者',width:75,align:'center'},
+            {field:'lastupdateTime',title:'最后修改时间',width:150,align:'center', formatter: function(value,row,index){
+                return fmtData(value);
+            }}
+        ]];
+    </script>
+
+<body>
+
+<div>
+    <div class="container" style="width: 100%; height: 100%">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+
+                <!-- 搜索 -->
+                <br/>
+                <div class="row clearfix">
+                    <div class="col-md-12 column" style="height: 40px">
+                        <form id="searchForm">
+                            <div class="form-group" >
+                                <label style="width: 70px; font-weight: 500;">属性名称</label>
+                                <div style="display: inline">
+                                    <input type="text" class="form-control" name="productAttrName" placeholder="请输入属性名..." style=" height: 25px; width: 200px; display: inline">
+                                </div>
+                                <label style="width: 70px"></label>
+                            </div>
+                            <label style="position: absolute; right: 60px; top: -2px;">
+                                <button type="button" class="btn btn-default btn-sm" id="btnSearch">搜索</button>
+                            </label>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 列表 -->
+                <table id="grid"></table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 提示框 -->
+<div class="alert alert-success" id="successMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+<div class="alert alert-danger" id="failMsg" style="display: none; position: absolute; top: 70px; right: 40px; width: 300px"></div>
+
+<!-- 表单 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    属性编辑
+                </h4>
+            </div>
+
+            <!-- 表单 -->
+            <div class="modal-body">
+                <form id="editForm" enctype="multipart/form-data">
+                    <div class="form-group" style="display: none">
+                        <label>规格ID</label>
+                        <input type="hidden" class="form-control" name="productAttrId">
+                    </div>
+                    <div class="form-group">
+                        <label>规格名</label>
+                        <input type="text" class="form-control" name="productAttrName" placeholder="请输入规格名" style="width: 300px;">
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="text" class="form-control" name="sortOrder" placeholder="请输入排序" style="width: 300px;">
+                    </div>
+                    <div class="form-group" id="multiPullDownDiv" style="display: inline">
+                        <label style="width: 90px; font-weight: 500;" >类别/商品名称</label>
+                        <input type="hidden" class="form-control" name="parentId">
+                        <div></div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="btnSaveContainImg()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

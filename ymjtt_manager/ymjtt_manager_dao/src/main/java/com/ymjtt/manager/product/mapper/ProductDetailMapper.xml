@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.product.mapper.ProductDetailMapper">
+
+    <resultMap id="productDetailDoMap" type="productDetailDo">
+        <id property="productDetailId" column="product_detail_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="image" column="image"/>
+        <result property="createTime" column="createTime"/>
+        <result property="createOper" column="createOper"/>
+        <result property="lastupdateTime" column="lastupdateTime"/>
+        <result property="lastupdateOper" column="lastupdateOper"/>
+        <result property="updateCounts" column="updateCounts"/>
+    </resultMap>
+
+    <sql id="productDetailCloumn">
+        pd.product_detail_id, pd.product_id, pd.image, pd.createTime, pd.createOper, pd.lastupdateTime, pd.lastupdateOper, pd.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="productDetailDoWhere">
+        <where>
+            <if test="productDetailId != null">
+                AND pd.product_detail_id = #{productDetailId}
+            </if>
+            <if test="productId != null">
+                AND pd.product_id = #{productId}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="productDetailDo" resultMap="productDetailDoMap">
+        SELECT
+        <include refid="productDetailCloumn"/>
+        FROM product_detail pd
+        <include refid="productDetailDoWhere"/>
+        ORDER BY pd.lastupdateTime DESC
+    </select>
+
+    <!-- get-->
+    <select id="getDO" parameterType="Long" resultMap="productDetailDoMap">
+        SELECT
+        <include refid="productDetailCloumn"/>
+        FROM product_detail pd
+        <if test="id != null and id != ''">
+            WHERE pd.product_detail_id = #{id}
+        </if>
+        ORDER BY pd.lastupdateTime DESC
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateDO" parameterType="productDetailDo">
+        UPDATE product_detail SET
+        <if test="productDetailId != null and productDetailId != ''">
+            product_detail_id = #{productDetailId},
+        </if>
+        <if test="image != null and image != ''">
+            image = #{image},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+          product_detail_id = #{productDetailId}
+    </update>
+
+
+
+
+    <!-- Others -->
+    <!-- list -->
+    <sql id="productDetailByproductIdWhere">
+        <where>
+            <if test="productId != null and productId != ''">
+                AND pd.product_id = #{productId}
+            </if>
+        </where>
+    </sql>
+    <select id="listByProductId" parameterType="Long" resultMap="productDetailDoMap">
+        SELECT
+        <include refid="productDetailCloumn"/>
+        FROM product_detail pd
+        <include refid="productDetailByproductIdWhere"/>
+        ORDER BY pd.lastupdateTime DESC
+    </select>
+
+</mapper>

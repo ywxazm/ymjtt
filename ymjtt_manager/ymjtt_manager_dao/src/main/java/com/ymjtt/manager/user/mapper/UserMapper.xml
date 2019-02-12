@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.user.mapper.UserMapper">
+
+    <resultMap id="UserDoMap" type="userDo" >
+        <id property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="image" column="image" />
+        <result property="email" column="email" />
+        <result property="phone" column="phone" />
+        <result property="status" column="status" />
+        <result property="userType" column="user_type" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="userCloumn">
+        u.user_id, u.user_name, u.image, u.email, u.phone, u.status, u.user_type, u.createTime, u.createOper, 
+        u.lastupdateTime, u.lastupdateOper, u.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="userWhere">
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="phone != null and phone != ''">
+            AND phone like concat('%', #{phone}, '%')
+        </if>
+        <if test="email != null and email != ''">
+            AND email like concat('%', #{email}, '%')
+        </if>
+        <if test="userType != null">
+            AND user_type = #{userType}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </sql>
+    <select id="listDO" parameterType="userDo" resultMap="UserDoMap">
+        SELECT
+        <include refid="userCloumn"/>
+        FROM user u
+        <include refid="userWhere" />
+        ORDER BY u.lastupdateTime DESC
+    </select>
+
+    <!-- get -->
+    <select id="getDO" parameterType="Long" resultMap="UserDoMap">
+        SELECT
+        <include refid="userCloumn"/>
+        FROM user u
+        WHERE u.user_id = #{id}
+    </select>
+
+    <!-- update -->
+    <update id="updateDO" parameterType="userDo">
+        UPDATE user SET
+        <if test="userName != null and userName != ''">
+            user_name = #{userName},
+        </if>
+        <if test="pwd != null and pwd != ''">
+            pwd = #{pwd},
+        </if>
+        <if test="image != null and image != ''">
+            image = #{image},
+        </if>
+        <if test="email != null and email != ''">
+            email = #{email},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        <if test="userType != null">
+            user_type = #{userType},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+        user_id = #{userId}
+    </update>
+
+
+
+    <!-- Others -->
+
+</mapper>

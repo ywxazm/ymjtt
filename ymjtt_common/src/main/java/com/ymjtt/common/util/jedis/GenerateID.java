@@ -1,5 +1,7 @@
 package com.ymjtt.common.util.jedis;
 
+import com.ymjtt.common.util.date.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,40 +13,41 @@ import org.springframework.stereotype.Component;
 public class GenerateID {
 
     @Autowired
-    private JedisClient jedisClient;
+    private HashOper hashOper;
 
     /**
-     * 以递增长方式生成产品ID, 1亿开始
+     * 以递增长方式生成产品ID
      * @author  ywx
      * @date    2018/12/18 17:55
      * @param   []
      * @return  java.lang.String
      */
     public String generateProductID() {
-        String productIdValue = jedisClient.get(RedisKey.PRODUCT_ID);
-        if (null != productIdValue) {
-            productIdValue = String.valueOf(jedisClient.incr(RedisKey.PRODUCT_ID));
+        String yyyymmdd = DateUtils.LocalDateTime2String(DateUtils.getCurrentDateTime(), DateUtils.DATE_NOFUll_FORMAT);
+        String productIdValue = hashOper.hget(RedisKey.ID, RedisKey.PRODUCT);
+        if (!StringUtils.isEmpty(productIdValue)) {
+            productIdValue = String.valueOf(hashOper.hincrBy(RedisKey.ID, RedisKey.PRODUCT, 1L));
         }else {
-            jedisClient.set(RedisKey.PRODUCT_ID, "100000000");
-            productIdValue = "100000000";
+            productIdValue = yyyymmdd + "100000";
+            hashOper.hset(RedisKey.ID, RedisKey.PRODUCT, productIdValue);
         }
         return productIdValue;
     }
 
     /**
-     * 以自增长的方式, 生成条形码, 2亿开始
+     * 以自增长的方式, 生成条形码
      * @author  ywx
      * @date    2018/12/18 21:00
      * @param   []
      * @return  java.lang.String
      */
     public String generateProductBarCode() {
-        String productBarCodeValue = jedisClient.get(RedisKey.PRODUCT_BARCODE);
-        if (null != productBarCodeValue) {
-            productBarCodeValue = String.valueOf(jedisClient.incr(RedisKey.PRODUCT_BARCODE));
+        String productBarCodeValue = hashOper.hget(RedisKey.PRODUCT, RedisKey.BARCODE);
+        if (!StringUtils.isEmpty(productBarCodeValue)) {
+            productBarCodeValue = String.valueOf(hashOper.hincrBy(RedisKey.PRODUCT, RedisKey.BARCODE, 1L));
         }else {
-            jedisClient.set(RedisKey.PRODUCT_BARCODE, "200000000");
-            productBarCodeValue = "200000000";
+            productBarCodeValue = "10000000000";
+            hashOper.hset(RedisKey.PRODUCT, RedisKey.BARCODE, productBarCodeValue);
         }
         return productBarCodeValue;
     }
@@ -57,12 +60,12 @@ public class GenerateID {
      * @return  java.lang.String
      */
     public String generateProductCatId() {
-        String productBarCodeValue = jedisClient.get(RedisKey.PRODUCT_CAT_ID);
-        if (null != productBarCodeValue) {
-            productBarCodeValue = String.valueOf(jedisClient.incr(RedisKey.PRODUCT_CAT_ID));
-        }else {
-            jedisClient.set(RedisKey.PRODUCT_CAT_ID, "30000");
+        String productBarCodeValue = hashOper.hget(RedisKey.ID, RedisKey.PRODUCT_CAT);
+        if (StringUtils.isEmpty(productBarCodeValue)) {
+            hashOper.hset(RedisKey.ID, RedisKey.PRODUCT_CAT, "30000");
             productBarCodeValue = "30000";
+        }else {
+            productBarCodeValue = String.valueOf(hashOper.hincrBy(RedisKey.ID, RedisKey.PRODUCT_CAT, 1L));
         }
         return productBarCodeValue;
     }

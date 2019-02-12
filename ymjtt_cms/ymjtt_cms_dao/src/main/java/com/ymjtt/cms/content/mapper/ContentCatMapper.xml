@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.cms.content.mapper.ContentCatMapper">
+
+    <resultMap id="contentCatDoMap" type="contentCatDo" >
+        <id property="contentCatId" column="content_cat_id" />
+        <result property="parentId" column="parent_id" />
+        <result property="contentCatName" column="content_cat_name" />
+        <result property="contentCatStatus" column="content_cat_status" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="contentCatCloumn">
+        cc.content_cat_id, cc.parent_id, cc.content_cat_name, cc.content_cat_status, cc.sort_order, cc.createTime, cc.createOper,
+        cc.lastupdateTime, cc.lastupdateOper, cc.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="contentCatWhere">
+        WHERE 1 = 1
+        <where>
+            <if test="contentCatId != null">
+                AND cc.content_cat_id = #{contentCatId}
+            </if>
+            <if test="parentId != null">
+                AND cc.product_id = #{parentId}
+            </if>
+            <if test="contentCatName != null and contentCatName != ''">
+                AND cc.content_cat_name LIKE concat('%', #{contentCatName}, '%')
+            </if>
+            <if test="sortOrder != null">
+                AND cc.sort_order = #{sortOrder}
+            </if>
+            <if test="createOper != null and createOper != ''">
+                AND cc.createOper LIKE concat('%', #{createOper}, '%')
+            </if>
+            <if test="lastupdateOper != null and lastupdateOper != ''">
+                AND cc.lastupdateOper LIKE concat('%', #{lastupdateOper}, '%')
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="contentCatDo" resultMap="contentCatDoMap">
+        SELECT
+        <include refid="contentCatCloumn"/>
+        FROM content_cat cc
+        <include refid="contentCatWhere" />
+        ORDER BY cc.sort_order ASC
+    </select>
+
+    <!-- get -->
+    <select id="getDO" parameterType="Long" resultMap="contentCatDoMap">
+        SELECT
+        <include refid="contentCatCloumn"/>
+        FROM content_cat cc
+        WHERE cc.content_cat_id = #{id}
+    </select>
+
+    <!-- update -->
+    <update id="updateDO" parameterType="contentCatDo">
+        UPDATE content_cat SET
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="contentCatName != null and contentCatName != ''">
+            content_cat_name = #{contentCatName},
+        </if>
+        <if test="contentCatStatus != null">
+            content_cat_status = #{contentCatStatus},
+        </if>
+        <if test="sortOrder != null">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+        content_cat_id = #{contentCatId}
+    </update>
+
+
+    <!-- Others -->
+    <!-- list -->
+    <sql id="contentCatIDWhere">
+        WHERE 1 = 1
+        <if test="parentId != null">
+            AND cc.parent_id = #{parentId}
+        </if>
+    </sql>
+    <select id="listByParentId" parameterType="Long" resultMap="contentCatDoMap">
+        SELECT
+        <include refid="contentCatCloumn"/>
+        FROM content_cat cc
+        <include refid="contentCatIDWhere" />
+        ORDER BY cc.sort_order ASC
+    </select>
+
+
+</mapper>
