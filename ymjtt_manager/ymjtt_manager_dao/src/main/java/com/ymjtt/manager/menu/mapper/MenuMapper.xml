@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.manager.menu.mapper.MenuMapper">
+
+    <resultMap id="menuDoMap" type="menuDo" >
+        <id property="menuId" column="menu_id" />
+        <result property="menuName" column="menu_name" />
+        <result property="sortOrder" column="sort_order" />
+        <result property="icon" column="icon" />
+        <result property="url" column="url" />
+        <result property="parentId" column="parent_id" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="menuCloumn">
+        m.menu_id, m.menu_name, m.sort_order, m.icon, m.sort_order,m.url, m.parent_id, m.createTime, m.createOper,
+        m.lastupdateTime, m.lastupdateOper, m.update_counts
+    </sql>
+
+    <!-- list -->
+    <sql id="menuWhere">
+        <where>
+            <if test="menuId != null">
+                AND m.menuId = #{menuId}
+            </if>
+            <if test="menuName != null">
+                AND m.menu_name LIKE concat('%', #{menuName}, '%')
+            </if>
+            <if test="parentId != null">
+                AND m.parent_id = #{parentId}
+            </if>
+        </where>
+    </sql>
+    <select id="listDO" parameterType="menuDo" resultMap="menuDoMap">
+        SELECT
+        <include refid="menuCloumn"/>
+        FROM menu m
+        <include refid="menuWhere" />
+        ORDER BY m.sort_order ASC
+    </select>
+
+    <!-- get -->
+    <select id="getDO" parameterType="Long" resultMap="menuDoMap">
+        SELECT
+        <include refid="menuCloumn"/>
+        FROM menu m
+        WHERE m.menu_id = #{id}
+    </select>
+
+    <!-- 更新 -->
+    <update id="updateDO" parameterType="menuDo">
+        UPDATE menu SET
+        <if test="menuName != null and menuName != ''">
+            menu_name = #{menuName},
+        </if>
+        <if test="sortOrder != null">
+            sort_order = #{sortOrder},
+        </if>
+        <if test="url != null and url != ''">
+            url = #{url},
+        </if>
+        <if test="icon != null and icon != ''">
+            icon = #{icon},
+        </if>
+        <if test="parentId != null">
+            parent_id = #{parentId},
+        </if>
+        <if test="1 != 2">
+            lastupdateTime = timestamp(now()),
+        </if>
+        <if test="lastupdateOper != null and lastupdateOper != ''">
+            lastupdateOper = #{lastupdateOper},
+        </if>
+        <if test="1 != 2">
+            update_counts = update_counts + 1
+        </if>
+        WHERE
+        menu_id = #{menuId}
+    </update>
+
+
+    <!-- Others -->
+    <!-- list -->
+    <sql id="menuPidWhere">
+        WHERE 1 = 1
+        <if test="parentId != null">
+            AND m.parent_id = #{parentId}
+        </if>
+    </sql>
+    <select id="listByParentId" parameterType="Long" resultMap="menuDoMap">
+        SELECT
+        <include refid="menuCloumn"/>
+        FROM menu m
+        <include refid="menuPidWhere" />
+        ORDER BY m.sort_order ASC
+    </select>
+
+</mapper>
