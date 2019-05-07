@@ -54,14 +54,12 @@
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
         <persistence.version>2.2</persistence.version>
-        <javassist.version>3.20.0-GA</javassist.version>
 
         <logback.version>1.2.3</logback.version>
         <logbackextspring.version>0.1.4</logbackextspring.version>
         <jcloverslf4j.version>1.7.25</jcloverslf4j.version>
 
         <okhttp.version>3.8.1</okhttp.version>
-        <beanUtils.version>1.9.3</beanUtils.version>
         <fileupload.version>1.3.1</fileupload.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang3.version>3.7</commons-lang3.version>
@@ -191,13 +189,6 @@
                 <version>${persistence.version}</version>
             </dependency>
 
-            <!-- javassist -->
-            <dependency>
-                <groupId>org.javassist</groupId>
-                <artifactId>javassist</artifactId>
-                <version>${javassist.version}</version>
-            </dependency>
-
             <!-- mysql -->
             <dependency>
                 <groupId>mysql</groupId>
@@ -282,12 +273,6 @@
                 <version>${plexusUtils.version}</version>
             </dependency>
 
-            <!-- BeanUtils -->
-            <dependency>
-                <groupId>commons-beanutils</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${beanUtils.version}</version>
-            </dependency>
             <!-- okHttp -->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
