@@ -2,14 +2,13 @@ package com.ymjtt.manager.product.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.util.jedis.GenerateID;
-import com.ymjtt.common.util.jedis.HashOper;
 import com.ymjtt.common.vo.NodeVO;
 import com.ymjtt.manager.product.mapper.ProductCatMapper;
 import com.ymjtt.manager.product.mapper.ProductMapper;
 import com.ymjtt.manager.product.service.ProductCatService;
 import com.ymjtt.manager.product.vo.ProductCatVO;
 import com.ymjtt.manager.product.xdo.ProductCatDo;
+import com.ymjtt.manager.util.GenerateId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,10 +31,7 @@ public class ProductCatServiceImpl implements ProductCatService {
     private ProductMapper productMapper;
 
     @Autowired
-    private GenerateID generateID;
-
-    @Autowired
-    private HashOper hashOper;
+    private GenerateId generateID;
 
     @Value("${topProductCatId}")
     private Long topProductCatId;

@@ -1,0 +1,211 @@
+<map> 带有可点击区域的图像映射
+
+post请求比get请求耗时长
+    1. post请求数据量比get请求大
+    2. 三次握手后, post请求先发送请求头, 待服务器返回100后继续发送请求体, get请求直接发送请求数据
+
+get请求中的url编码
+    1.如果是特殊字符, 用三个2位的16进制数, 以%开头表示
+    2.不可包含%
+
+urlencode是一个函数,也称为%编码, 将url按一个编码方式进行编码
+
+display: inline
+
+
+
+2.18
+load average的三个数值1,5,15分钟内的负载情况, 当此数值/CPU数>5时,表明系统超负荷运行
+
+*.tar/*.tar.gz不同的解压命令参数
+
+spring中先获取bean再通过反射去拿取注解, 并根据不同的注解来执行不同的方法
+
+
+2.19
+html格式
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+    </body>
+</html>
+
+<meta charset="..."/> 指定浏览器打开本文档的编码方式
+
+
+2.20
+EL表达式不需要导包, JSTL需要导包
+
+transient
+    1.它修饰的变量,不会被序列化
+    2.静态变量不会被序列化
+    3.用于修饰变量
+
+@Transient较transient区别
+    1.作用在get/set方法上
+    2.@Transent注解的属性值, 不会出现;Transient修饰的属性值为null
+
+fastJson和jackson实现不序列化的方法
+    1.jackson   在属性上加@JsonIgnore
+    2.fastJson  在属性上加@JSONField(serialize=false)
+
+jni java native interface java本地接口
+native java代码只定义方法, C/C++负责具体实现, 可实现对硬件的访问
+hashcode(), notify(), notifyAll(), wait(), clone()都是java本地接口
+
+finalize()
+GC在回收对象之前调用
+gc(), 是由JVM来调用的
+
+
+
+2.21
+原记录的StringBuffer的扩容原理不是jdk1.8的执行原理, 而是1.5之前的原理
+StringBuffer保证线程安全是通过同步方法的方式实现的
+StringBuffer & StringBuilder 没有实现Conpare接口, 未重写compareTo(), 因此不可进行排序
+                             没有重写equals(), 因此不可进行比较
+
+二分查找返回索引, 执行二分查找前需要先排序
+
+排序
+    1.Bean中Comparable compara()
+    2.内部类, Comparator comparaTo()
+
+for
+    1.遍历的对象未实现iterator接口,则正常的遍历
+    2.遍历的对象实现iterator接口,则调用next(),进行遍历
+
+快速失败
+    1.在增加for/迭代时,list集合对象操作,会导致"修改并发异常", 应该用迭代器操作集合
+    2.快速失败的原理: 比较modCount & expectedModCount的值是否一致, 不一致, 则报错
+    3.如果用普通的for, 则可能会掩盖掉错误, 这种错误指的是数据的错误, 因此建议用增加for/迭代
+
+2.22
+标记型接口特点
+    ex. XXX instanceof Serializable 语句必然存在, 如果是此接口的子类对象, 则.....
+
+Serializable接口
+    标记型接口, 实现了此接口才可序列化
+
+RandomAccess接口
+    标记型接口,实现了此接口才可以随机访问
+    实现: 以数组为基础, 以索引来访问对象
+
+Iterator接口
+    规范迭代器基础方法
+
+Iterable接口
+    规范获取迭代器的方法, 实现了此接口, 才可使用迭代
+
+ListIterator接口
+    继承了Iterator接口, 是Iterator接口的增强
+
+
+SubList
+    用于截取集合
+
+CAS Compare And Swap
+
+null值,null键
+HashTable不允许
+HashMap, LinkedHashMap, WeakHashMap允许
+
+HashMap
+    线程不安全原因, put()会引起死循环,导致CPU利用率达100%
+HashTable
+    效率低下的原因, HashTable的所有线程都需要竞争同一把锁
+ConcurrentHashMap
+    利用分段锁的技术提升效率, 同时保证线程安全
+分段锁
+    将类中全局数据分成一段一段, 给一段配置一把锁 n
+
+synchronized
+    在方法上时, 锁是调用这个方法的对象
+
+加载因子太大
+    会导致同一个桶中,存放好几个Key_Value, 增加了查找的时间
+
+CopyOnWriteArrayList
+    用于读多写少的场景
+    将原有数组深拷贝一份,添加现需要添加的数据, 重设原有数组
+
+衡量算法指标
+    时间复杂度 + 空间复杂度
+
+时间复杂度
+    执行算法所需时间
+    常见时间复杂度: 常数阶O(1)，对数阶O(log2n)，线性阶O(n)，线性对数阶O(nlog2n)，平方阶O(n2)，立方阶O(n3)， k次方阶O(nk)，指数阶O(2n)
+    与n无关的循环O(1)
+    与n有关的循环O(n)
+    与n有关的三层循环O(n3)
+
+    用两个算法A1和A2求解同一问题，时间复杂度分别是O(100n2)，O(5n3)
+    　　　　（1） 5n3/100n2=n/20 ，当输入量n＜20时，100n2 > 5n3 ，这时A2花费的时间较少。
+    　　　　（2）随着问题规模n的增大，两个算法的时间开销之比 5n3/100n2=n/20 也随着增大。即当问题规模较大时，
+                算法A1比算法A2要高效的多。它们的渐近时间复杂度O(n2)和O(n3) 评价了这两个算法在时间方面的性能。在算法分析时，
+                往往对算法的时间复杂度和渐近时间复杂度不予区分，而经常是将渐近时间复杂度 O(f(n)) 简称为时间复杂度，
+                其中的f(n)一般是算法中频度最大的语句频度。
+
+    平均时间复杂度和最坏时间复杂度, 一般考量最坏时间复杂度
+
+空间复杂度
+    执行算法所需要占用的内存空间
+
+一般效率较好的算法要控制在O(log2n) 或者 O(n)
+
+Log2 8	 ＝ 3
+
+
+2.25
+检查型异常不进行事务的回滚, 即IO/SQL/TimeOut/FileNotFoundException Exception不回滚, 那功或失么在同一事务中如何保证两条insert同时成败呢?
+开始事务...
+生成订单
+网络断了...
+减库存
+关闭事务...             怎么保证"生成订单" "减库存"都成功, 配置rollback-for="java.lang.Throwable"
+
+非检票型异常, 可以在方法上不加throws + 异常名, 如NPE
+
+
+
+2.28
+Order by 原理
+
+上面的减库存, 是建立在同一个数据库的基础之上的, 使用的是这个数据库的事务管理, 若有多个数据库, 那么这个事务就不可用了
+
+一.	什么是网页静态化技术
+将网页以纯静态的方式展示
+
+二.	网页静态化与缓存的比较
+a)	缓存技术用于小数据, 经常变动的数据的存储
+b)	网页静态化技术用于大数据, 不常变动的数据
+
+三.	网页静态化的应用场景
+a)	新闻页
+b)	商品详情页
+
+四.	什么是FreeMarker
+FreeMarker是一款由Java编写的模板引擎, 用它可以通过模板和要改变的数据生成Html文件, 减少频繁使用数据库, 给系统带的压力
+
+模板 + 数据 --> *.html
+当数据发生变化时, 可通过MQ, 自动生成静态页面
+静态页面的名称为SKU的ID
+
+SEO 搜索引擎优化
+
+跨域: IP不同/端口不同的请求
+同源策略: 浏览器的一种机制, 不允许从一个源中获取另一个源的文档
+jsonp: ajax发送jsonp请求时, 带上callback=回调函数名, 服务器端接收到参数后, 组装与"方法名(参数)"的形式返回
+
+
+
+
+
+
+
+
+
+
+

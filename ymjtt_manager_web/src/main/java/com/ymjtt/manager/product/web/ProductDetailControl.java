@@ -1,10 +1,10 @@
 package com.ymjtt.manager.product.web;
 
 import com.github.pagehelper.PageInfo;
+import com.ymjtt.common.fastdfs.FastDFSUtil;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
-import com.ymjtt.common.util.fastdfs.FastDFSUtil;
 import com.ymjtt.common.util.file.FileUtils;
 import com.ymjtt.manager.product.service.ProductDetailService;
 import com.ymjtt.manager.product.xdo.ProductDetailDo;
@@ -37,13 +37,13 @@ public class ProductDetailControl {
     private ProductDetailService productDetailService;
 
     @Autowired
-    private FastDFSUtil fastDFSUtil;
+    FastDFSUtil fastDFSUtil;
 
     @ResponseBody
     @RequestMapping(value = "/list")
     public DataGridVO<ProductDetailDo> list(ProductDetailDo productDetailDo, Integer page, Integer rows) {
         PageInfo<ProductDetailDo> pageInfo = productDetailService.listDO(productDetailDo, page, rows);
-        return new DataGridVO<>(pageInfo);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody

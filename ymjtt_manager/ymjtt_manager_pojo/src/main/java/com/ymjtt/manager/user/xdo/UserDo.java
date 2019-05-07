@@ -1,12 +1,8 @@
 package com.ymjtt.manager.user.xdo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 /**
  * @auther ywx
@@ -17,8 +13,7 @@ import java.util.Arrays;
 public class UserDo implements Serializable{
     protected Long userId;
     protected String userName;
-    @JsonIgnore
-    protected String pwd;
+    protected transient String pwd;
     protected String image;
     protected String email;
     protected Long phone;
@@ -209,4 +204,6 @@ public class UserDo implements Serializable{
     public String toString() {
         return "UserDo{" + "userId=" + userId + ", userName='" + userName + '\'' + ", pwd='" + pwd + '\'' + ", image='" + image + '\'' + ", email='" + email + '\'' + ", phone=" + phone + ", status=" + status + ", userType=" + userType + ", createTime=" + createTime + ", createOper='" + createOper + '\'' + ", lastupdateTime=" + lastupdateTime + ", lastupdateOper='" + lastupdateOper + '\'' + ", updateCounts=" + updateCounts + '}';
     }
+
+
 }

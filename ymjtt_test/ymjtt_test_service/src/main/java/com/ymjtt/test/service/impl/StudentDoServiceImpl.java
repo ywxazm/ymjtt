@@ -164,7 +164,7 @@ public class StudentDoServiceImpl implements StudentDoService {
         stu.setAge(11);
         studentDoMapper.saveStudentDo(stu);
 
-        throw new Exception("aa");
+        throw new Exception("aa");  //检查型异常, 提交
     }
 
     @Override
@@ -174,7 +174,7 @@ public class StudentDoServiceImpl implements StudentDoService {
         stu.setAge(12);
         studentDoMapper.saveStudentDo(stu);
 
-        throw new RuntimeException("aa");
+        throw new RuntimeException("aa"); //非检查型异常, 回滚
     }
 
     @Override

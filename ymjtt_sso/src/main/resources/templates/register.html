@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ymjtt注册中心</title>
+
+    <link th:href="@{/img/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/custom.css}">
+
+    <script type="text/javascript" th:src="@{/js/jquery-2.1.4.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/userjs/register.js}"></script>
+
+    <script>if (window.top !== window.self) {
+    window.top.location = window.location;
+    }</script>
+
+    <script>
+        function submit() {
+            var userNick = $('#id_userNick').val().trim();
+            var pwd = $('#id_pwd').val().trim();
+            var pwdAgain = $('#id_pwdAgain').val().trim();
+        }
+    </script>
+
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <h3 class="logo-name" style="font-size: 120px">YMJTT</h3>
+    </div>
+    <br/>
+    <div>
+        <p>创建一个YMJTT新账户</p>
+        <form class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" name="userNick" id="id_userNick" placeholder="请输入用户名/手机号/邮箱号">
+                <a href="#" id="userNameMsg" data-toggle="tooltip" data-placement="right" title=""></a>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="pwd" id="id_pwd" placeholder="请输入密码">
+                <a href="#" id="firstPwd" data-toggle="tooltip" data-placement="right" title=""></a>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="pwdAgain" id="id_pwdAgain" placeholder="请再次输入密码">
+                <a href="#" id="secondPwd" data-toggle="tooltip" data-placement="right" title=""></a>
+            </div>
+            <div class="form-group text-left">
+                <div class="checkbox" style="margin-top:20px">
+                    <label class="no-padding" style="margin-left: 100px">
+                        <input type="checkbox" style="margin-top: 3px"><b> 我同意注册协议</b>
+                    </label>
+                </div>
+            </div>
+            <div class="btn btn-primary block full-width m-b" onclick="submit()">注 册</div>
+            <p class="text-muted text-center">
+                <small>已经有账户了？</small>
+                <a href="../sso/login">点此登录</a>
+            </p>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

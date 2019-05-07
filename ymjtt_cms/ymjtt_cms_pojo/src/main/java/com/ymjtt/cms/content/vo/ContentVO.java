@@ -1,11 +1,9 @@
 package com.ymjtt.cms.content.vo;
 
-import com.ymjtt.cms.content.xdo.ContentCatDo;
 import com.ymjtt.cms.content.xdo.ContentDo;
 import com.ymjtt.common.vo.NodeVO;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

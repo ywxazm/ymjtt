@@ -1,5 +1,6 @@
 package com.ymjtt.manager.product.web;
 
+import com.github.pagehelper.PageInfo;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
@@ -25,7 +26,8 @@ public class ProductAttrValueControl {
     @ResponseBody
     @RequestMapping(value = "/list")
     public DataGridVO<ProductAttrValueDo> list(ProductAttrValueDo productAttrValueDo, Integer page, Integer rows) {
-        return new DataGridVO<>(productAttrValueService.listDO(productAttrValueDo, page, rows));
+        PageInfo<ProductAttrValueDo> pageInfo = productAttrValueService.listDO(productAttrValueDo, page, rows);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody

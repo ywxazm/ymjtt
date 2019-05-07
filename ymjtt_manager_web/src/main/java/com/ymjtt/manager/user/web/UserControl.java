@@ -1,10 +1,10 @@
 package com.ymjtt.manager.user.web;
 
 import com.github.pagehelper.PageInfo;
+import com.ymjtt.common.fastdfs.FastDFSUtil;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
-import com.ymjtt.common.util.fastdfs.FastDFSUtil;
 import com.ymjtt.common.util.objPackage.BeanUtil;
 import com.ymjtt.manager.user.service.UserService;
 import com.ymjtt.manager.user.xdo.UserDo;
@@ -43,13 +43,13 @@ public class UserControl {
     private BeanUtil<UserDo> beanUtil;
 
     @Autowired
-    private FastDFSUtil fastDFSUtil;
+    FastDFSUtil fastDFSUtil;
 
     @ResponseBody
     @RequestMapping(value = "/list")
     public DataGridVO<UserDo> list(UserDo userDo, Integer page, Integer rows) {
         PageInfo<UserDo> pageInfo = userService.listDO(userDo, page, rows);
-        return new DataGridVO<>(pageInfo);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody

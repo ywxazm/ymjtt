@@ -1,8 +1,9 @@
 package com.ymjtt.test.xdo;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
-public class StudentDo implements Serializable {
+public class StudentDo implements Serializable, Cloneable, Comparator {
 
     private Integer id;     //id
     private String name;    //姓名
@@ -33,6 +34,13 @@ public class StudentDo implements Serializable {
     }
 
     @Override
+    public int compare(Object o1, Object o2) {
+        StudentDo stu1 = (StudentDo)o1;
+        StudentDo stu2 = (StudentDo)o2;
+        return stu1.getAge().equals(stu2.getAge()) ? 0 : (stu1.getAge() > stu2.getAge() ? -1 : 1);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -59,5 +67,12 @@ public class StudentDo implements Serializable {
                 ", name='" + name + '\'' +
                 ", age=" + age +
                 '}';
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Object clone = super.clone();
+        System.out.println("执行clone().....");
+        return clone;
     }
 }

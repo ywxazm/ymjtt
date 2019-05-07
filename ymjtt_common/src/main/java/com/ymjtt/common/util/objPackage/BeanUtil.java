@@ -53,26 +53,28 @@ public class BeanUtil<T> {
      * @param   [obj]
      * @return  java.util.Map<java.lang.String,java.lang.Object>
      */
-    public static Map<String, Object> bean2Map(Object obj) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-
-        if(obj == null){
-            return null;
-        }
+    public static Map<String, Object> bean2Map(Object obj) {
         Map<String, Object> map = new HashMap<>();
-        BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
-        PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        for (PropertyDescriptor property : propertyDescriptors) {
-            String key = property.getName();
-            // 过滤class属性
-            if (!key.equals("class")) {
-                // 得到property对应的getter方法
-                Method getter = property.getReadMethod();
-                Object value = getter.invoke(obj);
-
-                map.put(key, value);
+        try {
+            if (obj == null) {
+                return null;
             }
+            BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
+            PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+            for (PropertyDescriptor property : propertyDescriptors) {
+                String key = property.getName();
+                // 过滤class属性
+                if (!key.equals("class")) {
+                    // 得到property对应的getter方法
+                    Method getter = property.getReadMethod();
+                    Object value = getter.invoke(obj);
+
+                    map.put(key, value);
+                }
+            }
+        } catch (IllegalAccessException | IntrospectionException | InvocationTargetException e) {
+            e.printStackTrace();
         }
         return map;
-
     }
 }

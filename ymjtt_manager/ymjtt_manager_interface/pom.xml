@@ -23,6 +23,12 @@
             <artifactId>ymjtt_manager_dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+
+        <!-- fastdfs -->
+        <dependency>
+            <groupId>com.ywx</groupId>
+            <artifactId>fastdfs_client_java</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

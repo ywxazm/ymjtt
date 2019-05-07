@@ -35,6 +35,18 @@
         <filter-name>encoding-filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    
+    <!-- 直接访问静态资源, 由tomcat负责处理 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/htmltest/HtmlTest.html</url-pattern>
+    </servlet-mapping>
+
+    <!-- 静态资源不拦截 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/static/*</url-pattern>
+    </servlet-mapping>
 
     <!-- springmvc入口 -->
     <servlet>

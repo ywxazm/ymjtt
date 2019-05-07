@@ -31,7 +31,7 @@
             <tx:method name="method01" propagation="REQUIRES_NEW" isolation="READ_COMMITTED"/>
             <tx:method name="method02" propagation="REQUIRES_NEW" isolation="READ_COMMITTED"/>
             <!-- 回滚问题 -->
-            <tx:method name="method03" propagation="REQUIRED" isolation="READ_COMMITTED" />
+            <tx:method name="method03" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="java.lang.Throwable" />
             <tx:method name="method04" propagation="REQUIRED" isolation="READ_COMMITTED"  />
             <tx:method name="method05" propagation="REQUIRED" isolation="READ_COMMITTED" no-rollback-for="java.lang.RuntimeException" />
             <tx:method name="method06" propagation="REQUIRED" isolation="READ_COMMITTED" rollback-for="java.lang.Exception"  />

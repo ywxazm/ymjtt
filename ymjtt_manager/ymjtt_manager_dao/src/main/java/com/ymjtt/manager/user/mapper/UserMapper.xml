@@ -6,6 +6,7 @@
     <resultMap id="UserDoMap" type="userDo" >
         <id property="userId" column="user_id" />
         <result property="userName" column="user_name" />
+        <result property="pwd" column="pwd" />
         <result property="image" column="image" />
         <result property="email" column="email" />
         <result property="phone" column="phone" />
@@ -19,8 +20,8 @@
     </resultMap>
 
     <sql id="userCloumn">
-        u.user_id, u.user_name, u.image, u.email, u.phone, u.status, u.user_type, u.createTime, u.createOper, 
-        u.lastupdateTime, u.lastupdateOper, u.update_counts
+        u.user_id, u.user_name, u.pwd, u.image, u.email, u.phone, u.status, u.user_type, u.createTime, u.createOper,
+        u.lastLoginTime, u.loginCounts, u.lastupdateTime, u.lastupdateOper, u.update_counts
     </sql>
 
     <!-- list -->

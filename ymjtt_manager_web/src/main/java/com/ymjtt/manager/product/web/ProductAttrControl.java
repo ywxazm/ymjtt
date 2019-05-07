@@ -1,9 +1,10 @@
 package com.ymjtt.manager.product.web;
 
+import com.github.pagehelper.PageInfo;
+import com.ymjtt.common.redis.HashOper;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
-import com.ymjtt.common.util.jedis.HashOper;
 import com.ymjtt.common.vo.NodeVO;
 import com.ymjtt.manager.product.service.ProductAttrService;
 import com.ymjtt.manager.product.service.ProductAttrValueService;
@@ -20,11 +21,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.JedisCluster;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 商品
@@ -53,7 +55,8 @@ public class ProductAttrControl {
     @ResponseBody
     @RequestMapping(value = "/list")
     public DataGridVO<ProductAttrDo> list(ProductAttrDo productAttrDo, Integer page, Integer rows) {
-        return new DataGridVO<>(productAttrService.listDO(productAttrDo, page, rows));
+        PageInfo<ProductAttrDo> pageInfo = productAttrService.listDO(productAttrDo, page, rows);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody
@@ -97,7 +100,8 @@ public class ProductAttrControl {
     @ResponseBody
     @RequestMapping(value = "/listContainBelongName")
     public DataGridVO listContainBelongName(ProductAttrDo productAttrDo, Integer page, Integer rows) throws InvocationTargetException, IllegalAccessException, IntrospectionException {
-        return new DataGridVO<>(productAttrService.listVO(productAttrDo, page, rows));
+        PageInfo<List<Map<String, Object>>> pageInfo = productAttrService.listVO(productAttrDo, page, rows);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     /**

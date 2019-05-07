@@ -2,10 +2,10 @@ package com.ymjtt.manager.product.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.util.jedis.GenerateID;
 import com.ymjtt.manager.product.mapper.ProductAttrValueMapper;
 import com.ymjtt.manager.product.service.ProductAttrValueService;
 import com.ymjtt.manager.product.xdo.ProductAttrValueDo;
+import com.ymjtt.manager.util.GenerateId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class ProductAttrValueServiceImpl<T> implements ProductAttrValueService {
     private ProductAttrValueMapper productAttrValueMapper;
 
     @Autowired
-    private GenerateID generateID;
+    private GenerateId generateID;
 
     @Override
     public PageInfo<ProductAttrValueDo> listDO(ProductAttrValueDo productAttrValueDo, Integer page, Integer rows) {

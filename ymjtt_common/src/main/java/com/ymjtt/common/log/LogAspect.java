@@ -39,13 +39,13 @@ public class LogAspect {
         if (className.contains("web")) {
             startTimeMap.put("web" + threadId, System.currentTimeMillis());
             String ip = getIp2(getRequest(joinPoint));
-            logger.debug("Control ip = {}, threadId = {}, className = {}, params = {}", ip, threadId, className , paramList);
+            logger.debug("Ymjtt_Log-->: Control ip = {}, threadId = {}, className = {}, params = {}", ip, threadId, className , paramList);
         }else if(className.contains("service")) {
             startTimeMap.put("service" + threadId, System.currentTimeMillis());
-            logger.debug("Service threadId = {}, className = {}, params = {}", threadId, className, paramList);
+            logger.debug("Ymjtt_Log-->: Service threadId = {}, className = {}, params = {}", threadId, className, paramList);
         }else {
             startTimeMap.put("others" + threadId, System.currentTimeMillis());
-            logger.debug("Others threadId = {}, className = {}, params = {}", threadId, className, paramList);
+            logger.debug("Ymjtt_Log-->: Others threadId = {}, className = {}, params = {}", threadId, className, paramList);
         }
     }
 
@@ -57,13 +57,13 @@ public class LogAspect {
         if (className.contains("web")) {
             String ip = getIp2(getRequest(joinPoint));
             Long castTime = System.currentTimeMillis() - startTimeMap.get("web" + threadId);
-            logger.debug("Control ip = {}, threadId = {}, className = {}, castTime = {}ms", ip, threadId, className, castTime);
+            logger.debug("Ymjtt_Log-->: Control ip = {}, threadId = {}, className = {}, castTime = {}ms", ip, threadId, className, castTime);
         } else if (className.contains("service")) {
             Long castTime = System.currentTimeMillis() - startTimeMap.get("service" + threadId);
-            logger.debug("Service threadId = {}, className = {}, castTime = {}ms", threadId, className, castTime);
+            logger.debug("Ymjtt_Log-->: Service threadId = {}, className = {}, castTime = {}ms", threadId, className, castTime);
         } else {
             Long castTime = System.currentTimeMillis() - startTimeMap.get("others" + threadId);
-            logger.debug("Others threadId = {}, className = {}, castTime = {}ms", threadId, className, castTime);
+            logger.debug("Ymjtt_Log-->: Others threadId = {}, className = {}, castTime = {}ms", threadId, className, castTime);
         }
     }
 
@@ -82,8 +82,7 @@ public class LogAspect {
         }
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        HttpServletRequest request = sra.getRequest();
-        return request;
+        return sra.getRequest();
     }
 
     /**

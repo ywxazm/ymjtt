@@ -30,6 +30,6 @@ public class ProductControl {
     @RequestMapping(value = "/list")
     public DataGridVO<ProductDo> list(ProductDo productDo) {
         PageInfo<ProductDo> pageInfo = productService.listDO(productDo, 1, 50);
-        return new DataGridVO<>(pageInfo);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 }

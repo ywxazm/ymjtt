@@ -1,11 +1,10 @@
 package com.ymjtt.common.result;
 
-import com.github.pagehelper.PageInfo;
-
 import java.io.Serializable;
 import java.util.List;
 
 /**
+ * EASYUI需要的返回数据类型
  * @auther ywx
  * @date 2019/1/9 15:24
  **/
@@ -14,18 +13,9 @@ public class DataGridVO<T> implements Serializable {
     private Long total;
     private List<T> rows;
 
-    public DataGridVO() {
-    }
-
-    @Deprecated
     public DataGridVO(List<T> rows, Long total) {
         this.rows = rows;
         this.total = total;
-    }
-
-    public DataGridVO(PageInfo<T> pageInfo) {
-        this.rows = pageInfo.getList();
-        this.total = pageInfo.getTotal();
     }
 
     public Long getTotal() {

@@ -1,15 +1,16 @@
 package com.ymjtt.manager.content.web;
 
+import com.github.pagehelper.PageInfo;
 import com.ymjtt.cms.content.service.ContentCatService;
 import com.ymjtt.cms.content.service.ContentService;
 import com.ymjtt.cms.content.vo.ContentCatVO;
 import com.ymjtt.cms.content.xdo.ContentCatDo;
 import com.ymjtt.cms.content.xdo.ContentDo;
+import com.ymjtt.common.constant.RedisKeyConstant;
+import com.ymjtt.common.redis.HashOper;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
-import com.ymjtt.common.util.jedis.HashOper;
-import com.ymjtt.common.util.jedis.RedisKey;
 import com.ymjtt.common.util.json.JSONConvertUtil;
 import com.ymjtt.common.vo.NodeVO;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.JedisCluster;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,18 +37,14 @@ public class ContentCatControl {
     @Autowired
     private ContentService contentService;
 
-    private HashOper hashOper;
-
     @Autowired
-    public ContentCatControl(HashOper hashOper) {
-        this.hashOper = hashOper;
-        hashOper.del(RedisKey.CONTENT_CAT);
-    }
+    private HashOper hashOper;
 
     @ResponseBody
     @RequestMapping(value = "/list")
     public DataGridVO<ContentCatDo> list(ContentCatDo contentCatDo, Integer page, Integer rows) {
-        return new DataGridVO<>(contentCatService.listDO(contentCatDo, page, rows));
+        PageInfo<ContentCatDo> pageInfo = contentCatService.listDO(contentCatDo, page, rows);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody
@@ -59,7 +57,7 @@ public class ContentCatControl {
     @RequestMapping(value = "/save")
     public ResultVO save(ContentCatDo contentCatDo) {
         if (contentCatService.saveDO(contentCatDo)) {
-            hashOper.hdel(RedisKey.CONTENT_CAT, contentCatDo.getParentId() + "_son");
+            hashOper.del(RedisKeyConstant.CONTENT_CAT);
             return ResultVO.buildSuccessResult(CodeResult.SAVE_SUCCESS);
         }
         return ResultVO.buildSuccessResult(CodeResult.SAVE_FAIL);
@@ -69,8 +67,7 @@ public class ContentCatControl {
     @RequestMapping(value = "/update")
     public ResultVO update(ContentCatDo contentCatDo) {
         if (contentCatService.updateDO(contentCatDo)) {
-            hashOper.hdel(RedisKey.CONTENT_CAT, contentCatDo.getContentCatId() + "_parent");
-            hashOper.hdel(RedisKey.CONTENT_CAT, contentCatDo.getContentCatId() + "_son");
+            hashOper.del(RedisKeyConstant.CONTENT_CAT);
             return ResultVO.buildSuccessResult(CodeResult.UPDATE_SUCCESS);
         }
         return ResultVO.buildSuccessResult(CodeResult.UPDATE_FAIL);
@@ -91,8 +88,7 @@ public class ContentCatControl {
         }
 
         if (contentCatService.removeDO(id)) {
-            hashOper.hdel(RedisKey.CONTENT_CAT, id + "_parent");
-            hashOper.hdel(RedisKey.CONTENT_CAT, id + "_son");
+            hashOper.del(RedisKeyConstant.CONTENT_CAT);
             return ResultVO.buildSuccessResult(CodeResult.REMOVE_SUCCESS);
         }
 
@@ -110,11 +106,11 @@ public class ContentCatControl {
     @ResponseBody
     @RequestMapping("/listByParentId")
     public ResultVO listByParentId(Long parentId) throws IOException {
-        String contentCats = hashOper.hget(RedisKey.CONTENT_CAT, parentId + "_son");
+        String contentCats = hashOper.hget(RedisKeyConstant.CONTENT_CAT, parentId + "_son");
         List<NodeVO> contentCatVOList;
         if (StringUtils.isEmpty(contentCats)) {
             contentCatVOList = contentCatService.listByParentId(parentId);
-            hashOper.hset(RedisKey.CONTENT_CAT, parentId + "_son", JSONConvertUtil.obj2Json(contentCatVOList));
+            hashOper.hset(RedisKeyConstant.CONTENT_CAT, parentId + "_son", JSONConvertUtil.obj2Json(contentCatVOList));
         }else {
             JSONConvertUtil<NodeVO> jsonConvertUtil = new JSONConvertUtil<>();
             contentCatVOList = jsonConvertUtil.json2List(contentCats, NodeVO.class);
@@ -133,11 +129,11 @@ public class ContentCatControl {
     @RequestMapping("/getContainParentDo")
     public ResultVO getContainParentDo(Long id) throws IOException {
         ContentCatDo contentCatDo = contentCatService.getDO(id);
-        String nodeVOs = hashOper.hget(RedisKey.CONTENT_CAT, id + "_parent");
+        String nodeVOs = hashOper.hget(RedisKeyConstant.CONTENT_CAT, id + "_parent");
         List<NodeVO> nodeVOList;
         if (StringUtils.isEmpty(nodeVOs)) {
             nodeVOList = contentCatService.listBySonId(id);
-            hashOper.hset(RedisKey.CONTENT_CAT, id + "_parent", JSONConvertUtil.obj2Json(nodeVOList));
+            hashOper.hset(RedisKeyConstant.CONTENT_CAT, id + "_parent", JSONConvertUtil.obj2Json(nodeVOList));
         }else {
             JSONConvertUtil<NodeVO> jsonConvertUtil = new JSONConvertUtil<>();
             nodeVOList = jsonConvertUtil.json2List(nodeVOs, NodeVO.class);

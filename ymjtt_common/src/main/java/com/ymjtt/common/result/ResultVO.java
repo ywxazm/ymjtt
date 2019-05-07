@@ -42,7 +42,7 @@ public class ResultVO<T> implements Serializable {
 
     /** 成功, 返回数据(使用默认CodeResult) */
     public static <T> ResultVO<T> buildSuccessResult(T data) {
-        return new ResultVO<>(CodeResult.DEFAULT_SUCCESS, data);
+        return new ResultVO<>(CodeResult.COMMON_SUCCESS, data);
     }
 
     private ResultVO(CodeResult codeResult) {

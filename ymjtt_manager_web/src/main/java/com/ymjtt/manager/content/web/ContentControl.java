@@ -5,10 +5,10 @@ import com.ymjtt.cms.content.service.ContentCatService;
 import com.ymjtt.cms.content.service.ContentService;
 import com.ymjtt.cms.content.vo.ContentVO;
 import com.ymjtt.cms.content.xdo.ContentDo;
+import com.ymjtt.common.fastdfs.FastDFSUtil;
 import com.ymjtt.common.result.CodeResult;
 import com.ymjtt.common.result.DataGridVO;
 import com.ymjtt.common.result.ResultVO;
-import com.ymjtt.common.util.fastdfs.FastDFSUtil;
 import com.ymjtt.common.util.objPackage.BeanUtil;
 import com.ymjtt.common.vo.NodeVO;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,7 @@ public class ContentControl {
     private ContentCatService contentCatService;
 
     @Autowired
-    private FastDFSUtil fastDFSUtil;
+    FastDFSUtil fastDFSUtil;
 
     @Autowired
     private BeanUtil<ContentDo> beanUtil;
@@ -49,7 +49,7 @@ public class ContentControl {
     @RequestMapping(value = "/list")
     public DataGridVO<ContentDo> list(ContentDo contentDo, Integer page, Integer rows) {
         PageInfo<ContentDo> pageInfo = contentService.listDO(contentDo, page, rows);
-        return new DataGridVO<>(pageInfo);
+        return new DataGridVO<>(pageInfo.getList(), pageInfo.getTotal());
     }
 
     @ResponseBody
@@ -131,6 +131,7 @@ public class ContentControl {
     public ResultVO getContainParentDo(Long contentId) {
         ContentDo contentDo = contentService.getDO(contentId);
         List<NodeVO> nodeVOList = contentCatService.listBySonId(contentDo.getContentCatId());
+        nodeVOList.add(new ContentVO(contentDo));
         ContentVO contentVO = new ContentVO(contentDo);
         contentVO.setUpLevelNodeList(nodeVOList);
         return ResultVO.buildSuccessResult(contentVO);

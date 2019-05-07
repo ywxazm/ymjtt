@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>商品</title>
-</head>
 
     <link rel="shortcut icon" href="../../../static/favicon.ico">
     <link rel="stylesheet" type="text/css" href="../../../static/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="../../../static/themes/icon.css">
     <link rel="stylesheet" href="../../../static/themes/bootstrap.min.css">
 
-    <script type="text/javascript" src="../../../static/plugins/jquery.min.js"></script>
-    <script type="text/javascript" src="../../../static/plugins/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="../../../static/plugins/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../../static/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" src="../../../static/plugins/jquery.serializejson.min.js"></script>
+    <script src="../../../static/plugins/jquery.min.js"></script>
+    <script src="../../../static/plugins/jquery.easyui.min.js"></script>
+    <script src="../../../static/plugins/bootstrap.min.js"></script>
+    <script src="../../../static/locale/easyui-lang-zh_CN.js"></script>
+    <script src="../../../static/plugins/jquery.serializejson.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="../../../static/css/ymjttForEasyUi.css">
-    <script type="text/javascript" src="../../../static/js/common/data.js"></script>
-    <script type="text/javascript" src="../../../static/js/common/crud.js"></script>
-    <script type="text/javascript" src="../../../static/js/common/multiPullDown.js"></script>
-    <script type="text/javascript" src="../../../static/js/common/Image.js"></script>
-    <script type="text/javascript" src="../../../static/js/product/product.js"></script>
+    <script src="../../../static/js/common/data.js"></script>
+    <script src="../../../static/js/common/crud.js"></script>
+    <script src="../../../static/js/common/multiPullDown.js"></script>
+    <script src="../../../static/js/common/Image.js"></script>
+    <script src="../../../static/js/product/product.js"></script>
 
     <script type="text/javascript">
         var modelUrl = '../../../manager/product/';
         var pullDownUrl = '../../../manager/productCat/';
         var topNodeParentId = 0;
         var columns=[[
-            {field:'productId',title:'商品ID',width:120,align:'center'},
+            {field:'productId',title:'商品ID',width:150,align:'center'},
             {field:'-',title:'操作',width:170,align:'center',formatter: function(value,row,index){
                 var oper = '<label><button class="btn btn-default btn-xs" id="update" data-toggle="modal" data-target="#myModal" onclick="loadNodeData('+ row.productId +')">修改</button></label>&nbsp;';
                 oper += '<label><button class="btn btn-default btn-xs" onclick="del('+ row.productId +')">删除</button></label>&nbsp;';
@@ -57,6 +56,7 @@
             {field:'updateCounts',title:'操作次数',width:60,align:'center'}
         ]];
     </script>
+</head>
 
 <body>
 

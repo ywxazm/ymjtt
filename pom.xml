@@ -12,6 +12,9 @@
         <module>ymjtt_manager_web</module>
         <module>ymjtt_portal_web</module>
         <module>ymjtt_cms</module>
+        <module>ymjtt_seckill</module>
+        <module>sso</module>
+        <module>ymjtt_sso</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>
@@ -26,9 +29,19 @@
 
         <spring.version>5.0.8.RELEASE</spring.version>
         <aspectj.version>1.8.10</aspectj.version>
-        <mybatis.version>3.2.8</mybatis.version>
-        <mybatisSpring.version>1.3.2</mybatisSpring.version>
-        <pagehelper.version>4.2.1</pagehelper.version>
+        <mybatis.version>3.4.6</mybatis.version>
+        <mybatisSpring.version>2.0.0</mybatisSpring.version>
+        <pagehelper.version>4.1.6</pagehelper.version>
+
+        <!-- springboot部分 -->
+        <sbWeb.version>2.0.0.RELEASE</sbWeb.version>
+        <sbDependencies.version>2.0.0.RELEASE</sbDependencies.version>
+        <sbThymeleaf.version>2.0.0.RELEASE</sbThymeleaf.version>
+        <sbMybatis.version>2.0.0</sbMybatis.version>
+        <sbPageHelper.version>1.2.10</sbPageHelper.version>
+        <sbDruid.version>1.1.10</sbDruid.version>
+        <sbDevelop.version>2.0.4.RELEASE</sbDevelop.version>
+        <!-- end -->
 
         <mysql.version>8.0.12</mysql.version>
         <druid.version>1.1.12</druid.version>
@@ -97,6 +110,52 @@
                 <artifactId>spring-test</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+
+            <!-- springboot部分 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${sbWeb.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${sbWeb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>             <!-- 可以在子springboot中不添加<parent> -->
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${sbDependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${sbThymeleaf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${sbMybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${sbPageHelper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${sbDruid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <version>${sbDevelop.version}</version>
+            </dependency>
+            <!-- end -->
 
             <!-- spring注解 -->
             <dependency>

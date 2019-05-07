@@ -124,7 +124,7 @@ public class JarFileUtils {
         writeFile(filePath, content);
     }
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         resetFilePath("/D:/Develop/MavenResp/com/ywx/ymjtt/ymjtt_common/1.0-SNAPSHOT/ymjtt_common-1.0-SNAPSHOT.jar!/util/fastdfs.properties", "D://a.properties");
-    }*/
+    }
 }

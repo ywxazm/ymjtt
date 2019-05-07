@@ -2,8 +2,8 @@ package com.ymjtt.manager.product.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.util.jedis.HashOper;
-import com.ymjtt.common.util.jedis.RedisKey;
+import com.ymjtt.common.constant.RedisKeyConstant;
+import com.ymjtt.common.redis.HashOper;
 import com.ymjtt.common.util.objPackage.BeanUtil;
 import com.ymjtt.manager.product.mapper.ProductAttrMapper;
 import com.ymjtt.manager.product.service.ProductAttrService;
@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.JedisCluster;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -88,7 +89,7 @@ public class ProductAttrServiceImpl<T> implements ProductAttrService {
         PageInfo pageInfo = new PageInfo(productAttrDoList);
         List<Map<String, Object>> resultList = new ArrayList<>();
         for (ProductAttrDo pa : productAttrDoList) {
-            String belongName = hashOper.hget(RedisKey.PRODUCT_ATTR, String.valueOf(pa.getBelongId()));
+            String belongName = hashOper.hget(RedisKeyConstant.PRODUCT_ATTR, String.valueOf(pa.getBelongId()));
             if (StringUtils.isEmpty(belongName)) {
                 Integer attrType = pa.getAttrType();
                 if (attrType == 1) {
@@ -101,7 +102,7 @@ public class ProductAttrServiceImpl<T> implements ProductAttrService {
                     throw new IllegalArgumentException("AttrType Must == 1 Or 2");
                 }
             }
-            hashOper.hset(RedisKey.PRODUCT_ATTR, String.valueOf(pa.getBelongId()), belongName);
+            hashOper.hset(RedisKeyConstant.PRODUCT_ATTR, String.valueOf(pa.getBelongId()), belongName);
             Map<String, Object> map = BeanUtil.bean2Map(pa);
             map.put("belongName", belongName);
             resultList.add(map);

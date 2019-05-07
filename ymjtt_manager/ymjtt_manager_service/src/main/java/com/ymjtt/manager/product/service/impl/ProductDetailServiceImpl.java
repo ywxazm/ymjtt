@@ -2,10 +2,10 @@ package com.ymjtt.manager.product.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.util.fastdfs.FastDFSUtil;
 import com.ymjtt.manager.product.mapper.ProductDetailMapper;
 import com.ymjtt.manager.product.service.ProductDetailService;
 import com.ymjtt.manager.product.xdo.ProductDetailDo;
+import com.ymjtt.common.fastdfs.FastDFSUtil;
 import org.csource.common.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
     private ProductDetailMapper productDetailMapper;
 
     @Autowired
-    private FastDFSUtil fastDFSUtil;
+    FastDFSUtil fastDFSUtil;
 
     @Override
     public PageInfo<ProductDetailDo> listDO(ProductDetailDo productDetailDo, Integer page, Integer rows) {

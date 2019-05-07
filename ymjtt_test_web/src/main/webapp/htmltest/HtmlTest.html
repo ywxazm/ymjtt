@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+
+    <script src="localhost:9003/manager_web/static/plugins/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+
+    <script>
+        $(function () {
+            $.get('http://localhost:9003/manager_web/manager/product/jsonp?callback=method', function () {
+                alert(123);
+            });
+            $.ajax({
+                url: 'http://localhost:9003/manager_web/manager/product/jsonp?callback=method',
+                dataType: "jsonp",
+                jsonp: "method",
+                success: function (data) {
+
+                }
+            })
+        });
+
+
+        function method(data) {
+            alert("执行了这个方法....");
+            console.log(data);
+        }
+    </script>
+
+
+</head>
+<body>
+   aa
+</body>
+</html>

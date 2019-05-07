@@ -5,24 +5,12 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <context:property-placeholder location="classpath:util/*.properties, classpath:properties/*.properties"/>
+    <context:property-placeholder location="classpath*:properties/*.properties"/>
 
     <context:component-scan base-package="com.ymjtt.portal" />
 
     <mvc:annotation-driven/>
 
-    <!-- html视图解析器 -->
-    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="/html/"/>
-    </bean>
-    <bean id="freemarkerConfiguration" class="org.springframework.beans.factory.config.PropertiesFactoryBean" />
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
-        <property name="contentType" value="text/html; charset=utf-8"/>
-        <property name="cache" value="true"/>
-        <property name="suffix" value=".html"/>
-        <property name="order" value="3"/>
-    </bean>
     <!-- jsp视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="order" value="4" />

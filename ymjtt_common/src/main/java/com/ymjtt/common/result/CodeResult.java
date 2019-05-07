@@ -10,12 +10,27 @@ public class CodeResult {
     private Integer code;
     private String msg;
 
-    /* 通用 */
-    public static CodeResult DEFAULT_FAIL = new CodeResult(500, "Common Fail");
-    public static CodeResult DEFAULT_SUCCESS = new CodeResult(200, "Common Success");
+    private CodeResult(Integer code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 
-    /* 自定义异常 */
-    public static CodeResult DB_NOT_CONTAIN_DATA = new CodeResult(6001, "DB Not Contain Data");
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    @Override
+    public String toString() {
+        return "CodeResult{" + "code=" + code + ", msg='" + msg + '\'' + '}';
+    }
+
+    /* 通用 */
+    public static CodeResult COMMON_FAIL = new CodeResult(5000, "Common Fail");
+    public static CodeResult COMMON_SUCCESS = new CodeResult(200, "Common Success");
 
     /* CRUD公共部分 */
     /* 成功 */
@@ -41,21 +56,13 @@ public class CodeResult {
     public static CodeResult REMOVE_FILE_FAIL = new CodeResult(500903, "Remove File Fail");
     public static CodeResult REMOVE_FILE_PATH_IS_NULL = new CodeResult(500904, "Remove FilePath Not Allow Is Null");
 
-    /* 用户部分 */
-    public static CodeResult USERNAME_OR_PASSWORD_ERROR = new CodeResult(500201, "UserName Or Password Error");
-
     /* cms */
 
-    public CodeResult(Integer code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
 
-    public Integer getCode() {
-        return code;
-    }
+    /* sso */
+    public static CodeResult USER_NAME_EXIST = new CodeResult(500101, "User Name Exist");
+    public static CodeResult USER_NAME_IS_NULL = new CodeResult(500101, "User Name Is Null");
 
-    public String getMsg() {
-        return msg;
-    }
+    /* 异常部分 */
+
 }

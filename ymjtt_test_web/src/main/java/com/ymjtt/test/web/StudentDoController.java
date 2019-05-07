@@ -6,6 +6,7 @@ import com.ymjtt.test.xdo.StudentDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,4 +30,6 @@ public class StudentDoController {
         System.out.println("the Service cast time is " + (System.currentTimeMillis() - start));
         response.getWriter().write(JSONConvertUtil.list2Json(list));
     }
+
+
 }
