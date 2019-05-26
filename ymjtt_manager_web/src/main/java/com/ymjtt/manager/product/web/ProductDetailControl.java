@@ -2,10 +2,9 @@ package com.ymjtt.manager.product.web;
 
 import com.github.pagehelper.PageInfo;
 import com.ymjtt.common.fastdfs.FastDFSUtil;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.util.file.FileUtils;
+import com.ymjtt.common.vo.ResultInfoVO;
 import com.ymjtt.manager.product.service.ProductDetailService;
 import com.ymjtt.manager.product.xdo.ProductDetailDo;
 import org.apache.commons.lang3.StringUtils;
@@ -54,50 +53,50 @@ public class ProductDetailControl {
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) throws IOException, MyException {
-        return ResultVO.buildResult(productDetailService.removeDO(id), CodeResult.REMOVE_SUCCESS, CodeResult.REMOVE_FAIL);
+    public ResultInfoVO remove(Long id) throws IOException, MyException {
+        return productDetailService.removeDO(id) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(HttpServletRequest request, MultipartFile[] multipartFiles) throws IOException, MyException {
+    public ResultInfoVO save(HttpServletRequest request, MultipartFile[] multipartFiles) throws IOException, MyException {
         String productId = request.getParameter("productId");
         if (StringUtils.isEmpty(productId)) {
-            return ResultVO.buildFailResult(CodeResult.SAVE_FAIL, "ProductId Must IS Not null");
+            return ResultInfoVO.buildFailInfo("ProductId Must IS Not null");
         }
 
         if (null == multipartFiles || multipartFiles.length == 0) {
-            return ResultVO.buildFailResult(CodeResult.SAVE_FAIL, "multipartFiles Must IS Not null");
+            return ResultInfoVO.buildFailInfo("multipartFiles Must IS Not null");
         }
 
         boolean saveResult = true;
         for (MultipartFile multipartFile : multipartFiles) {
             saveResult = productDetailService.saveDO(Long.parseLong(productId), multipartFile.getBytes(), FileUtils.getExtensionName(multipartFile.getName()));
         }
-        return ResultVO.buildResult(saveResult, CodeResult.SAVE_SUCCESS, CodeResult.SAVE_FAIL);
+        return saveResult ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(HttpServletRequest request, MultipartFile[] multipartFiles) throws IOException, MyException {
+    public ResultInfoVO update(HttpServletRequest request, MultipartFile[] multipartFiles) throws IOException, MyException {
         String productId = request.getParameter("productId");
         if (StringUtils.isEmpty(productId)) {
-            return ResultVO.buildFailResult(CodeResult.SAVE_FAIL, "ProductId Must IS Not null");
+            return ResultInfoVO.buildFailInfo("ProductId Must IS Not null");
         }
 
         if (null == multipartFiles || multipartFiles.length == 0) {
-            return ResultVO.buildFailResult(CodeResult.SAVE_FAIL, "multipartFiles Must IS Not null");
+            return ResultInfoVO.buildFailInfo("multipartFiles Must IS Not null");
         }
 
         if (!productDetailService.removeByParentId(Long.parseLong(productId))) {
-            return ResultVO.buildFailResult(CodeResult.SAVE_FAIL, "Del Old Image Or Db Fail");
+            return ResultInfoVO.buildFailInfo("Del Old Image Or Db Fail");
         }
 
         boolean saveResult = true;
         for (MultipartFile multipartFile : multipartFiles) {
             saveResult = productDetailService.saveDO(Long.parseLong(productId), multipartFile.getBytes(), FileUtils.getExtensionName(multipartFile.getName()));
         }
-        return ResultVO.buildResult(saveResult, CodeResult.UPDATE_SUCCESS, CodeResult.SAVE_FAIL);
+        return saveResult ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     //Others

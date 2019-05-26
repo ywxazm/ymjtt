@@ -1,7 +1,7 @@
 package com.ymjtt.portal.search.web;
 
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.result.DataGridVO;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.manager.product.service.ProductService;
 import com.ymjtt.manager.product.xdo.ProductDo;
 import org.springframework.beans.factory.annotation.Autowired;

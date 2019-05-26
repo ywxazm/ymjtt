@@ -1,12 +1,11 @@
 package com.ymjtt.manager.util;
 
-import com.ymjtt.common.constant.RedisKeyConstant;
+import com.ymjtt.common.redis.constant.RedisKeyConstant;
 import com.ymjtt.common.redis.HashOper;
 import com.ymjtt.common.util.date.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.JedisCluster;
 
 /**
  * @auther ywx

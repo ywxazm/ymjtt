@@ -2,7 +2,7 @@ package com.ymjtt.manager.product.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.constant.RedisKeyConstant;
+import com.ymjtt.common.redis.constant.RedisKeyConstant;
 import com.ymjtt.common.redis.HashOper;
 import com.ymjtt.common.util.objPackage.BeanUtil;
 import com.ymjtt.manager.product.mapper.ProductAttrMapper;
@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.JedisCluster;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;

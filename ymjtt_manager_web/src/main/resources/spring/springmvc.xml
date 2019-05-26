@@ -11,6 +11,14 @@
 
     <mvc:annotation-driven/>
 
+    <!-- 添加自定义拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.ymjtt.manager.interceptor.AuthorityInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <!-- html视图解析器 -->
     <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/html/"/>
@@ -60,5 +68,10 @@
     <!-- cms -->
     <dubbo:reference interface="com.ymjtt.cms.content.service.ContentCatService" id="contentCatServiceImpl" timeout="3000"/>
     <dubbo:reference interface="com.ymjtt.cms.content.service.ContentService" id="contentServiceImpl" timeout="3000"/>
+
+    <!-- sso -->
+    <dubbo:reference interface="com.ymjtt.sso.service.LoginService" id="loginServiceImpl" timeout="3000"/>
+    <dubbo:reference interface="com.ymjtt.sso.service.RegisterService" id="registerServiceImpl" timeout="3000"/>
+    <dubbo:reference interface="com.ymjtt.sso.service.CommonService" id="commonServiceImpl" timeout="3000"/>
 
 </beans>

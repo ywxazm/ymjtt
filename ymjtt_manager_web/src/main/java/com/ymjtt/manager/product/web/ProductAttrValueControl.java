@@ -1,9 +1,8 @@
 package com.ymjtt.manager.product.web;
 
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.vo.DataGridVO;
+import com.ymjtt.common.vo.ResultInfoVO;
 import com.ymjtt.manager.product.service.ProductAttrValueService;
 import com.ymjtt.manager.product.xdo.ProductAttrValueDo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,27 +37,27 @@ public class ProductAttrValueControl {
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) {
-        return ResultVO.buildResult(productAttrValueService.removeDO(id), CodeResult.REMOVE_SUCCESS, CodeResult.REMOVE_FAIL);
+    public ResultInfoVO remove(Long id) {
+        return productAttrValueService.removeDO(id) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(ProductAttrValueDo productAttrValueDo) {
-        return ResultVO.buildResult(productAttrValueService.saveDO(productAttrValueDo), CodeResult.SAVE_SUCCESS, CodeResult.SAVE_FAIL);
+    public ResultInfoVO save(ProductAttrValueDo productAttrValueDo) {
+        return productAttrValueService.saveDO(productAttrValueDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(ProductAttrValueDo productAttrValueDo){
-        return ResultVO.buildResult(productAttrValueService.updateDO(productAttrValueDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+    public ResultInfoVO update(ProductAttrValueDo productAttrValueDo){
+        return productAttrValueService.updateDO(productAttrValueDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
 
     /* Others */
     @ResponseBody
     @RequestMapping(value = "/listNoPage")
-    public ResultVO listNoPage(ProductAttrValueDo productAttrValueDo){
-        return ResultVO.buildSuccessResult(productAttrValueService.listNoPage(productAttrValueDo));
+    public ResultInfoVO listNoPage(ProductAttrValueDo productAttrValueDo){
+        return ResultInfoVO.buildSuccessInfo(productAttrValueService.listNoPage(productAttrValueDo));
     }
 }

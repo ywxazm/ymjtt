@@ -1,5 +1,6 @@
 package com.ymjtt.common.fastdfs;
 
+import com.ymjtt.common.exception.instance.FastDFSIntException;
 import com.ymjtt.common.util.file.FileUtils;
 import com.ymjtt.common.util.file.JarFileUtils;
 import org.apache.commons.io.IOUtils;
@@ -40,7 +41,7 @@ public class FastDFSUtil {
     private StorageClient storageClient;
 
     @PostConstruct
-    public void init()  {
+    public void init() throws FastDFSIntException {
         try {
             String newPath = System.getProperty("user.home") + "/" + confFile;
             confFile = FastDFSUtil.class.getClassLoader().getResource(confFile).getPath();
@@ -51,7 +52,7 @@ public class FastDFSUtil {
             storageServer = null;
             storageClient = new StorageClient(trackerServer, storageServer);
         } catch (Exception e) {
-            throw new FastDFSInitException("FastDFSUtil init fail");
+            throw new FastDFSIntException("FastDfs Init Error");
         }
     }
 

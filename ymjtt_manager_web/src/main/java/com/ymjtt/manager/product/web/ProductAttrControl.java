@@ -2,10 +2,9 @@ package com.ymjtt.manager.product.web;
 
 import com.github.pagehelper.PageInfo;
 import com.ymjtt.common.redis.HashOper;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.vo.NodeVO;
+import com.ymjtt.common.vo.ResultInfoVO;
 import com.ymjtt.manager.product.service.ProductAttrService;
 import com.ymjtt.manager.product.service.ProductAttrValueService;
 import com.ymjtt.manager.product.service.ProductCatService;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.JedisCluster;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
@@ -67,26 +65,27 @@ public class ProductAttrControl {
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) {
+    public ResultInfoVO remove(Long id) {
         ProductAttrValueDo productAttrValueDo = new ProductAttrValueDo();
         productAttrValueDo.setProductAttrId(id);
         List<ProductAttrValueDo> productAttrValueDoList = productAttrValueService.listNoPage(productAttrValueDo);
         if (null != productAttrValueDoList || !productAttrValueDoList.isEmpty()) {
-            ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "ProductAttrId = " + id + " Contain Attr Value");
+            ResultInfoVO.buildFailInfo("ProductAttrId = " + id + " Contain Attr Value");
         }
-        return ResultVO.buildResult(productAttrService.removeDO(id), CodeResult.REMOVE_SUCCESS, CodeResult.REMOVE_FAIL);
+
+        return productAttrService.removeDO(id) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(ProductAttrDo productAttrDo) {
-        return ResultVO.buildResult(productAttrService.saveDO(productAttrDo), CodeResult.SAVE_SUCCESS, CodeResult.SAVE_FAIL);
+    public ResultInfoVO save(ProductAttrDo productAttrDo) {
+        return productAttrService.saveDO(productAttrDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(ProductAttrDo productAttrDo){
-        return ResultVO.buildResult(productAttrService.updateDO(productAttrDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+    public ResultInfoVO update(ProductAttrDo productAttrDo){
+        return productAttrService.updateDO(productAttrDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     /* Others */
@@ -95,7 +94,7 @@ public class ProductAttrControl {
      * @author  ywx
      * @date    2019/1/24 14:32
      * @param   [id] 规格ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/listContainBelongName")
@@ -109,11 +108,11 @@ public class ProductAttrControl {
      * @author  ywx
      * @date    2019/1/24 14:32
      * @param   [id] 规格ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/getContainParentDo")
-    public ResultVO getContainParentDo(Long id) {
+    public ResultInfoVO getContainParentDo(Long id) {
         ProductAttrDo productAttrDo = productAttrService.getDO(id);
         ProductAttrVO productAttrVO = new ProductAttrVO(productAttrDo);
         Integer attrType = productAttrDo.getAttrType();
@@ -143,7 +142,7 @@ public class ProductAttrControl {
         productAttrVO.setBelongName(belongName);
         nodeVOList.add(new ProductAttrVO(productAttrDo));
         productAttrVO.setUpLevelNodeList(nodeVOList);
-        return ResultVO.buildSuccessResult(productAttrVO);
+        return ResultInfoVO.buildSuccessInfo(productAttrVO);
     }
 
     /**

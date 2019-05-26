@@ -8,64 +8,45 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>ymjtt_sso_pojo</module>
+        <module>ymjtt_sso_dao</module>
+        <module>ymjtt_sso_interface</module>
+        <module>ymjtt_sso_service</module>
+    </modules>
     <artifactId>ymjtt_sso</artifactId>
 
-    <!-- 版本控制 -->
-    <properties>
-        <sbPageHelper.version>5.1.4</sbPageHelper.version>
-    </properties>
-
     <dependencies>
-        <!-- 内部依赖 -->
         <dependency>
             <groupId>com.ywx.ymjtt</groupId>
             <artifactId>ymjtt_common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>aspectjrt</artifactId>
+                    <groupId>org.aspectj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aspectjtools</artifactId>
+                    <groupId>org.aspectj</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-web</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-webmvc</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- 内部依赖 -->
+        <!-- aspectj -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-        </dependency>
-
-        <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax.persistence</groupId>            <!-- 由Idea生成javaBean,依赖此jar -->
-            <artifactId>javax.persistence-api</artifactId>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <!-- maven启动springboot插件 -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.0.0.RELEASE</version>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

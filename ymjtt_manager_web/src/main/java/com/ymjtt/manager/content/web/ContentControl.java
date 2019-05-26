@@ -6,11 +6,10 @@ import com.ymjtt.cms.content.service.ContentService;
 import com.ymjtt.cms.content.vo.ContentVO;
 import com.ymjtt.cms.content.xdo.ContentDo;
 import com.ymjtt.common.fastdfs.FastDFSUtil;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
 import com.ymjtt.common.util.objPackage.BeanUtil;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.vo.NodeVO;
+import com.ymjtt.common.vo.ResultInfoVO;
 import org.apache.commons.lang3.StringUtils;
 import org.csource.common.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,29 +53,33 @@ public class ContentControl {
 
     @ResponseBody
     @RequestMapping(value = "/get")
-    public ResultVO get(Long id) {
-        return ResultVO.buildSuccessResult(contentService.getDO(id));
+    public ResultInfoVO get(Long id) {
+        return ResultInfoVO.buildSuccessInfo(contentService.getDO(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) throws IOException, MyException {
+    public ResultInfoVO remove(Long id) throws IOException, MyException {
         ContentDo contentDo = contentService.getDO(id);
         if (null == contentDo) {
-            return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "Have No Id = " + id + " ContentDo");
+            return ResultInfoVO.buildFailInfo("Have No Id = " + id + " ContentDo");
         }
 
         if (!StringUtils.isEmpty(contentDo.getImage())) {
             if (!fastDFSUtil.remove(contentDo.getImage())) {
-                return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "Remove Obj Image Fail");
+                return ResultInfoVO.buildFailInfo("Remove Obj Image Fail");
             }
         }
-        return ResultVO.buildResult(contentService.removeDO(id), CodeResult.REMOVE_SUCCESS, CodeResult.REMOVE_FAIL);
+
+        if (contentService.removeDO(id)) {
+            return ResultInfoVO.buildSuccessInfo();
+        }
+        return ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(HttpServletRequest request, MultipartFile[] multipartFiles) throws InvocationTargetException, IllegalAccessException, IOException, MyException {
+    public ResultInfoVO save(HttpServletRequest request, MultipartFile[] multipartFiles) throws InvocationTargetException, IllegalAccessException, IOException, MyException {
         ContentDo contentDo = beanUtil.buildObj(request, new ContentDo());
 
         if (null != multipartFiles && multipartFiles.length != 0) {
@@ -88,12 +91,15 @@ public class ContentControl {
             contentDo.setImage(imgPath);
         }
 
-        return ResultVO.buildResult(contentService.saveDO(contentDo), CodeResult.SAVE_SUCCESS, CodeResult.SAVE_FAIL);
+        if (contentService.saveDO(contentDo)) {
+            return ResultInfoVO.buildSuccessInfo();
+        }
+        return ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(HttpServletRequest request, MultipartFile[] multipartFiles) throws InvocationTargetException, IllegalAccessException, IOException, MyException {
+    public ResultInfoVO update(HttpServletRequest request, MultipartFile[] multipartFiles) throws InvocationTargetException, IllegalAccessException, IOException, MyException {
         ContentDo contentDo = beanUtil.buildObj(request, new ContentDo());
 
         if (null != multipartFiles && multipartFiles.length != 0) {
@@ -111,10 +117,14 @@ public class ContentControl {
                 String imgPath = fastDFSUtil.save(multipartFiles[0], new HashMap<>());
                 contentDo.setImage(imgPath);
             }else {
-                return ResultVO.buildFailResult(CodeResult.UPDATE_FAIL, "FastDFS Remove Old Image Fail");
+                return ResultInfoVO.buildFailInfo("FastDFS Remove Old Image Fail");
             }
         }
-        return ResultVO.buildResult(contentService.updateDO(contentDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+
+        if (contentService.updateDO(contentDo)) {
+            return ResultInfoVO.buildSuccessInfo();
+        }
+        return ResultInfoVO.buildFailInfo();
     }
 
 
@@ -124,16 +134,16 @@ public class ContentControl {
      * @author  ywx
      * @date    2019/1/30 8:50
      * @param   [contentId] 内容ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/getContainParentDo")
-    public ResultVO getContainParentDo(Long contentId) {
+    public ResultInfoVO getContainParentDo(Long contentId) {
         ContentDo contentDo = contentService.getDO(contentId);
         List<NodeVO> nodeVOList = contentCatService.listBySonId(contentDo.getContentCatId());
         nodeVOList.add(new ContentVO(contentDo));
         ContentVO contentVO = new ContentVO(contentDo);
         contentVO.setUpLevelNodeList(nodeVOList);
-        return ResultVO.buildSuccessResult(contentVO);
+        return ResultInfoVO.buildSuccessInfo(contentVO);
     }
 }

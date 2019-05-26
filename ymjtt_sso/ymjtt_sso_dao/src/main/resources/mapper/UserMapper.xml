@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ymjtt.sso.dao.UserMapper">
+
+    <resultMap id="userDoMap" type="userDo" >
+        <id property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="pwd" column="pwd" />
+        <result property="salt" column="salt" />
+        <result property="image" column="image" />
+        <result property="email" column="email" />
+        <result property="phone" column="phone" />
+        <result property="status" column="status" />
+        <result property="userType" column="user_type" />
+        <result property="createTime" column="createTime" />
+        <result property="createOper" column="createOper" />
+        <result property="lastLoginTime" column="lastLoginTime" />
+        <result property="loginCounts" column="loginCounts" />
+        <result property="lastupdateTime" column="lastupdateTime" />
+        <result property="lastupdateOper" column="lastupdateOper" />
+        <result property="updateCounts" column="update_counts" />
+    </resultMap>
+
+    <sql id="userCloumn">
+        u.user_id, u.user_name, u.pwd, u.salt, u.image, u.email, u.phone, u.status, u.user_type, u.createTime, u.createOper,
+        u.lastLoginTime, u.loginCounts, u.lastupdateTime, u.lastupdateOper, u.update_counts
+    </sql>
+
+    <!-- get -->
+    <sql id="userWhere">
+        WHERE u.status = 1
+        <if test="userNick != null and userNick != ''">
+            AND (u.user_name = #{userNick}
+            OR u.phone = #{userNick}
+            OR u.email = #{userNick})
+        </if>
+    </sql>
+    <select id="getDO" parameterType="string" resultMap="userDoMap">
+        SELECT
+        <include refid="userCloumn"/>
+        FROM user u
+        <include refid="userWhere" />
+    </select>
+
+
+    <!-- Others -->
+
+</mapper>

@@ -2,10 +2,9 @@ package com.ymjtt.manager.user.web;
 
 import com.github.pagehelper.PageInfo;
 import com.ymjtt.common.fastdfs.FastDFSUtil;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.util.objPackage.BeanUtil;
+import com.ymjtt.common.vo.ResultInfoVO;
 import com.ymjtt.manager.user.service.UserService;
 import com.ymjtt.manager.user.xdo.UserDo;
 import org.csource.common.MyException;
@@ -54,30 +53,30 @@ public class UserControl {
 
     @ResponseBody
     @RequestMapping(value = "/get")
-    public ResultVO get(Long id) {
-        return ResultVO.buildSuccessResult(userService.getDO(id));
+    public ResultInfoVO get(Long id) {
+        return ResultInfoVO.buildSuccessInfo(userService.getDO(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) throws IOException, MyException {
+    public ResultInfoVO remove(Long id) throws IOException, MyException {
         UserDo userDo = userService.getDO(id);
         if (null == userDo) {
-            return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "Have No Id = " + id + " UserDo");
+            return ResultInfoVO.buildFailInfo("Have No Id = " + id + " UserDo");
         }
 
         if (!StringUtils.isEmpty(userDo.getImage())) {
             if (!fastDFSUtil.remove(userDo.getImage())) {
-                return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "Remove Obj Image Fail");
+                return ResultInfoVO.buildFailInfo("Remove Obj Image Fail");
             }
         }
 
-        return ResultVO.buildResult(userService.removeDO(id), CodeResult.REMOVE_SUCCESS, CodeResult.REMOVE_FAIL);
+        return userService.removeDO(id) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(HttpServletRequest request,  MultipartFile[] multipartFiles) throws IOException, MyException, InvocationTargetException, IllegalAccessException {
+    public ResultInfoVO save(HttpServletRequest request,  MultipartFile[] multipartFiles) throws IOException, MyException, InvocationTargetException, IllegalAccessException {
         UserDo userDo = beanUtil.buildObj(request, new UserDo());
 
         if (null != multipartFiles && multipartFiles.length != 0) {
@@ -90,12 +89,12 @@ public class UserControl {
         }
 
         userDo.setPwd(DigestUtils.md5DigestAsHex(initPassword.getBytes(Charset.defaultCharset())));
-        return ResultVO.buildResult(userService.saveDO(userDo), CodeResult.SAVE_SUCCESS, CodeResult.SAVE_FAIL);
+        return userService.saveDO(userDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(HttpServletRequest request,  MultipartFile[] multipartFiles) throws IOException, MyException, InvocationTargetException, IllegalAccessException {
+    public ResultInfoVO update(HttpServletRequest request,  MultipartFile[] multipartFiles) throws IOException, MyException, InvocationTargetException, IllegalAccessException {
         UserDo userDo = beanUtil.buildObj(request, new UserDo());
 
         if (null != multipartFiles && multipartFiles.length != 0) {
@@ -113,11 +112,10 @@ public class UserControl {
                 String imgPath = fastDFSUtil.save(multipartFiles[0], new HashMap<>());
                 userDo.setImage(imgPath);
             }else {
-                return ResultVO.buildFailResult(CodeResult.UPDATE_FAIL, "FastDFS Remove Old Image Fail");
+                return ResultInfoVO.buildFailInfo("FastDFS Remove Old Image Fail");
             }
         }
-
-        return ResultVO.buildResult(userService.updateDO(userDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+        return userService.updateDO(userDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
 
@@ -127,19 +125,19 @@ public class UserControl {
      * @author  ywx
      * @date    2019/1/28 9:54
      * @param   [id, oldPassword, newPassword]  用户ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/resetPassword")
-    public ResultVO resetPassword(Long id, String oldPassword, String newPassword) {
+    public ResultInfoVO resetPassword(Long id, String oldPassword, String newPassword) {
         UserDo userDo = userService.getDO(id);
         String dbPassword = userDo.getPwd();
         byte[] oldBytes = DigestUtils.md5Digest(oldPassword.trim().getBytes(Charset.defaultCharset()));
         if (new String(oldBytes).equals(dbPassword)) {
             userDo.setPwd(DigestUtils.md5DigestAsHex(initPassword.getBytes(Charset.defaultCharset())));
-            return ResultVO.buildResult(userService.updateDO(userDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+            return userService.updateDO(userDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
         }
-        return ResultVO.buildFailResult(CodeResult.UPDATE_FAIL);
+        return ResultInfoVO.buildFailInfo();
     }
 
     /**
@@ -147,15 +145,15 @@ public class UserControl {
      * @author  ywx
      * @date    2019/1/28 9:54
      * @param   [id] 用户ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/initPassword")
-    public ResultVO initPassword(Long id) {
+    public ResultInfoVO initPassword(Long id) {
         UserDo userDo = new UserDo();
         userDo.setUserId(id);
         userDo.setPwd(DigestUtils.md5DigestAsHex(initPassword.getBytes(Charset.defaultCharset())));
-        return ResultVO.buildResult(userService.updateDO(userDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+        return userService.updateDO(userDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
     /**
@@ -163,15 +161,15 @@ public class UserControl {
      * @author  ywx
      * @date    2019/1/29 14:39
      * @param   [id]
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping(value = "/cancelOrActive")
-    public ResultVO cancelOrActive(Long id, Integer newStatus) {
+    public ResultInfoVO cancelOrActive(Long id, Integer newStatus) {
         UserDo userDo = new UserDo();
         userDo.setUserId(id);
         userDo.setStatus(newStatus);
-        return ResultVO.buildResult(userService.updateDO(userDo), CodeResult.UPDATE_SUCCESS, CodeResult.UPDATE_FAIL);
+        return userService.updateDO(userDo) ? ResultInfoVO.buildSuccessInfo() : ResultInfoVO.buildFailInfo();
     }
 
 

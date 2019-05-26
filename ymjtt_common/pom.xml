@@ -36,7 +36,6 @@
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
         </dependency>
-
         <!-- servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>

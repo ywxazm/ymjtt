@@ -6,19 +6,17 @@ import com.ymjtt.cms.content.service.ContentService;
 import com.ymjtt.cms.content.vo.ContentCatVO;
 import com.ymjtt.cms.content.xdo.ContentCatDo;
 import com.ymjtt.cms.content.xdo.ContentDo;
-import com.ymjtt.common.constant.RedisKeyConstant;
 import com.ymjtt.common.redis.HashOper;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.redis.constant.RedisKeyConstant;
 import com.ymjtt.common.util.json.JSONConvertUtil;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.vo.NodeVO;
+import com.ymjtt.common.vo.ResultInfoVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.JedisCluster;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,50 +47,50 @@ public class ContentCatControl {
 
     @ResponseBody
     @RequestMapping(value = "/get")
-    public ResultVO get(Long id) {
-        return ResultVO.buildSuccessResult(CodeResult.GET_SUCCESS, contentCatService.getDO(id));
+    public ResultInfoVO get(Long id) {
+        return ResultInfoVO.buildSuccessInfo(contentCatService.getDO(id));
     }
 
     @ResponseBody
     @RequestMapping(value = "/save")
-    public ResultVO save(ContentCatDo contentCatDo) {
+    public ResultInfoVO save(ContentCatDo contentCatDo) {
         if (contentCatService.saveDO(contentCatDo)) {
             hashOper.del(RedisKeyConstant.CONTENT_CAT);
-            return ResultVO.buildSuccessResult(CodeResult.SAVE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
-        return ResultVO.buildSuccessResult(CodeResult.SAVE_FAIL);
+        return ResultInfoVO.buildSuccessInfo("save fail");
     }
 
     @ResponseBody
     @RequestMapping(value = "/update")
-    public ResultVO update(ContentCatDo contentCatDo) {
+    public ResultInfoVO update(ContentCatDo contentCatDo) {
         if (contentCatService.updateDO(contentCatDo)) {
             hashOper.del(RedisKeyConstant.CONTENT_CAT);
-            return ResultVO.buildSuccessResult(CodeResult.UPDATE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
-        return ResultVO.buildSuccessResult(CodeResult.UPDATE_FAIL);
+        return ResultInfoVO.buildFailInfo("update fail");
     }
 
     @ResponseBody
     @RequestMapping(value = "/remove")
-    public ResultVO remove(Long id) throws IOException {
+    public ResultInfoVO remove(Long id) throws IOException {
         if (contentCatService.ifParentNode(id)) {
-            return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "ContentCatId = " + id + ", Contains Son ContentCat, No Allow Remove");
+            return ResultInfoVO.buildFailInfo("ContentCatId = " + id + ", Contains Son ContentCat, No Allow Remove");
         }
 
         ContentDo contentDo = new ContentDo();
         contentDo.setContentCatId(id);
         List<ContentDo> contentDos = contentService.listDO(contentDo);
         if (null != contentDos && !contentDos.isEmpty()) {
-            return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "ContentCatId = " + id + ", Contains Son Content, No Allow Remove");
+            return ResultInfoVO.buildFailInfo("ContentCatId = " + id + ", Contains Son Content, No Allow Remove");
         }
 
         if (contentCatService.removeDO(id)) {
             hashOper.del(RedisKeyConstant.CONTENT_CAT);
-            return ResultVO.buildSuccessResult(CodeResult.REMOVE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
 
-        return ResultVO.buildSuccessResult(CodeResult.REMOVE_FAIL);
+        return ResultInfoVO.buildFailInfo();
     }
 
     //Others
@@ -101,11 +99,11 @@ public class ContentCatControl {
      * @author  ywx
      * @date    2019/1/25 11:20
      * @param   [parentId] 父Id
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping("/listByParentId")
-    public ResultVO listByParentId(Long parentId) throws IOException {
+    public ResultInfoVO listByParentId(Long parentId) throws IOException {
         String contentCats = hashOper.hget(RedisKeyConstant.CONTENT_CAT, parentId + "_son");
         List<NodeVO> contentCatVOList;
         if (StringUtils.isEmpty(contentCats)) {
@@ -115,7 +113,7 @@ public class ContentCatControl {
             JSONConvertUtil<NodeVO> jsonConvertUtil = new JSONConvertUtil<>();
             contentCatVOList = jsonConvertUtil.json2List(contentCats, NodeVO.class);
         }
-        return ResultVO.buildSuccessResult(contentCatVOList);
+        return ResultInfoVO.buildSuccessInfo(contentCatVOList);
     }
 
     /**
@@ -123,11 +121,11 @@ public class ContentCatControl {
      * @author  ywx
      * @date    2019/1/25 11:22
      * @param   [id]    ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping("/getContainParentDo")
-    public ResultVO getContainParentDo(Long id) throws IOException {
+    public ResultInfoVO getContainParentDo(Long id) throws IOException {
         ContentCatDo contentCatDo = contentCatService.getDO(id);
         String nodeVOs = hashOper.hget(RedisKeyConstant.CONTENT_CAT, id + "_parent");
         List<NodeVO> nodeVOList;
@@ -141,7 +139,7 @@ public class ContentCatControl {
 
         ContentCatVO contentCatVO = new ContentCatVO(contentCatDo);
         contentCatVO.setUpLevelNodeList(nodeVOList);
-        return ResultVO.buildSuccessResult(contentCatVO);
+        return ResultInfoVO.buildSuccessInfo(contentCatVO);
     }
 
 }

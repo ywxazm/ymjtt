@@ -1,13 +1,12 @@
 package com.ymjtt.manager.menu.web;
 
 import com.github.pagehelper.PageInfo;
-import com.ymjtt.common.constant.RedisKeyConstant;
 import com.ymjtt.common.redis.HashOper;
-import com.ymjtt.common.result.CodeResult;
-import com.ymjtt.common.result.DataGridVO;
-import com.ymjtt.common.result.ResultVO;
+import com.ymjtt.common.redis.constant.RedisKeyConstant;
 import com.ymjtt.common.util.json.JSONConvertUtil;
+import com.ymjtt.common.vo.DataGridVO;
 import com.ymjtt.common.vo.NodeVO;
+import com.ymjtt.common.vo.ResultInfoVO;
 import com.ymjtt.manager.menu.service.MenuService;
 import com.ymjtt.manager.menu.vo.MenuVO;
 import com.ymjtt.manager.menu.xdo.MenuDo;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import redis.clients.jedis.JedisCluster;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,43 +43,43 @@ public class MenuControl {
 
     @ResponseBody
     @RequestMapping("/get")
-    public ResultVO get(Long id) {
-        return ResultVO.buildSuccessResult(CodeResult.GET_SUCCESS, menuService.getDO(id));
+    public ResultInfoVO get(Long id) {
+        return ResultInfoVO.buildSuccessInfo(menuService.getDO(id));
     }
 
     @ResponseBody
     @RequestMapping("/save")
-    public ResultVO save(MenuDo menuDo) {
+    public ResultInfoVO save(MenuDo menuDo) {
         if (menuService.saveDO(menuDo)) {
             hashOper.del(RedisKeyConstant.MENU);
-            return ResultVO.buildSuccessResult(CodeResult.SAVE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
-        return ResultVO.buildFailResult(CodeResult.SAVE_FAIL);
+        return ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping("/remove")
-    public ResultVO remove(Long id) {
+    public ResultInfoVO remove(Long id) {
         if (menuService.ifParentNode(id)) {
-            return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL, "MenuId = " + id + ", Contains Son Menus, No Allow Remove");
+            return ResultInfoVO.buildFailInfo("MenuId = " + id + ", Contains Son Menus, No Allow Remove");
         }
 
         if (menuService.removeDO(id)) {
             hashOper.del(RedisKeyConstant.MENU);
-            return ResultVO.buildSuccessResult(CodeResult.REMOVE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
 
-        return ResultVO.buildFailResult(CodeResult.REMOVE_FAIL);
+        return ResultInfoVO.buildFailInfo();
     }
 
     @ResponseBody
     @RequestMapping("/update")
-    public ResultVO update(MenuDo menuDo) {
+    public ResultInfoVO update(MenuDo menuDo) {
         if (menuService.updateDO(menuDo)) {
             hashOper.del(RedisKeyConstant.MENU);
-            return ResultVO.buildSuccessResult(CodeResult.UPDATE_SUCCESS);
+            return ResultInfoVO.buildSuccessInfo();
         }
-        return ResultVO.buildFailResult(CodeResult.UPDATE_FAIL);
+        return ResultInfoVO.buildFailInfo();
     }
 
     //Others
@@ -90,11 +88,11 @@ public class MenuControl {
      * @author  ywx
      * @date    2019/1/25 11:20
      * @param   [parentId] 父菜单Id
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping("/listByParentId")
-    public ResultVO listByParentId(Long parentId) throws IOException {
+    public ResultInfoVO listByParentId(Long parentId) throws IOException {
         String menus = hashOper.hget(RedisKeyConstant.MENU, parentId + "_son");
         List<NodeVO> menuVOList;
         if (StringUtils.isEmpty(menus)) {
@@ -104,7 +102,7 @@ public class MenuControl {
             JSONConvertUtil<NodeVO> jsonConvertUtil = new JSONConvertUtil<>();
             menuVOList = jsonConvertUtil.json2List(menus, NodeVO.class);
         }
-        return ResultVO.buildSuccessResult(menuVOList);
+        return ResultInfoVO.buildSuccessInfo(menuVOList);
     }
 
     /**
@@ -112,11 +110,11 @@ public class MenuControl {
      * @author  ywx
      * @date    2019/1/25 11:22
      * @param   [id]    菜单ID
-     * @return  com.ymjtt.common.result.ResultVO
+     * @return  com.ymjtt.common.result.ResultInfoVO
      */
     @ResponseBody
     @RequestMapping("/getContainParentDo")
-    public ResultVO getContainParentDo(Long id) throws IOException {
+    public ResultInfoVO getContainParentDo(Long id) throws IOException {
         MenuDo menuDo = menuService.getDO(id);
         String nodeVOs = hashOper.hget(RedisKeyConstant.MENU, id + "_parent");
         List<NodeVO> nodeVOList;
@@ -130,7 +128,7 @@ public class MenuControl {
 
         MenuVO menuVO = new MenuVO(menuDo);
         menuVO.setUpLevelNodeList(nodeVOList);
-        return ResultVO.buildSuccessResult(menuVO);
+        return ResultInfoVO.buildSuccessInfo(menuVO);
     }
 
 }

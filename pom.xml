@@ -12,9 +12,8 @@
         <module>ymjtt_manager_web</module>
         <module>ymjtt_portal_web</module>
         <module>ymjtt_cms</module>
-        <module>ymjtt_seckill</module>
-        <module>sso</module>
         <module>ymjtt_sso</module>
+        <module>ymjtt_sso_web</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>
@@ -48,12 +47,14 @@
         <jsp.version>2.2</jsp.version>
         <servlet.version>2.5</servlet.version>
         <servlet2.version>3.0.1</servlet2.version>
+        <jsr303.version>2.0.1.Final</jsr303.version>
         <freemarker.version>2.3.23</freemarker.version>
         <jackson.version>2.9.0</jackson.version>        <!-- 这个版本与Spring5兼容,其它的不行 -->
         <aspectj.version>1.9.1</aspectj.version>
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
         <persistence.version>2.2</persistence.version>
+        <javassist.version>3.24.1-GA</javassist.version>
 
         <logback.version>1.2.3</logback.version>
         <logbackextspring.version>0.1.4</logbackextspring.version>
@@ -63,6 +64,7 @@
         <fileupload.version>1.3.1</fileupload.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang3.version>3.7</commons-lang3.version>
+        <commonsBean.version>1.9.3</commonsBean.version>
 
         <dubbo.version>2.5.3</dubbo.version>
         <zk.version>3.4.6</zk.version>
@@ -220,6 +222,12 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet2.version}</version>
             </dependency>
+            <!-- jsr303 -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${jsr303.version}</version>
+            </dependency>
             <!-- freeMarck -->
             <dependency>
                 <groupId>org.freemarker</groupId>
@@ -254,6 +262,11 @@
                 <artifactId>jcl-over-slf4j</artifactId>
                 <version>${jcloverslf4j.version}</version>
             </dependency>
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${commonsBean.version}</version>
+            </dependency>
             <!-- junit -->
             <dependency>
                 <groupId>junit</groupId>
@@ -271,6 +284,12 @@
                 <groupId>org.codehaus.plexus</groupId>      <!-- Spring之外的IOC容器, Maven刚出来时, Spring还不成熟, Maven自已开发的容器 -->
                 <artifactId>plexus-utils</artifactId>
                 <version>${plexusUtils.version}</version>
+            </dependency>
+            <!-- javassist -->
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${javassist.version}</version>
             </dependency>
 
             <!-- okHttp -->
@@ -330,6 +349,13 @@
                 <artifactId>jedis</artifactId>
                 <version>${jedis.version}</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-catalina -->
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-catalina</artifactId>
+                <version>9.0.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
