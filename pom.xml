@@ -14,6 +14,7 @@
         <module>ymjtt_cms</module>
         <module>ymjtt_sso</module>
         <module>ymjtt_sso_web</module>
+        <module>ymjtt_writeSource</module>
     </modules>
     <groupId>com.ywx.ymjtt</groupId>
     <artifactId>ymjtt_parent</artifactId>

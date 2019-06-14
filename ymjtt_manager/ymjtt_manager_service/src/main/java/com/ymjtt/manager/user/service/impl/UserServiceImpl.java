@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     public PageInfo<UserDo> listDO(UserDo userDo, Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
         List<UserDo> userDoList = userMapper.listDO(userDo);
+        userDoList.stream().forEach(System.out::println);
         return new PageInfo<>(userDoList);
     }
 

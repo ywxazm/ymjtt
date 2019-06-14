@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * @auther ywx
@@ -28,14 +29,7 @@ import javax.validation.Valid;
 @RequestMapping("/login")
 public class LoginControl {
 
-
-    /*private static final ThreadLocal<Object> threadLocal = new ThreadLocal<Object>(){
-        @Override
-        protected Object initialValue()
-        {
-            return new Date();
-        }
-    };*/
+    private ThreadLocal<Object> threadLocal = new ThreadLocal<>();
 
     @Value("${COOKIE_USER_TOKEN}")
     private String COOKIE_USER_TOKEN;
@@ -64,7 +58,6 @@ public class LoginControl {
             CookieUtils.setCookie(request, response, COOKIE_USER_TOKEN, resultInfoVO.getData().toString(), 3600 * 24 * 7);
             return resultInfoVO;
         }
-
 
         throw new UserException("user or password is not match exception");
     }

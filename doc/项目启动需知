@@ -61,3 +61,6 @@ NIO
         客户端连接服务端事件	    SelectionKey.OP_CONNECT(8)
         读事件	                SelectionKey.OP_READ(1)
         写事件	                SelectionKey.OP_WRITE(4)
+
+MQ
+    帐号密码: admin  admin
