@@ -43,7 +43,7 @@
         <sbDevelop.version>2.0.4.RELEASE</sbDevelop.version>
         <!-- end -->
 
-        <mysql.version>8.0.12</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <druid.version>1.1.12</druid.version>
         <jsp.version>2.2</jsp.version>
         <servlet.version>2.5</servlet.version>
