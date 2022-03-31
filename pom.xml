@@ -34,7 +34,7 @@
         <pagehelper.version>4.1.6</pagehelper.version>
 
         <!-- springboot部分 -->
-        <sbWeb.version>2.0.0.RELEASE</sbWeb.version>
+        <sbWeb.version>2.5.12</sbWeb.version>
         <sbDependencies.version>2.0.0.RELEASE</sbDependencies.version>
         <sbThymeleaf.version>2.0.0.RELEASE</sbThymeleaf.version>
         <sbMybatis.version>2.0.0</sbMybatis.version>
