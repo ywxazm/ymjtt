@@ -68,7 +68,7 @@
         <commonsBean.version>1.9.3</commonsBean.version>
 
         <dubbo.version>2.5.3</dubbo.version>
-        <zk.version>3.4.6</zk.version>
+        <zk.version>3.4.14</zk.version>
         <zkclient.version>0.1</zkclient.version>
         <fastdfs.version>1.25</fastdfs.version>
         <jedis.version>2.9.0</jedis.version>
