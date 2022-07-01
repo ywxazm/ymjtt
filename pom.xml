@@ -53,7 +53,7 @@
         <jackson.version>2.9.0</jackson.version>        <!-- 这个版本与Spring5兼容,其它的不行 -->
         <aspectj.version>1.9.1</aspectj.version>
         <junit.version>4.12</junit.version>
-        <plexusUtils.version>3.0.15</plexusUtils.version>
+        <plexusUtils.version>3.0.16</plexusUtils.version>
         <persistence.version>2.2</persistence.version>
         <javassist.version>3.24.1-GA</javassist.version>
 
