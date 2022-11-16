@@ -50,7 +50,7 @@
         <servlet2.version>3.0.1</servlet2.version>
         <jsr303.version>2.0.1.Final</jsr303.version>
         <freemarker.version>2.3.23</freemarker.version>
-        <jackson.version>2.9.0</jackson.version>        <!-- 这个版本与Spring5兼容,其它的不行 -->
+        <jackson.version>2.12.7.1</jackson.version>        <!-- 这个版本与Spring5兼容,其它的不行 -->
         <aspectj.version>1.9.1</aspectj.version>
         <junit.version>4.12</junit.version>
         <plexusUtils.version>3.0.15</plexusUtils.version>
